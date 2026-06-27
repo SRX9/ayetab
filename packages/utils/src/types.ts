@@ -16,6 +16,11 @@ export interface ToolDefinition {
 export interface ToolResult {
   output: string;
   error?: string;
+  format?: "text" | "html" | "diff";
+  html?: string;
+  language?: string;
+  diffLines?: Array<{ type: "added" | "removed" | "unchanged"; value: string }>;
+  meta?: Record<string, unknown>;
 }
 
 export type ToolHandler = (input: string, options?: Record<string, unknown>) => ToolResult;

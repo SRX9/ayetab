@@ -3,14 +3,14 @@
 import { useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getToolById, type ToolDefinition } from "@ayetab/utils";
-import { ToolRunner, CommandPalette, ThemeToggle } from "@ayetab/ui";
-import { TOOL_REGISTRY } from "@ayetab/utils";
+import { getToolById, TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
+import { ToolRunner, CommandPalette, ThemeToggle, usePreferences } from "@ayetab/ui";
 
 export default function ToolPageClient({ toolId }: { toolId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialInput = searchParams.get("input") ?? "";
+  const { isFavorite, toggleFavorite, addRecent } = usePreferences();
 
   const tool = useMemo(() => getToolById(toolId), [toolId]);
 
@@ -26,6 +26,12 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
     (t: ToolDefinition) => router.push(`/tools/${t.id}`),
     [router]
   );
+
+  const handleRecent = useCallback((id: string) => addRecent(id), [addRecent]);
+
+  const handleToggleFavorite = useCallback(() => {
+    if (tool) toggleFavorite(tool.id);
+  }, [tool, toggleFavorite]);
 
   if (!tool) {
     return (
@@ -58,6 +64,9 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
             tool={tool}
             initialInput={initialInput}
             onNavigate={handleNavigate}
+            onRecent={handleRecent}
+            isFavorite={isFavorite(tool.id)}
+            onToggleFavorite={handleToggleFavorite}
           />
         </div>
       </main>

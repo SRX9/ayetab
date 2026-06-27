@@ -3,7 +3,7 @@ import type { ToolResult } from "../types";
 export function formatJson(input: string, indent = 2): ToolResult {
   try {
     const parsed = JSON.parse(input);
-    return { output: JSON.stringify(parsed, null, indent) };
+    return { output: JSON.stringify(parsed, null, indent), language: "json" };
   } catch (e) {
     return { output: "", error: `Invalid JSON: ${(e as Error).message}` };
   }
@@ -12,7 +12,7 @@ export function formatJson(input: string, indent = 2): ToolResult {
 export function minifyJson(input: string): ToolResult {
   try {
     const parsed = JSON.parse(input);
-    return { output: JSON.stringify(parsed) };
+    return { output: JSON.stringify(parsed), language: "json" };
   } catch (e) {
     return { output: "", error: `Invalid JSON: ${(e as Error).message}` };
   }

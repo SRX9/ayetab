@@ -37,24 +37,25 @@ Click the extension icon to open the side panel on any page.
 
 ## Available tools
 
-**17 tools** implemented and working (12 P0 + 5 simple P1):
+**25 tools** implemented and working across web and extension.
 
 | Category | Tools |
 |----------|-------|
-| Format | JSON Formatter, Line Sort/Dedupe |
+| Format | JSON, HTML, CSS, JS, SQL, Line Sort/Dedupe |
 | Encode | Base64, URL Encode/Decode, HTML Entity |
-| Convert | Number Base, Case Converter, Color, Hex↔ASCII, URL Parser |
-| Inspect | Unix Time, JWT Debugger, RegExp Tester, String Inspector |
-| Generate | Hash Generator, UUID Generator, Random String |
-
-27 more tools are registered in the catalog for Phase 2–3. See `docs/utilities-catalog.md`.
+| Convert | YAML↔JSON, JSON↔CSV, Number Base, Case, Color, Hex↔ASCII, URL Parser |
+| Inspect | Unix Time, JWT, RegExp, String Inspector, Text Diff, Markdown Preview, Cron Parser |
+| Generate | Hash, UUID, Random String, Lorem Ipsum |
 
 ## Features
 
-- **Command palette** — press `⌘K` (or `Ctrl+K`) to fuzzy-search all tools
-- **Dark/light theme** — toggle in sidebar header, persisted to localStorage
-- **Smart paste detection** — paste content and get prompted to open the matching tool
-- **Shared tool runner** — same UI and logic in web app and Chrome extension
+- **Command palette** — `⌘K` / `Ctrl+K` fuzzy search
+- **Dark/light theme** — persisted across sessions
+- **Smart paste detection** — auto-suggest tool from clipboard content
+- **Favorites & recents** — star tools, quick-access recent history in sidebar
+- **Syntax highlighting** — JSON and SQL output highlighted
+- **Rich outputs** — side-by-side diff view, markdown HTML preview
+- **File upload** — load input from a file on any tool page
 
 ## Architecture
 

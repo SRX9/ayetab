@@ -1,22 +1,28 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import type { ToolResult } from "@ayetab/utils";
 
 export function useToolState(initialInput = "") {
   const [input, setInput] = useState(initialInput);
-  const [output, setOutput] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [result, setResultState] = useState<ToolResult>({ output: "" });
 
   const reset = useCallback(() => {
     setInput("");
-    setOutput("");
-    setError(null);
+    setResultState({ output: "" });
   }, []);
 
-  const setResult = useCallback((result: { output: string; error?: string }) => {
-    setOutput(result.output);
-    setError(result.error ?? null);
+  const setResult = useCallback((r: ToolResult) => {
+    setResultState(r);
   }, []);
 
-  return { input, setInput, output, setOutput, error, setError, reset, setResult };
+  return {
+    input,
+    setInput,
+    output: result.output,
+    error: result.error ?? null,
+    result,
+    setResult,
+    reset,
+  };
 }

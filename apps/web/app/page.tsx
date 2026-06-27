@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   TOOL_REGISTRY,
@@ -8,18 +8,30 @@ import {
   type ToolDefinition,
   CATEGORY_LABELS,
 } from "@ayetab/utils";
-import { ToolCard, SearchBar, CategoryNav, CommandPalette, ThemeToggle } from "@ayetab/ui";
+import {
+  ToolCard,
+  SearchBar,
+  CategoryNav,
+  CommandPalette,
+  ThemeToggle,
+  ToolListSection,
+  usePreferences,
+} from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
 
 export default function HomePage() {
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState<ToolCategory | "all">("all");
+  const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
+  const { prefs, toggleFavorite, isFavorite } = usePreferences();
 
   const filteredTools = useMemo(() => {
+    if (activeCategory === "favorites") {
+      return TOOL_REGISTRY.filter((t) => prefs.favorites.includes(t.id));
+    }
     if (activeCategory === "all") return TOOL_REGISTRY;
     return TOOL_REGISTRY.filter((t) => t.category === activeCategory);
-  }, [activeCategory]);
+  }, [activeCategory, prefs.favorites]);
 
   const counts = useMemo(() => {
     const c: Record<ToolCategory | "all", number> = {
@@ -34,9 +46,15 @@ export default function HomePage() {
     return c;
   }, []);
 
-  const handleSelect = (tool: ToolDefinition) => {
-    router.push(`/tools/${tool.id}`);
-  };
+  const handleSelect = useCallback(
+    (tool: ToolDefinition) => router.push(`/tools/${tool.id}`),
+    [router]
+  );
+
+  const handleToggleFavorite = useCallback(
+    (tool: ToolDefinition) => toggleFavorite(tool.id),
+    [toggleFavorite]
+  );
 
   return (
     <div className="min-h-screen flex">
@@ -50,12 +68,45 @@ export default function HomePage() {
           </div>
           <ThemeToggle />
         </div>
+
+        <button
+          onClick={() => setActiveCategory("favorites")}
+          className={`flex items-center justify-between rounded-md px-3 py-2 text-sm text-left transition-colors ${
+            activeCategory === "favorites"
+              ? "bg-accent text-accent-foreground font-medium"
+              : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+          }`}
+        >
+          <span>★ Favorites</span>
+          <span className="text-xs text-muted-foreground">{prefs.favorites.length}</span>
+        </button>
+
         <CategoryNav
           categories={CATEGORIES}
-          active={activeCategory}
-          onSelect={setActiveCategory}
+          active={activeCategory === "favorites" ? "all" : activeCategory}
+          onSelect={(c) => setActiveCategory(c)}
           counts={counts}
         />
+
+        {prefs.recents.length > 0 && (
+          <div className="flex flex-col gap-1">
+            <p className="text-[10px] text-muted-foreground uppercase tracking-wider px-3">Recent</p>
+            {prefs.recents.slice(0, 5).map((id) => {
+              const tool = TOOL_REGISTRY.find((t) => t.id === id);
+              if (!tool) return null;
+              return (
+                <button
+                  key={id}
+                  onClick={() => handleSelect(tool)}
+                  className="rounded-md px-3 py-1.5 text-xs text-left text-muted-foreground hover:bg-accent hover:text-foreground truncate"
+                >
+                  {tool.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <p className="text-[10px] text-muted-foreground mt-auto">
           Press <kbd className="px-1 py-0.5 rounded border border-border text-[9px]">⌘K</kbd> to search
         </p>
@@ -65,7 +116,11 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto flex flex-col gap-6">
           <div>
             <h2 className="text-2xl font-semibold">
-              {activeCategory === "all" ? "All Tools" : CATEGORY_LABELS[activeCategory]}
+              {activeCategory === "favorites"
+                ? "Favorites"
+                : activeCategory === "all"
+                  ? "All Tools"
+                  : CATEGORY_LABELS[activeCategory]}
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
               {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available
@@ -74,9 +129,25 @@ export default function HomePage() {
 
           <SearchBar tools={TOOL_REGISTRY} onSelect={handleSelect} />
 
+          {activeCategory === "all" && prefs.favorites.length > 0 && (
+            <ToolListSection
+              title="Favorites"
+              toolIds={prefs.favorites}
+              onSelect={handleSelect}
+              isFavorite={isFavorite}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredTools.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} onClick={handleSelect} />
+              <ToolCard
+                key={tool.id}
+                tool={tool}
+                onClick={handleSelect}
+                isFavorite={isFavorite(tool.id)}
+                onToggleFavorite={handleToggleFavorite}
+              />
             ))}
           </div>
         </div>

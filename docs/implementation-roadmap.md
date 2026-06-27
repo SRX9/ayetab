@@ -34,30 +34,31 @@ All 12 P0 tools implemented via centralized `executeTool()` executor.
 - [x] Random String Generator
 - [x] HTML Entity Encode/Decode
 
-## Phase 2: Core Tools (P1 — 15 tools)
+## Phase 2: Core Tools (P1) ✅
 
-| Tool | Library Needed |
-|------|---------------|
-| HTML/CSS/JS Formatter | `js-beautify` |
-| SQL Formatter | `sql-formatter` |
-| YAML ↔ JSON | `yaml` |
-| JSON ↔ CSV | `papaparse` |
-| Text Diff | `diff` (jsdiff) |
-| Markdown Preview | `marked` |
-| Cron Parser | `cronstrue`, `cron-parser` |
-| String Inspector | Custom |
-| Lorem Ipsum | `lorem-ipsum` |
-| Random String | `crypto.getRandomValues` |
-| HTML Entity Encode/Decode | `he` |
-| URL Parser | Native `URL` API |
+| Tool | Status |
+|------|--------|
+| HTML/CSS/JS Formatter | ✅ |
+| SQL Formatter | ✅ |
+| YAML ↔ JSON | ✅ |
+| JSON ↔ CSV | ✅ |
+| Text Diff | ✅ |
+| Markdown Preview | ✅ |
+| Cron Parser | ✅ |
+| Lorem Ipsum | ✅ |
+| String Inspector | ✅ (Phase 1) |
+| Random String | ✅ (Phase 1) |
+| HTML Entity | ✅ (Phase 1) |
+| URL Parser | ✅ (Phase 1) |
 
-### Phase 2 UI Features
+### Phase 2 UI Features ✅
 
-- [ ] Favorites system
-- [ ] Recent tools history
-- [ ] Syntax highlighting in output (Shiki)
-- [ ] Side-by-side diff view
-- [ ] File upload for input
+- [x] Favorites system (localStorage / chrome.storage)
+- [x] Recent tools history
+- [x] Syntax highlighting in output (JSON, SQL)
+- [x] Side-by-side diff view
+- [x] File upload for input
+- [x] Markdown HTML preview
 
 ## Phase 3: Extended Tools (P2 — 12 tools)
 
