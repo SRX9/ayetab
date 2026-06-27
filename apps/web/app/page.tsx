@@ -8,7 +8,7 @@ import {
   type ToolDefinition,
   CATEGORY_LABELS,
 } from "@ayetab/utils";
-import { ToolCard, SearchBar, CategoryNav } from "@ayetab/ui";
+import { ToolCard, SearchBar, CategoryNav, CommandPalette, ThemeToggle } from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
 
@@ -40,11 +40,15 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
+      <CommandPalette tools={TOOL_REGISTRY} onSelect={handleSelect} />
+
       <aside className="w-56 shrink-0 border-r border-border p-4 flex flex-col gap-4">
-        <div>
-          <h1 className="text-lg font-bold tracking-tight">AyeTab</h1>
-          <p className="text-xs text-muted-foreground">Developer Utilities</p>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <h1 className="text-lg font-bold tracking-tight">AyeTab</h1>
+            <p className="text-xs text-muted-foreground">Developer Utilities</p>
+          </div>
+          <ThemeToggle />
         </div>
         <CategoryNav
           categories={CATEGORIES}
@@ -52,9 +56,11 @@ export default function HomePage() {
           onSelect={setActiveCategory}
           counts={counts}
         />
+        <p className="text-[10px] text-muted-foreground mt-auto">
+          Press <kbd className="px-1 py-0.5 rounded border border-border text-[9px]">⌘K</kbd> to search
+        </p>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 p-6 overflow-auto">
         <div className="max-w-4xl mx-auto flex flex-col gap-6">
           <div>

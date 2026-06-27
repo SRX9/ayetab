@@ -35,24 +35,26 @@ pnpm dev --filter extension   # Vite dev server + HMR
 
 Click the extension icon to open the side panel on any page.
 
-## Available tools (P0 — MVP)
+## Available tools
 
-12 tools implemented and working:
+**17 tools** implemented and working (12 P0 + 5 simple P1):
 
-- JSON Formatter
-- Base64 Encode/Decode
-- URL Encode/Decode
-- Hash Generator (SHA-1, SHA-256, SHA-512)
-- UUID Generator
-- Unix Time Converter
-- JWT Debugger
-- RegExp Tester
-- Color Converter
-- Number Base Converter
-- String Case Converter
-- Line Sort/Dedupe
+| Category | Tools |
+|----------|-------|
+| Format | JSON Formatter, Line Sort/Dedupe |
+| Encode | Base64, URL Encode/Decode, HTML Entity |
+| Convert | Number Base, Case Converter, Color, Hex↔ASCII, URL Parser |
+| Inspect | Unix Time, JWT Debugger, RegExp Tester, String Inspector |
+| Generate | Hash Generator, UUID Generator, Random String |
 
-27 more tools are registered in the catalog and ready for Phase 1–3 implementation. See `docs/utilities-catalog.md`.
+27 more tools are registered in the catalog for Phase 2–3. See `docs/utilities-catalog.md`.
+
+## Features
+
+- **Command palette** — press `⌘K` (or `Ctrl+K`) to fuzzy-search all tools
+- **Dark/light theme** — toggle in sidebar header, persisted to localStorage
+- **Smart paste detection** — paste content and get prompted to open the matching tool
+- **Shared tool runner** — same UI and logic in web app and Chrome extension
 
 ## Architecture
 

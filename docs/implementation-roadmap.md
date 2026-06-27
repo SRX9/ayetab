@@ -2,7 +2,7 @@
 
 Phased plan to go from scaffold to full DevUtils parity.
 
-## Phase 0: Scaffold (Current)
+## Phase 0: Scaffold ✅
 
 - [x] Turborepo monorepo with pnpm workspaces
 - [x] Shared packages: `tsconfig`, `utils`, `ui`
@@ -12,34 +12,27 @@ Phased plan to go from scaffold to full DevUtils parity.
 - [x] P0 utility implementations in `@ayetab/utils`
 - [x] Documentation
 
-## Phase 1: MVP Tools (P0 — 12 tools)
+## Phase 1: MVP Tools (P0 — 12 tools) ✅
 
-Ship the 12 highest-value, simplest tools:
+All 12 P0 tools implemented via centralized `executeTool()` executor.
 
-| # | Tool | Package | Status |
-|---|------|---------|--------|
-| 1 | JSON Formatter | `utils/tools/json` | Scaffold |
-| 2 | Base64 Encode/Decode | `utils/tools/base64` | Scaffold |
-| 3 | URL Encode/Decode | `utils/tools/url-encode` | Scaffold |
-| 4 | Hash Generator | `utils/tools/hash` | Scaffold |
-| 5 | UUID Generator | `utils/tools/uuid` | Scaffold |
-| 6 | Unix Time Converter | `utils/tools/unix-time` | Scaffold |
-| 7 | JWT Debugger | `utils/tools/jwt` | Scaffold |
-| 8 | RegExp Tester | `utils/tools/regex` | Scaffold |
-| 9 | Color Converter | `utils/tools/color` | Scaffold |
-| 10 | Number Base Converter | `utils/tools/number-base` | Scaffold |
-| 11 | String Case Converter | `utils/tools/case` | Scaffold |
-| 12 | Line Sort/Dedupe | `utils/tools/line-sort` | Scaffold |
+### Phase 1 UI Features ✅
 
-### Phase 1 UI Features
+- [x] Tool grid on home page with category filters
+- [x] Individual tool pages with input/output panels
+- [x] Copy-to-clipboard on output
+- [x] Command palette search (`⌘K`)
+- [x] Dark/light theme toggle
+- [x] Smart paste detection (suggest tool from clipboard)
+- [x] Extension side panel with same tool set
 
-- [ ] Tool grid on home page with category filters
-- [ ] Individual tool pages with input/output panels
-- [ ] Copy-to-clipboard on output
-- [ ] Command palette search (`⌘K`)
-- [ ] Dark/light theme toggle
-- [ ] Smart paste detection (suggest tool from clipboard)
-- [ ] Extension side panel with same tool set
+### Phase 1 Bonus Tools (simple P1)
+
+- [x] URL Parser
+- [x] Hex ↔ ASCII
+- [x] String Inspector
+- [x] Random String Generator
+- [x] HTML Entity Encode/Decode
 
 ## Phase 2: Core Tools (P1 — 15 tools)
 

@@ -1,20 +1,27 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   TOOL_REGISTRY,
   type ToolCategory,
   type ToolDefinition,
   CATEGORY_LABELS,
 } from "@ayetab/utils";
-import { SearchBar, CategoryNav } from "@ayetab/ui";
-import { ToolView } from "./tool-view";
+import {
+  SearchBar,
+  CategoryNav,
+  CommandPalette,
+  ThemeProvider,
+  ThemeToggle,
+  ToolRunner,
+} from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
 
-export default function App() {
+function AppContent() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all">("all");
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
+  const [initialInput, setInitialInput] = useState("");
 
   const filteredTools = useMemo(() => {
     if (activeCategory === "all") return TOOL_REGISTRY;
@@ -34,20 +41,40 @@ export default function App() {
     return c;
   }, []);
 
+  const openTool = useCallback((tool: ToolDefinition, input = "") => {
+    setSelectedTool(tool);
+    setInitialInput(input);
+  }, []);
+
+  const handleNavigate = useCallback((tool: ToolDefinition, input: string) => {
+    openTool(tool, input);
+  }, [openTool]);
+
   if (selectedTool) {
     return (
       <div className="h-screen flex flex-col bg-background text-foreground">
+        <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} />
         <header className="border-b border-border px-3 py-2 flex items-center gap-2 shrink-0">
           <button
-            onClick={() => setSelectedTool(null)}
+            onClick={() => {
+              setSelectedTool(null);
+              setInitialInput("");
+            }}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             ← Back
           </button>
-          <span className="text-xs font-medium truncate">{selectedTool.name}</span>
+          <span className="text-xs font-medium truncate flex-1">{selectedTool.name}</span>
+          <ThemeToggle />
         </header>
         <div className="flex-1 overflow-auto p-3">
-          <ToolView tool={selectedTool} />
+          <ToolRunner
+            key={`${selectedTool.id}-${initialInput}`}
+            tool={selectedTool}
+            initialInput={initialInput}
+            onNavigate={handleNavigate}
+            compact
+          />
         </div>
       </div>
     );
@@ -55,18 +82,18 @@ export default function App() {
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground">
-      <header className="border-b border-border px-3 py-3 shrink-0">
-        <h1 className="text-sm font-bold tracking-tight">AyeTab</h1>
-        <p className="text-[10px] text-muted-foreground">Developer Utilities</p>
+      <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} />
+      <header className="border-b border-border px-3 py-3 shrink-0 flex items-start justify-between gap-2">
+        <div>
+          <h1 className="text-sm font-bold tracking-tight">AyeTab</h1>
+          <p className="text-[10px] text-muted-foreground">Developer Utilities</p>
+        </div>
+        <ThemeToggle />
       </header>
 
       <div className="flex-1 overflow-auto flex flex-col">
         <div className="p-3 border-b border-border">
-          <SearchBar
-            tools={TOOL_REGISTRY}
-            onSelect={setSelectedTool}
-            placeholder="Search tools..."
-          />
+          <SearchBar tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} placeholder="Search tools..." />
         </div>
 
         <div className="flex flex-1 overflow-hidden">
@@ -87,7 +114,7 @@ export default function App() {
               {filteredTools.map((tool) => (
                 <button
                   key={tool.id}
-                  onClick={() => setSelectedTool(tool)}
+                  onClick={() => openTool(tool)}
                   className="flex flex-col gap-0.5 rounded-md px-2 py-2 text-left hover:bg-accent transition-colors"
                 >
                   <span className="text-xs font-medium">{tool.name}</span>
@@ -101,5 +128,13 @@ export default function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

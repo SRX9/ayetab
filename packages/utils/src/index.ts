@@ -13,3 +13,8 @@ export * from "./tools/color";
 export * from "./tools/number-base";
 export * from "./tools/case";
 export * from "./tools/line-sort";
+export * from "./tools/hex-ascii";
+export * from "./tools/string-inspector";
+export * from "./tools/random-string";
+export * from "./tools/html-entity";
+export * from "./executor";

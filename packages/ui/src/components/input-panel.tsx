@@ -9,6 +9,7 @@ interface InputPanelProps {
   label?: string;
   className?: string;
   rows?: number;
+  onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void;
 }
 
 export function InputPanel({
@@ -18,6 +19,7 @@ export function InputPanel({
   label = "Input",
   className,
   rows = 8,
+  onPaste,
 }: InputPanelProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
@@ -27,6 +29,7 @@ export function InputPanel({
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onPaste={onPaste}
         placeholder={placeholder}
         rows={rows}
         className="w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm font-mono placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

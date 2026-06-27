@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { TOOL_REGISTRY } from "@ayetab/utils";
 import ToolPageClient from "./tool-page-client";
 
@@ -7,5 +8,9 @@ export function generateStaticParams() {
 
 export default async function ToolPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return <ToolPageClient toolId={id} />;
+  return (
+    <Suspense>
+      <ToolPageClient toolId={id} />
+    </Suspense>
+  );
 }
