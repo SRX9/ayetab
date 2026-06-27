@@ -1,107 +1,60 @@
 # Implementation Roadmap
 
-Phased plan to go from scaffold to full DevUtils parity.
-
 ## Phase 0: Scaffold ✅
 
-- [x] Turborepo monorepo with pnpm workspaces
-- [x] Shared packages: `tsconfig`, `utils`, `ui`
-- [x] Next.js web app with home page and tool routing
-- [x] Chrome extension with Side Panel + React
-- [x] Tool registry with metadata for all 47+ tools
-- [x] P0 utility implementations in `@ayetab/utils`
-- [x] Documentation
+## Phase 1: MVP Tools ✅
 
-## Phase 1: MVP Tools (P0 — 12 tools) ✅
+12 P0 tools + command palette, theme, smart paste, shared runner
 
-All 12 P0 tools implemented via centralized `executeTool()` executor.
+## Phase 2: Core Tools ✅
 
-### Phase 1 UI Features ✅
+HTML/CSS/JS/SQL formatters, YAML↔JSON, JSON↔CSV, Text Diff, Markdown, Cron, Lorem Ipsum + favorites, recents, syntax highlighting, diff view, file upload
 
-- [x] Tool grid on home page with category filters
-- [x] Individual tool pages with input/output panels
-- [x] Copy-to-clipboard on output
-- [x] Command palette search (`⌘K`)
-- [x] Dark/light theme toggle
-- [x] Smart paste detection (suggest tool from clipboard)
-- [x] Extension side panel with same tool set
-
-### Phase 1 Bonus Tools (simple P1)
-
-- [x] URL Parser
-- [x] Hex ↔ ASCII
-- [x] String Inspector
-- [x] Random String Generator
-- [x] HTML Entity Encode/Decode
-
-## Phase 2: Core Tools (P1) ✅
+## Phase 3: Extended Tools ✅
 
 | Tool | Status |
 |------|--------|
-| HTML/CSS/JS Formatter | ✅ |
-| SQL Formatter | ✅ |
-| YAML ↔ JSON | ✅ |
-| JSON ↔ CSV | ✅ |
-| Text Diff | ✅ |
-| Markdown Preview | ✅ |
-| Cron Parser | ✅ |
-| Lorem Ipsum | ✅ |
-| String Inspector | ✅ (Phase 1) |
-| Random String | ✅ (Phase 1) |
-| HTML Entity | ✅ (Phase 1) |
-| URL Parser | ✅ (Phase 1) |
+| XML Formatter | ✅ |
+| HTML → JSX | ✅ |
+| HTML Preview | ✅ |
+| QR Code Generator | ✅ |
+| Backslash Escape | ✅ |
+| Certificate Decoder | ✅ |
+| SVG → CSS | ✅ |
+| Base64 Image | ✅ |
 
-### Phase 2 UI Features ✅
+## Phase 4: Advanced Tools ✅
 
-- [x] Favorites system (localStorage / chrome.storage)
-- [x] Recent tools history
-- [x] Syntax highlighting in output (JSON, SQL)
-- [x] Side-by-side diff view
-- [x] File upload for input
-- [x] Markdown HTML preview
+| Tool | Status |
+|------|--------|
+| cURL → Code (fetch/Python) | ✅ |
+| JSON → Code (TypeScript/Go) | ✅ |
+| PHP Serialize/Unserialize | ✅ |
+| ERB/LESS/SCSS Formatters | ✅ |
+| ULID Generator/Decoder | ✅ |
+| Query String ↔ JSON | ✅ |
+| MD5 + Keccak-256 hashes | ✅ |
 
-## Phase 3: Extended Tools (P2 — 12 tools)
+## Phase 5: Polish & Launch ✅
 
-| Tool | Notes |
-|------|-------|
-| XML Formatter | `js-beautify` |
-| HTML → JSX | `htmltojsx` |
-| HTML Preview | Sandboxed iframe |
-| QR Code Generator | `qrcode` |
-| Backslash Escape | JSON trick |
-| Certificate Decoder | `@peculiar/x509` |
-| Hex ↔ ASCII | Pure |
-| SVG → CSS | Custom |
-| Base64 Image | Canvas API |
+- [x] Chrome Web Store listing guide (`docs/STORE.md`)
+- [x] Firefox extension support (`sidebar_action` + `browser_specific_settings`)
+- [x] Keyboard shortcuts modal (`?`)
+- [x] Export/import favorites (JSON)
+- [x] Onboarding tour (first-visit modal)
+- [x] Vitest unit tests for core utilities
+- [x] Dynamic imports in executor for code splitting
+- [x] Image preview output for QR / Base64 image tools
+- [x] Accessibility: dialog roles on modals
 
-## Phase 4: Advanced Tools (P3 — 10+ tools)
+### Remaining (manual / post-launch)
 
-| Tool | Notes |
-|------|-------|
-| cURL → Code | `curlconverter` |
-| JSON → Code | Custom templates |
-| PHP Serializer | Custom |
-| ERB/LESS/SCSS Formatters | `js-beautify` |
-| ULID Generate/Decode | `ulid` |
-| Keccak-256 | `js-sha3` |
+- [ ] Submit to Chrome Web Store
+- [ ] Submit to Firefox Add-ons
+- [ ] E2E tests (Playwright)
+- [ ] Lighthouse performance audit
+- [ ] WCAG 2.1 AA formal audit
 
-## Phase 5: Polish & Launch
+## Tool count: 41 implemented
 
-- [ ] Chrome Web Store listing
-- [ ] Firefox extension (sidebar_action API)
-- [ ] Keyboard shortcut customization
-- [ ] Export/import favorites
-- [ ] Onboarding tour
-- [ ] Performance audit (all tools < 50ms)
-- [ ] Accessibility audit (WCAG 2.1 AA)
-- [ ] E2E tests (Playwright for web, manual for extension)
-
-## Success Metrics
-
-| Metric | Target |
-|--------|--------|
-| P0 tools working | 12/12 |
-| Extension load time | < 500ms |
-| Tool execution time | < 50ms (P0 tools) |
-| Bundle size (extension) | < 2MB |
-| Lighthouse (web) | > 95 performance |
+All tools in the registry are fully implemented via `executeTool()`.

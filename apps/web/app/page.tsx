@@ -16,6 +16,10 @@ import {
   ThemeToggle,
   ToolListSection,
   usePreferences,
+  OnboardingModal,
+  ShortcutsModal,
+  useShortcutsModal,
+  SettingsMenu,
 } from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
@@ -23,7 +27,8 @@ const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", 
 export default function HomePage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
-  const { prefs, toggleFavorite, isFavorite } = usePreferences();
+  const { prefs, toggleFavorite, isFavorite, importPrefs } = usePreferences();
+  const { open: shortcutsOpen, setOpen: setShortcutsOpen, close: closeShortcuts } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
     if (activeCategory === "favorites") {
@@ -58,6 +63,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex">
+      <OnboardingModal />
+      <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
       <CommandPalette tools={TOOL_REGISTRY} onSelect={handleSelect} />
 
       <aside className="w-56 shrink-0 border-r border-border p-4 flex flex-col gap-4">
@@ -108,8 +115,13 @@ export default function HomePage() {
         )}
 
         <p className="text-[10px] text-muted-foreground mt-auto">
-          Press <kbd className="px-1 py-0.5 rounded border border-border text-[9px]">⌘K</kbd> to search
+          Press <kbd className="px-1 py-0.5 rounded border border-border text-[9px]">⌘K</kbd> to search ·{" "}
+          <button onClick={() => setShortcutsOpen(true)} className="hover:text-foreground underline-offset-2 hover:underline">
+            ?
+          </button>{" "}
+          for shortcuts
         </p>
+        <SettingsMenu prefs={prefs} onImport={importPrefs} />
       </aside>
 
       <main className="flex-1 p-6 overflow-auto">

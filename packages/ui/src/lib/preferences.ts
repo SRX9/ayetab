@@ -4,13 +4,26 @@ export interface UserPreferences {
 }
 
 const STORAGE_KEY = "ayetab-prefs";
+const ONBOARDING_KEY = "ayetab-onboarded";
 const MAX_RECENTS = 8;
 
 const DEFAULT_PREFS: UserPreferences = { favorites: [], recents: [] };
 
+export function exportPreferences(prefs: UserPreferences): string {
+  return JSON.stringify(prefs, null, 2);
+}
+
+export function importPreferences(json: string): UserPreferences {
+  const parsed = JSON.parse(json) as Partial<UserPreferences>;
+  return {
+    favorites: Array.isArray(parsed.favorites) ? parsed.favorites : [],
+    recents: Array.isArray(parsed.recents) ? parsed.recents : [],
+  };
+}
+
 type ChromeStorage = {
-  get: (keys: string[], cb: (result: Record<string, UserPreferences>) => void) => void;
-  set: (items: Record<string, UserPreferences>, cb?: () => void) => void;
+  get: (keys: string[], cb: (result: Record<string, string | UserPreferences | boolean>) => void) => void;
+  set: (items: Record<string, UserPreferences | boolean>, cb?: () => void) => void;
 };
 
 function getChromeStorage(): ChromeStorage | null {
@@ -18,31 +31,47 @@ function getChromeStorage(): ChromeStorage | null {
   return g.chrome?.storage?.local ?? null;
 }
 
-export async function loadPreferences(): Promise<UserPreferences> {
+async function storageGet<T>(key: string, fallback: T): Promise<T> {
   const chromeStorage = getChromeStorage();
   if (chromeStorage) {
     return new Promise((resolve) => {
-      chromeStorage.get([STORAGE_KEY], (result) => {
-        resolve(result[STORAGE_KEY] ?? DEFAULT_PREFS);
+      chromeStorage.get([key], (result) => {
+        resolve((result[key] as T) ?? fallback);
       });
     });
   }
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as UserPreferences) : DEFAULT_PREFS;
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
-    return DEFAULT_PREFS;
+    return fallback;
   }
 }
 
-export async function savePreferences(prefs: UserPreferences): Promise<void> {
+async function storageSet(key: string, value: unknown): Promise<void> {
   const chromeStorage = getChromeStorage();
   if (chromeStorage) {
     return new Promise((resolve) => {
-      chromeStorage.set({ [STORAGE_KEY]: prefs }, resolve);
+      chromeStorage.set({ [key]: value as UserPreferences }, resolve);
     });
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+export async function loadPreferences(): Promise<UserPreferences> {
+  return storageGet(STORAGE_KEY, DEFAULT_PREFS);
+}
+
+export async function savePreferences(prefs: UserPreferences): Promise<void> {
+  return storageSet(STORAGE_KEY, prefs);
+}
+
+export async function isOnboarded(): Promise<boolean> {
+  return storageGet(ONBOARDING_KEY, false);
+}
+
+export async function setOnboarded(): Promise<void> {
+  return storageSet(ONBOARDING_KEY, true);
 }
 
 export function toggleFavorite(prefs: UserPreferences, toolId: string): UserPreferences {

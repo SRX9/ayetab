@@ -16,6 +16,10 @@ import {
   ToolRunner,
   ToolListSection,
   usePreferences,
+  OnboardingModal,
+  ShortcutsModal,
+  useShortcutsModal,
+  SettingsMenu,
 } from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
@@ -24,7 +28,8 @@ function AppContent() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
   const [initialInput, setInitialInput] = useState("");
-  const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
+  const { prefs, toggleFavorite, isFavorite, addRecent, importPrefs } = usePreferences();
+  const { open: shortcutsOpen, close: closeShortcuts, setOpen: setShortcutsOpen } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
     if (activeCategory === "favorites") {
@@ -62,9 +67,18 @@ function AppContent() {
     [toggleFavorite]
   );
 
+  const modals = (
+    <>
+      <OnboardingModal />
+      <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
+    </>
+  );
+
   if (selectedTool) {
     return (
-      <div className="h-screen flex flex-col bg-background text-foreground">
+      <>
+        {modals}
+        <div className="h-screen flex flex-col bg-background text-foreground">
         <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} />
         <header className="border-b border-border px-3 py-2 flex items-center gap-2 shrink-0">
           <button
@@ -92,11 +106,14 @@ function AppContent() {
           />
         </div>
       </div>
+      </>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background text-foreground">
+    <>
+      {modals}
+      <div className="h-screen flex flex-col bg-background text-foreground">
       <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} />
       <header className="border-b border-border px-3 py-3 shrink-0 flex items-start justify-between gap-2">
         <div>
@@ -105,6 +122,10 @@ function AppContent() {
         </div>
         <ThemeToggle />
       </header>
+
+      <div className="px-3 pb-2">
+        <SettingsMenu prefs={prefs} onImport={importPrefs} compact />
+      </div>
 
       <div className="flex-1 overflow-auto flex flex-col">
         <div className="p-3 border-b border-border">
@@ -195,6 +216,7 @@ function AppContent() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

@@ -6,6 +6,7 @@ import { useClipboard } from "../hooks/use-clipboard";
 import { CodeOutput } from "./code-output";
 import { DiffView } from "./diff-view";
 import { HtmlPreview } from "./html-preview";
+import { ImagePreview } from "./image-preview";
 
 interface OutputPanelProps {
   value: string;
@@ -13,7 +14,7 @@ interface OutputPanelProps {
   label?: string;
   className?: string;
   rows?: number;
-  result?: Pick<ToolResult, "format" | "html" | "language" | "diffLines">;
+  result?: Pick<ToolResult, "format" | "html" | "language" | "diffLines" | "imageSrc">;
 }
 
 export function OutputPanel({
@@ -48,6 +49,8 @@ export function OutputPanel({
         </div>
       ) : result?.format === "html" && result.html ? (
         <HtmlPreview html={result.html} />
+      ) : result?.format === "image" && result.imageSrc ? (
+        <ImagePreview src={result.imageSrc} />
       ) : result?.format === "diff" && result.diffLines ? (
         <DiffView lines={result.diffLines} />
       ) : result?.language ? (

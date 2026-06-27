@@ -1,69 +1,61 @@
 # AyeTab
 
-All-in-one developer toolbox — a Chrome extension side panel + Next.js web app, inspired by [DevUtils](https://devutils.com).
+All-in-one developer toolbox — a Chrome/Firefox extension side panel + Next.js web app, inspired by [DevUtils](https://devutils.com).
 
-## What's inside
-
-| App / Package | Description |
-|---------------|-------------|
-| `apps/web` | Next.js 15 web app with full tool grid and individual tool pages |
-| `apps/extension` | Chrome MV3 extension with React side panel (Chrome 114+) |
-| `packages/utils` | Pure utility functions (JSON, Base64, JWT, hash, etc.) |
-| `packages/ui` | Shared React components (ToolShell, InputPanel, SearchBar, etc.) |
-| `docs/` | DevUtils analysis, architecture, utilities catalog, roadmap |
+**41 tools** — all processing runs locally in your browser. Your data never leaves your device.
 
 ## Quick start
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Start all apps in dev mode
-pnpm dev
-
-# Start individually
-pnpm dev --filter web         # http://localhost:3000
-pnpm dev --filter extension   # Vite dev server + HMR
+pnpm dev                    # all apps
+pnpm dev --filter web       # http://localhost:3000
+pnpm dev --filter extension # Vite + HMR
+pnpm test                   # unit tests
+pnpm build                  # production build
 ```
 
-## Load the Chrome extension
+### Load the extension
 
-1. Build the extension: `pnpm build --filter extension`
-2. Open `chrome://extensions`
-3. Enable **Developer mode**
-4. Click **Load unpacked** → select `apps/extension/dist`
+```bash
+pnpm build --filter extension
+```
 
-Click the extension icon to open the side panel on any page.
+Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist`  
+Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/manifest.json`
 
-## Available tools
-
-**25 tools** implemented and working across web and extension.
+## Tool categories (41 tools)
 
 | Category | Tools |
 |----------|-------|
-| Format | JSON, HTML, CSS, JS, SQL, Line Sort/Dedupe |
-| Encode | Base64, URL Encode/Decode, HTML Entity |
-| Convert | YAML↔JSON, JSON↔CSV, Number Base, Case, Color, Hex↔ASCII, URL Parser |
-| Inspect | Unix Time, JWT, RegExp, String Inspector, Text Diff, Markdown Preview, Cron Parser |
-| Generate | Hash, UUID, Random String, Lorem Ipsum |
+| **Format** | JSON, HTML, CSS, JS, XML, SQL, ERB, LESS, SCSS, Line Sort |
+| **Encode** | Base64, Base64 Image, URL, HTML Entity, Backslash Escape |
+| **Convert** | YAML↔JSON, JSON↔CSV, HTML→JSX, SVG→CSS, Case, Color, Hex↔ASCII, Number Base, URL Parser, Query String, PHP Serialize, cURL→Code, JSON→Code |
+| **Inspect** | JWT, Unix Time, RegExp, String Inspector, Text Diff, Markdown, HTML Preview, Cron, Certificate |
+| **Generate** | Hash (MD5/SHA/Keccak), UUID, ULID, Random String, Lorem Ipsum, QR Code |
 
 ## Features
 
 - **Command palette** — `⌘K` / `Ctrl+K` fuzzy search
-- **Dark/light theme** — persisted across sessions
-- **Smart paste detection** — auto-suggest tool from clipboard content
-- **Favorites & recents** — star tools, quick-access recent history in sidebar
-- **Syntax highlighting** — JSON and SQL output highlighted
-- **Rich outputs** — side-by-side diff view, markdown HTML preview
-- **File upload** — load input from a file on any tool page
+- **Favorites & recents** — star tools, quick-access history
+- **Smart paste** — auto-detect JWT, JSON, Base64, URLs
+- **Dark/light theme** — persisted locally
+- **Export/import** — backup favorites as JSON
+- **Onboarding** — first-visit welcome tour
+- **Keyboard shortcuts** — press `?` to view
+- **Rich outputs** — syntax highlighting, diff view, markdown/HTML/image previews
+- **File upload** — load input from files
+- **Firefox support** — `sidebar_action` in manifest
 
-## Architecture
+## Monorepo
 
 ```
-User Input → @ayetab/ui components → @ayetab/utils (pure functions) → Output
+apps/web          → Next.js 15
+apps/extension    → Chrome MV3 + Firefox sidebar
+packages/utils    → executeTool() + 41 tool implementations
+packages/ui       → Shared React components
+docs/             → Analysis, architecture, store listing guide
 ```
-
-All processing runs **client-side**. No data leaves the browser.
 
 ## Documentation
 
@@ -71,10 +63,4 @@ All processing runs **client-side**. No data leaves the browser.
 - [Utilities Catalog](docs/utilities-catalog.md)
 - [Architecture](docs/architecture.md)
 - [Implementation Roadmap](docs/implementation-roadmap.md)
-
-## Tech stack
-
-- **Monorepo:** Turborepo + pnpm workspaces
-- **Web:** Next.js 15 (App Router) + Tailwind CSS
-- **Extension:** Vite + React + @crxjs/vite-plugin + Chrome Side Panel API
-- **Shared:** TypeScript (strict), shared UI + utils packages
+- [Store Listing Guide](docs/STORE.md)

@@ -10,8 +10,24 @@ import { SmartPasteBanner } from "./smart-paste-banner";
 import { FavoriteButton } from "./favorite-button";
 import { useToolState } from "../hooks/use-tool-state";
 
-const MINIFY_TOOLS = new Set(["json-formatter", "html-formatter", "css-formatter", "js-formatter"]);
-const GENERATE_TOOLS = new Set(["uuid-generator", "random-string", "lorem-ipsum"]);
+const MINIFY_TOOLS = new Set([
+  "json-formatter",
+  "html-formatter",
+  "css-formatter",
+  "js-formatter",
+  "xml-formatter",
+  "erb-formatter",
+  "less-formatter",
+  "scss-formatter",
+]);
+
+const GENERATE_TOOLS = new Set([
+  "uuid-generator",
+  "random-string",
+  "lorem-ipsum",
+  "ulid-generator",
+  "qr-code",
+]);
 
 interface ToolRunnerProps {
   tool: ToolDefinition;
@@ -29,6 +45,10 @@ function getPlaceholder(toolId: string): string {
       return "First line: regex pattern\nRemaining lines: test string";
     case "text-diff":
       return "Paste original text, then --- on its own line, then modified text";
+    case "curl-code":
+      return 'curl -X POST "https://api.example.com" -H "Content-Type: application/json" -d \'{"key":"value"}\'';
+    case "cert-decoder":
+      return "Paste PEM-encoded certificate (-----BEGIN CERTIFICATE-----...)";
     default:
       return "Paste or type your input here...";
   }
@@ -45,6 +65,8 @@ export function ToolRunner({
 }: ToolRunnerProps) {
   const { input, setInput, output, error, result, setResult, reset } = useToolState(initialInput);
   const [pastedText, setPastedText] = useState<string | null>(null);
+  const [curlLang, setCurlLang] = useState<"fetch" | "python">("fetch");
+  const [codeLang, setCodeLang] = useState<"typescript" | "go">("typescript");
 
   useEffect(() => {
     onRecent?.(tool.id);
@@ -56,8 +78,11 @@ export function ToolRunner({
 
   const run = useCallback(async () => {
     if (!input.trim() && !GENERATE_TOOLS.has(tool.id)) return;
-    setResult(await executeTool(tool.id, input));
-  }, [tool.id, input, setResult]);
+    const options: Record<string, unknown> = {};
+    if (tool.id === "curl-code") options.lang = curlLang;
+    if (tool.id === "json-to-code") options.lang = codeLang;
+    setResult(await executeTool(tool.id, input, options));
+  }, [tool.id, input, setResult, curlLang, codeLang]);
 
   useEffect(() => {
     const timer = setTimeout(run, 300);
@@ -73,8 +98,38 @@ export function ToolRunner({
 
   const actions = (
     <>
-      {onToggleFavorite && (
-        <FavoriteButton active={!!isFavorite} onClick={onToggleFavorite} />
+      {onToggleFavorite && <FavoriteButton active={!!isFavorite} onClick={onToggleFavorite} />}
+      {tool.id === "curl-code" && (
+        <>
+          <button
+            onClick={() => setCurlLang("fetch")}
+            className={`text-xs px-2 py-1 rounded border ${curlLang === "fetch" ? "bg-accent" : "border-border"}`}
+          >
+            fetch
+          </button>
+          <button
+            onClick={() => setCurlLang("python")}
+            className={`text-xs px-2 py-1 rounded border ${curlLang === "python" ? "bg-accent" : "border-border"}`}
+          >
+            Python
+          </button>
+        </>
+      )}
+      {tool.id === "json-to-code" && (
+        <>
+          <button
+            onClick={() => setCodeLang("typescript")}
+            className={`text-xs px-2 py-1 rounded border ${codeLang === "typescript" ? "bg-accent" : "border-border"}`}
+          >
+            TS
+          </button>
+          <button
+            onClick={() => setCodeLang("go")}
+            className={`text-xs px-2 py-1 rounded border ${codeLang === "go" ? "bg-accent" : "border-border"}`}
+          >
+            Go
+          </button>
+        </>
       )}
       {MINIFY_TOOLS.has(tool.id) && (
         <button
@@ -92,9 +147,13 @@ export function ToolRunner({
           Generate
         </button>
       )}
-      {tool.id === "random-string" && (
+      {(tool.id === "random-string" || tool.id === "ulid-generator") && (
         <button
-          onClick={async () => setResult(await executeTool(tool.id, "", { length: 32 }))}
+          onClick={async () =>
+            setResult(
+              await executeTool(tool.id, "", tool.id === "ulid-generator" ? { action: "generate" } : { length: 32 })
+            )
+          }
           className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Generate
@@ -106,6 +165,14 @@ export function ToolRunner({
           className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Generate
+        </button>
+      )}
+      {tool.id === "qr-code" && (
+        <button
+          onClick={async () => setResult(await executeTool(tool.id, input || "https://ayetab.dev"))}
+          className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
+        >
+          Generate QR
         </button>
       )}
       <button
@@ -124,9 +191,7 @@ export function ToolRunner({
           pastedText={pastedText}
           onAccept={(detectedTool, text) => {
             setPastedText(null);
-            if (detectedTool.id !== tool.id) {
-              onNavigate(detectedTool, text);
-            }
+            if (detectedTool.id !== tool.id) onNavigate(detectedTool, text);
           }}
           onDismiss={() => setPastedText(null)}
         />
@@ -137,6 +202,7 @@ export function ToolRunner({
         rows={rows}
         placeholder={getPlaceholder(tool.id)}
         onPaste={handlePaste}
+        allowUpload={tool.id !== "qr-code"}
       />
       <OutputPanel value={output} error={error} rows={rows} result={result} />
     </ToolShell>

@@ -28,6 +28,13 @@ function highlightSql(code: string): string {
 function highlightCode(code: string, language?: string): string {
   if (language === "json") return highlightJson(code);
   if (language === "sql") return highlightSql(code);
+  if (language === "typescript" || language === "javascript") {
+    const escaped = escapeHtml(code);
+    return escaped.replace(
+      /\b(interface|type|const|let|var|function|export|import|from|return|async|await)\b/g,
+      '<span class="text-purple-600 dark:text-purple-400">$1</span>'
+    );
+  }
   return escapeHtml(code);
 }
 

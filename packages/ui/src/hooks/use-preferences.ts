@@ -37,7 +37,12 @@ export function usePreferences() {
     });
   }, []);
 
+  const importPrefs = useCallback(async (imported: UserPreferences) => {
+    await savePreferences(imported);
+    setPrefs(imported);
+  }, []);
+
   const isFavorite = useCallback((toolId: string) => prefs.favorites.includes(toolId), [prefs.favorites]);
 
-  return { prefs, loaded, toggleFavorite, addRecent, isFavorite };
+  return { prefs, loaded, toggleFavorite, addRecent, importPrefs, isFavorite };
 }
