@@ -69,7 +69,7 @@ export function CommandPalette({ tools: _tools, onSelect, open: controlledOpen, 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
       <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
-      <div className="relative w-full max-w-lg rounded-lg border border-border bg-popover shadow-2xl">
+      <div className="relative w-full max-w-lg rounded-lg border border-border bg-popover shadow-2xl" data-testid="command-palette">
         <div className="flex items-center border-b border-border px-3">
           <span className="text-muted-foreground text-sm mr-2">⌘K</span>
           <input

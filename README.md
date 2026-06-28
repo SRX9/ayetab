@@ -2,7 +2,7 @@
 
 All-in-one developer toolbox — a Chrome/Firefox extension side panel + Next.js web app, inspired by [DevUtils](https://devutils.com).
 
-**41 tools** — all processing runs locally in your browser. Your data never leaves your device.
+**43 tools** — all processing runs locally in your browser. Your data never leaves your device.
 
 ## Quick start
 
@@ -12,6 +12,7 @@ pnpm dev                    # all apps
 pnpm dev --filter web       # http://localhost:3000
 pnpm dev --filter extension # Vite + HMR
 pnpm test                   # unit tests
+pnpm test:e2e               # Playwright E2E (web app)
 pnpm build                  # production build
 ```
 
@@ -24,7 +25,7 @@ pnpm build --filter extension
 Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist`  
 Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/manifest.json`
 
-## Tool categories (41 tools)
+## Tool categories (43 tools)
 
 | Category | Tools |
 |----------|-------|

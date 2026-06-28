@@ -44,7 +44,10 @@ export function OutputPanel({
         )}
       </div>
       {error ? (
-        <div className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div
+          data-testid="tool-output-error"
+          className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        >
           {error}
         </div>
       ) : result?.format === "html" && result.html ? (
@@ -52,7 +55,7 @@ export function OutputPanel({
       ) : result?.format === "image" && result.imageSrc ? (
         <ImagePreview src={result.imageSrc} />
       ) : result?.format === "diff" && result.diffLines ? (
-        <DiffView lines={result.diffLines} />
+        <DiffView lines={result.diffLines} data-testid="tool-output-diff" />
       ) : result?.language ? (
         <CodeOutput value={value} language={result.language} rows={rows} />
       ) : (
@@ -60,6 +63,7 @@ export function OutputPanel({
           value={value}
           readOnly
           rows={rows}
+          data-testid="tool-output-text"
           className="w-full resize-y rounded-md border border-input bg-muted/50 px-3 py-2 text-sm font-mono focus-visible:outline-none"
           spellCheck={false}
         />

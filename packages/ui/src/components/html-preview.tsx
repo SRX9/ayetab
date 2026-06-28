@@ -10,6 +10,7 @@ interface HtmlPreviewProps {
 export function HtmlPreview({ html, className }: HtmlPreviewProps) {
   return (
     <div
+      data-testid="tool-output-html"
       className={cn(
         "rounded-md border border-input bg-background px-4 py-3 text-sm overflow-auto max-h-96",
         "[&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-semibold",

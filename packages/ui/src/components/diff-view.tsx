@@ -5,11 +5,15 @@ import { cn } from "../lib/utils";
 interface DiffViewProps {
   lines: Array<{ type: "added" | "removed" | "unchanged"; value: string }>;
   className?: string;
+  "data-testid"?: string;
 }
 
-export function DiffView({ lines, className }: DiffViewProps) {
+export function DiffView({ lines, className, "data-testid": testId }: DiffViewProps) {
   return (
-    <div className={cn("rounded-md border border-input overflow-auto font-mono text-xs", className)}>
+    <div
+      data-testid={testId}
+      className={cn("rounded-md border border-input overflow-auto font-mono text-xs", className)}
+    >
       {lines.map((line, i) => (
         <div
           key={i}

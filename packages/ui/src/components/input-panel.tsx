@@ -60,6 +60,7 @@ export function InputPanel({
         onPaste={onPaste}
         placeholder={placeholder}
         rows={rows}
+        data-testid="tool-input"
         className="w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm font-mono placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         spellCheck={false}
       />

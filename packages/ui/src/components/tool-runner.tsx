@@ -81,7 +81,11 @@ export function ToolRunner({
     const options: Record<string, unknown> = {};
     if (tool.id === "curl-code") options.lang = curlLang;
     if (tool.id === "json-to-code") options.lang = codeLang;
-    setResult(await executeTool(tool.id, input, options));
+    try {
+      setResult(await executeTool(tool.id, input, options));
+    } catch (e) {
+      setResult({ output: "", error: (e as Error).message });
+    }
   }, [tool.id, input, setResult, curlLang, codeLang]);
 
   useEffect(() => {

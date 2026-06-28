@@ -36,6 +36,7 @@ export function OnboardingModal() {
         </ul>
         <button
           onClick={dismiss}
+          data-testid="onboarding-dismiss"
           className="mt-5 w-full py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90"
         >
           Get started

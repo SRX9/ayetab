@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useKeyboardShortcut } from "../hooks/use-keyboard-shortcut";
 import { cn } from "../lib/utils";
 
@@ -17,6 +17,15 @@ const SHORTCUTS = [
 ];
 
 export function ShortcutsModal({ open, onClose }: ShortcutsModalProps) {
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
   if (!open) return null;
 
   return (

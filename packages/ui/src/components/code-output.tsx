@@ -50,6 +50,7 @@ export function CodeOutput({ value, language, className, rows = 8 }: CodeOutputP
 
   return (
     <pre
+      data-testid="tool-output-code"
       className={cn(
         "w-full overflow-auto rounded-md border border-input bg-muted/50 px-3 py-2 text-sm font-mono",
         className
