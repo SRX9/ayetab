@@ -1,0 +1,11 @@
+{
+  "extends": "@ayetab/tsconfig/react-library.json",
+  "compilerOptions": {
+    "types": ["chrome"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

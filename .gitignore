@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.next/
+out/
+.turbo/
+*.js.map
+*.d.ts.map
+
+# TypeScript emit in src (use Vite/tsc outDir only)
+apps/extension/src/**/*.js
+apps/extension/src/**/*.d.ts
+apps/extension/vite.config.js
+apps/extension/vite.config.d.ts
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Extension build
+apps/extension/dist/
+
+# Debug
+npm-debug.log*
+pnpm-debug.log*
+
+# Playwright
+playwright-report/
+test-results/
