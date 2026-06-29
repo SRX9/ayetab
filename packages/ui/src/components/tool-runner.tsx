@@ -9,6 +9,7 @@ import { OutputPanel } from "./output-panel";
 import { SmartPasteBanner } from "./smart-paste-banner";
 import { FavoriteButton } from "./favorite-button";
 import { useToolState } from "../hooks/use-tool-state";
+import { loadToolSession, saveToolOptions } from "../lib/tool-storage";
 
 const MINIFY_TOOLS = new Set([
   "json-formatter",
@@ -63,18 +64,51 @@ export function ToolRunner({
   onToggleFavorite,
   compact,
 }: ToolRunnerProps) {
-  const { input, setInput, output, error, result, setResult, reset } = useToolState(initialInput);
+  const { input, setInput, output, error, result, setResult, reset, isHydrated } = useToolState(
+    tool.id,
+    initialInput
+  );
   const [pastedText, setPastedText] = useState<string | null>(null);
   const [curlLang, setCurlLang] = useState<"fetch" | "python">("fetch");
   const [codeLang, setCodeLang] = useState<"typescript" | "go">("typescript");
+  const [optionsHydrated, setOptionsHydrated] = useState(tool.id !== "curl-code" && tool.id !== "json-to-code");
 
   useEffect(() => {
     onRecent?.(tool.id);
   }, [tool.id, onRecent]);
 
   useEffect(() => {
-    if (initialInput) setInput(initialInput);
-  }, [initialInput, setInput]);
+    let cancelled = false;
+    const hasOptions = tool.id === "curl-code" || tool.id === "json-to-code";
+    if (hasOptions) setOptionsHydrated(false);
+
+    void loadToolSession(tool.id).then((session) => {
+      if (cancelled) return;
+      if (session?.options) {
+        if (session.options.curlLang === "fetch" || session.options.curlLang === "python") {
+          setCurlLang(session.options.curlLang);
+        }
+        if (session.options.codeLang === "typescript" || session.options.codeLang === "go") {
+          setCodeLang(session.options.codeLang);
+        }
+      }
+      if (hasOptions) setOptionsHydrated(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [tool.id]);
+
+  useEffect(() => {
+    if (!isHydrated || !optionsHydrated) return;
+    if (tool.id !== "curl-code" && tool.id !== "json-to-code") return;
+
+    const options: Record<string, unknown> = {};
+    if (tool.id === "curl-code") options.curlLang = curlLang;
+    if (tool.id === "json-to-code") options.codeLang = codeLang;
+    void saveToolOptions(tool.id, options);
+  }, [tool.id, curlLang, codeLang, isHydrated, optionsHydrated]);
 
   const run = useCallback(async () => {
     if (!input.trim() && !GENERATE_TOOLS.has(tool.id)) return;
