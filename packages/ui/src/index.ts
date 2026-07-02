@@ -6,6 +6,7 @@ export { ToolCard } from "./components/tool-card";
 export { SearchBar } from "./components/search-bar";
 export { CategoryNav } from "./components/category-nav";
 export { CommandPalette } from "./components/command-palette";
+export { CommandPaletteProvider, useCommandPalette, useCommandPaletteOptional } from "./components/command-palette-provider";
 export { ThemeProvider, useTheme } from "./components/theme-provider";
 export { ThemeToggle } from "./components/theme-toggle";
 export { SmartPasteBanner } from "./components/smart-paste-banner";

@@ -16,23 +16,21 @@ test.describe("Home & navigation", () => {
     await expect(main.getByRole("button", { name: "Base64 Encode/Decode" })).toBeVisible();
   });
 
-  test("search dropdown navigates to tool", async ({ page }) => {
-    const search = page.getByPlaceholder("Search tools... (⌘K)");
-    await search.fill("jwt");
-    const dropdown = page.locator("main .absolute.top-full");
-    await expect(dropdown.getByRole("button", { name: /JWT Debugger/ })).toBeVisible();
-    await dropdown.getByRole("button", { name: /JWT Debugger/ }).click();
+  test("search bar opens command palette and navigates", async ({ page }) => {
+    await page.getByRole("button", { name: /Search tools/ }).click();
+    const palette = page.getByTestId("command-palette");
+    await expect(palette).toBeVisible();
+    await palette.getByPlaceholder("Search tools...").fill("jwt");
+    await palette.getByRole("button", { name: /JWT Debugger/ }).click();
     await expect(page).toHaveURL(/\/tools\/jwt-debugger/);
   });
 
-  test("command palette opens and navigates", async ({ page }) => {
+  test("command palette fuzzy search works", async ({ page }) => {
     await page.keyboard.press("Control+k");
     const palette = page.getByTestId("command-palette");
-    await expect(palette).toBeVisible();
-    await palette.getByPlaceholder("Search tools...").fill("uuid");
-    await palette.getByRole("button", { name: "UUID Generator" }).click();
-    await expect(page).toHaveURL(/\/tools\/uuid-generator/);
-    await expect(page.getByRole("heading", { name: "UUID Generator" })).toBeVisible();
+    await palette.getByPlaceholder("Search tools...").fill("jf");
+    await palette.getByRole("button", { name: /JSON Formatter/ }).click();
+    await expect(page).toHaveURL(/\/tools\/json-formatter/);
   });
 
   test("favorites toggle and filter", async ({ page }) => {

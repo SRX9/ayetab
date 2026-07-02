@@ -1,4 +1,5 @@
 import type { ToolDefinition } from "./types";
+import { fuzzySearchTools } from "./fuzzy-search";
 
 export const TOOL_REGISTRY: ToolDefinition[] = [
   // P0 — MVP
@@ -416,14 +417,7 @@ export function getToolsByPriority(priority: ToolDefinition["priority"]): ToolDe
 }
 
 export function searchTools(query: string): ToolDefinition[] {
-  const q = query.toLowerCase().trim();
-  if (!q) return TOOL_REGISTRY;
-
-  return TOOL_REGISTRY.filter(
-    (t) =>
-      t.name.toLowerCase().includes(q) ||
-      t.description.toLowerCase().includes(q) ||
-      t.id.includes(q) ||
-      t.keywords.some((k) => k.includes(q))
-  );
+  return fuzzySearchTools(query, TOOL_REGISTRY).map((r) => r.tool);
 }
+
+export { fuzzySearchTools, fuzzyMatch, type ToolSearchResult } from "./fuzzy-search";

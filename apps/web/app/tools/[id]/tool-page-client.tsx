@@ -3,8 +3,8 @@
 import { useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getToolById, TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
-import { ToolRunner, CommandPalette, ThemeToggle, usePreferences } from "@ayetab/ui";
+import { getToolById, type ToolDefinition } from "@ayetab/utils";
+import { ToolRunner, ThemeToggle, usePreferences } from "@ayetab/ui";
 
 export default function ToolPageClient({ toolId }: { toolId: string }) {
   const router = useRouter();
@@ -19,11 +19,6 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
       const params = new URLSearchParams({ input });
       router.push(`/tools/${nextTool.id}?${params.toString()}`);
     },
-    [router]
-  );
-
-  const handlePaletteSelect = useCallback(
-    (t: ToolDefinition) => router.push(`/tools/${t.id}`),
     [router]
   );
 
@@ -48,7 +43,6 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <CommandPalette tools={TOOL_REGISTRY} onSelect={handlePaletteSelect} />
       <header className="border-b border-border px-6 py-3 flex items-center gap-4">
         <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← All Tools
