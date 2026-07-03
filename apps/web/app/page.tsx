@@ -12,7 +12,6 @@ import {
   ToolCard,
   SearchBar,
   CategoryNav,
-  CommandPalette,
   ThemeToggle,
   ToolListSection,
   usePreferences,
@@ -65,7 +64,6 @@ export default function HomePage() {
     <div className="min-h-screen flex">
       <OnboardingModal />
       <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
-      <CommandPalette tools={TOOL_REGISTRY} onSelect={handleSelect} />
 
       <aside className="w-56 shrink-0 border-r border-border p-4 flex flex-col gap-4">
         <div className="flex items-start justify-between gap-2">
