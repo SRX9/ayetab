@@ -2,9 +2,10 @@
 
 import { useMemo, useCallback } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getToolById, type ToolDefinition } from "@ayetab/utils";
-import { ToolRunner, ThemeToggle, usePreferences } from "@ayetab/ui";
+import { ToolHost, ThemeToggle, usePreferences } from "@ayetab/ui";
 
 export default function ToolPageClient({ toolId }: { toolId: string }) {
   const router = useRouter();
@@ -43,6 +44,11 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {tool.id === "excalidraw" && (
+        <Script id="excalidraw-asset-path" strategy="beforeInteractive">
+          {`window["EXCALIDRAW_ASSET_PATH"] = window.origin;`}
+        </Script>
+      )}
       <header className="border-b border-border px-6 py-3 flex items-center gap-4">
         <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← All Tools
@@ -52,8 +58,8 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
         <ThemeToggle />
       </header>
       <main className="flex-1 p-6">
-        <div className="max-w-3xl mx-auto">
-          <ToolRunner
+        <div className={tool.id === "excalidraw" ? "w-full" : "max-w-3xl mx-auto"}>
+          <ToolHost
             key={`${tool.id}-${initialInput}`}
             tool={tool}
             initialInput={initialInput}

@@ -2,7 +2,7 @@
 
 All-in-one developer toolbox — a Chrome/Firefox extension side panel + Next.js web app, inspired by [DevUtils](https://devutils.com).
 
-**43 tools** — all processing runs locally in your browser. Your data never leaves your device.
+**44 tools** — all processing runs locally in your browser. Your data never leaves your device.
 
 ## Quick start
 
@@ -25,7 +25,7 @@ pnpm build --filter extension
 Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist`  
 Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/manifest.json`
 
-## Tool categories (43 tools)
+## Tool categories (44 tools)
 
 | Category | Tools |
 |----------|-------|
@@ -33,7 +33,7 @@ Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/ma
 | **Encode** | Base64, Base64 Image, URL, HTML Entity, Backslash Escape |
 | **Convert** | YAML↔JSON, JSON↔CSV, HTML→JSX, SVG→CSS, Case, Color, Hex↔ASCII, Number Base, URL Parser, Query String, PHP Serialize, cURL→Code, JSON→Code |
 | **Inspect** | JWT, Unix Time, RegExp, String Inspector, Text Diff, Markdown, HTML Preview, Cron, Certificate |
-| **Generate** | Hash (MD5/SHA/Keccak), UUID, ULID, Random String, Lorem Ipsum, QR Code |
+| **Generate** | Hash (MD5/SHA/Keccak), UUID, ULID, Random String, Lorem Ipsum, QR Code, Draw & Write |
 
 ## Features
 
