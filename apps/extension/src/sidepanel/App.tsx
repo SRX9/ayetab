@@ -13,7 +13,7 @@ import {
   CommandPalette,
   ThemeProvider,
   ThemeToggle,
-  ToolRunner,
+  ToolHost,
   ToolListSection,
   usePreferences,
   OnboardingModal,
@@ -93,8 +93,8 @@ function AppContent() {
           <span className="text-xs font-medium truncate flex-1">{selectedTool.name}</span>
           <ThemeToggle />
         </header>
-        <div className="flex-1 overflow-auto p-3">
-          <ToolRunner
+        <div className={`flex-1 overflow-auto p-3 ${selectedTool.id === "excalidraw" ? "flex flex-col" : ""}`}>
+          <ToolHost
             key={`${selectedTool.id}-${initialInput}`}
             tool={selectedTool}
             initialInput={initialInput}

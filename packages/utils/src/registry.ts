@@ -402,6 +402,15 @@ export const TOOL_REGISTRY: ToolDefinition[] = [
     icon: "Link2",
     keywords: ["query", "string", "url", "params", "json"],
   },
+  {
+    id: "excalidraw",
+    name: "Draw & Write",
+    description: "Sketch diagrams, notes, and whiteboards with Excalidraw — saved locally",
+    category: "generate",
+    priority: "P2",
+    icon: "PenTool",
+    keywords: ["draw", "sketch", "diagram", "whiteboard", "excalidraw", "canvas", "write", "notes"],
+  },
 ];
 
 export function getToolById(id: string): ToolDefinition | undefined {

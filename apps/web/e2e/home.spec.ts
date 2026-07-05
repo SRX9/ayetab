@@ -10,7 +10,7 @@ test.describe("Home & navigation", () => {
 
   test("loads home page with tool grid", async ({ page }) => {
     await expect(page.getByRole("heading", { name: "AyeTab", exact: true })).toBeVisible();
-    await expect(page.getByText("43 tools available")).toBeVisible();
+    await expect(page.getByText("44 tools available")).toBeVisible();
     const main = page.locator("main");
     await expect(main.getByRole("button", { name: "JSON Formatter" })).toBeVisible();
     await expect(main.getByRole("button", { name: "Base64 Encode/Decode" })).toBeVisible();
