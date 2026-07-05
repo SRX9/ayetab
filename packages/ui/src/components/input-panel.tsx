@@ -13,6 +13,7 @@ interface InputPanelProps {
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void;
   allowUpload?: boolean;
   autoFocus?: boolean;
+  focusKey?: string;
 }
 
 export function InputPanel({
@@ -25,15 +26,26 @@ export function InputPanel({
   onPaste,
   allowUpload = true,
   autoFocus = false,
+  focusKey,
 }: InputPanelProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!autoFocus) return;
-    const frame = requestAnimationFrame(() => textareaRef.current?.focus());
+
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = textareaRef.current;
+        if (!el) return;
+        el.focus();
+        const end = el.value.length;
+        el.setSelectionRange(end, end);
+      });
+    });
+
     return () => cancelAnimationFrame(frame);
-  }, [autoFocus]);
+  }, [autoFocus, focusKey]);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

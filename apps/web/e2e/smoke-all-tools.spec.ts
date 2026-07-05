@@ -70,6 +70,7 @@ test.describe("All tools smoke", () => {
       await page.goto(`/tools/${tool.id}`);
       await expect(page.getByRole("heading", { name: tool.name })).toBeVisible();
       await expect(page.getByTestId("tool-input")).toBeVisible({ timeout: 5000 });
+      await expect(page.getByTestId("tool-input")).toBeFocused({ timeout: 5000 });
 
       const sample = SAMPLE_INPUTS[tool.id];
 
