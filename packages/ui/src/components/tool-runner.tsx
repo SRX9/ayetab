@@ -241,6 +241,8 @@ export function ToolRunner({
         placeholder={getPlaceholder(tool.id)}
         onPaste={handlePaste}
         allowUpload={tool.id !== "qr-code"}
+        autoFocus={isHydrated}
+        focusKey={tool.id}
       />
       <OutputPanel value={output} error={error} rows={rows} result={result} />
     </ToolShell>
