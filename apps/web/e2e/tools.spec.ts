@@ -10,6 +10,7 @@ test.describe("Tool execution", () => {
 
   test("JSON formatter prettifies input", async ({ page }) => {
     await page.goto("/tools/json-formatter");
+    await expect(page.getByTestId("tool-input")).toBeFocused();
     await page.getByTestId("tool-input").fill('{"a":1,"b":[2,3]}');
     const out = await getToolOutputText(page);
     expect(out).toContain('"a"');

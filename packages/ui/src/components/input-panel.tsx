@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "../lib/utils";
 
 interface InputPanelProps {
@@ -12,6 +12,7 @@ interface InputPanelProps {
   rows?: number;
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void;
   allowUpload?: boolean;
+  autoFocus?: boolean;
 }
 
 export function InputPanel({
@@ -23,8 +24,16 @@ export function InputPanel({
   rows = 8,
   onPaste,
   allowUpload = true,
+  autoFocus = false,
 }: InputPanelProps) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!autoFocus) return;
+    const frame = requestAnimationFrame(() => textareaRef.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [autoFocus]);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -55,12 +64,14 @@ export function InputPanel({
         )}
       </div>
       <textarea
+        ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onPaste={onPaste}
         placeholder={placeholder}
         rows={rows}
         data-testid="tool-input"
+        autoFocus={autoFocus}
         className="w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm font-mono placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         spellCheck={false}
       />
