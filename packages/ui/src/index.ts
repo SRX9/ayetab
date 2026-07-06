@@ -20,6 +20,8 @@ export { ToolRunner } from "./components/tool-runner";
 export { ToolHost } from "./components/tool-host";
 export { ExcalidrawTool } from "./components/excalidraw-tool";
 export { isCustomUiTool, CUSTOM_UI_TOOL_IDS } from "./lib/custom-tools";
+export { CUSTOM_TOOL_COMPONENTS, CUSTOM_TOOL_TEST_IDS } from "./lib/custom-tool-components";
+export { useJsonToolState } from "./hooks/use-json-tool-state";
 export { ShortcutsModal, useShortcutsModal } from "./components/shortcuts-modal";
 export { OnboardingModal } from "./components/onboarding-modal";
 export { SettingsMenu } from "./components/settings-menu";

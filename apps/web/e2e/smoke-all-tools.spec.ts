@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { TOOL_REGISTRY } from "@ayetab/utils";
 import { dismissOnboarding, toolOutput, preparePage } from "./helpers";
-import { CUSTOM_UI_TOOL_IDS } from "@ayetab/ui";
+import { CUSTOM_UI_TOOL_IDS, CUSTOM_TOOL_TEST_IDS } from "@ayetab/ui";
 
 const TINY_PNG_B64 =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
@@ -56,8 +56,8 @@ const HTML_OUTPUT_TOOLS = new Set(["markdown-preview", "html-preview"]);
 const IMAGE_OUTPUT_TOOLS = new Set(["qr-code", "base64-image"]);
 
 test.describe("All tools smoke", () => {
-  test("registry contains 44 tools", () => {
-    expect(TOOL_REGISTRY.length).toBe(44);
+  test("registry contains 50 tools", () => {
+    expect(TOOL_REGISTRY.length).toBe(50);
   });
 
   test.beforeEach(async ({ page }) => {
@@ -72,7 +72,8 @@ test.describe("All tools smoke", () => {
       await expect(page.getByRole("heading", { name: tool.name })).toBeVisible();
 
       if (CUSTOM_UI_TOOL_IDS.has(tool.id)) {
-        await expect(page.getByTestId("excalidraw-canvas")).toBeVisible({ timeout: 15_000 });
+        const testId = CUSTOM_TOOL_TEST_IDS[tool.id];
+        await expect(page.getByTestId(testId)).toBeVisible({ timeout: 15_000 });
         return;
       }
 

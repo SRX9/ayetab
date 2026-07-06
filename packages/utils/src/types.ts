@@ -1,4 +1,4 @@
-export type ToolCategory = "format" | "convert" | "inspect" | "generate" | "encode";
+export type ToolCategory = "format" | "convert" | "inspect" | "generate" | "encode" | "productivity";
 
 export type ToolPriority = "P0" | "P1" | "P2" | "P3";
 
@@ -32,6 +32,7 @@ export const CATEGORY_LABELS: Record<ToolCategory, string> = {
   inspect: "Inspect & Debug",
   generate: "Generators",
   encode: "Encode & Decode",
+  productivity: "Productivity",
 };
 
 export const CATEGORY_ICONS: Record<ToolCategory, string> = {
@@ -40,4 +41,5 @@ export const CATEGORY_ICONS: Record<ToolCategory, string> = {
   inspect: "Search",
   generate: "Sparkles",
   encode: "Lock",
+  productivity: "ListTodo",
 };

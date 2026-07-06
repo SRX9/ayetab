@@ -2,7 +2,7 @@
 
 import type { ToolDefinition } from "@ayetab/utils";
 import { isCustomUiTool } from "../lib/custom-tools";
-import { ExcalidrawTool } from "./excalidraw-tool";
+import { CUSTOM_TOOL_COMPONENTS } from "../lib/custom-tool-components";
 import { ToolRunner } from "./tool-runner";
 
 interface ToolHostProps {
@@ -16,8 +16,9 @@ interface ToolHostProps {
 }
 
 export function ToolHost(props: ToolHostProps) {
-  if (props.tool.id === "excalidraw") {
-    return <ExcalidrawTool {...props} />;
+  const CustomComponent = CUSTOM_TOOL_COMPONENTS[props.tool.id];
+  if (CustomComponent) {
+    return <CustomComponent {...props} />;
   }
 
   if (isCustomUiTool(props.tool.id)) {

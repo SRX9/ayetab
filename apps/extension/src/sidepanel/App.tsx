@@ -22,7 +22,7 @@ import {
   SettingsMenu,
 } from "@ayetab/ui";
 
-const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
+const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
 
 function AppContent() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
@@ -47,6 +47,7 @@ function AppContent() {
       inspect: 0,
       generate: 0,
       encode: 0,
+      productivity: 0,
     };
     for (const t of TOOL_REGISTRY) c[t.category]++;
     return c;
