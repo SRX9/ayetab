@@ -21,7 +21,7 @@ import {
   SettingsMenu,
 } from "@ayetab/ui";
 
-const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode"];
+const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
 
 export default function HomePage() {
   const router = useRouter();
@@ -45,6 +45,7 @@ export default function HomePage() {
       inspect: 0,
       generate: 0,
       encode: 0,
+      productivity: 0,
     };
     for (const t of TOOL_REGISTRY) c[t.category]++;
     return c;
