@@ -31,10 +31,13 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
 
   if (!tool) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-semibold">Tool not found</h1>
-          <Link href="/" className="text-sm text-muted-foreground hover:underline mt-2 inline-block">
+      <div className="flex min-h-screen items-center justify-center p-6">
+        <div className="text-center animate-fade-up motion-reduce:animate-none">
+          <h1 className="text-2xl font-semibold tracking-tight">Tool not found</h1>
+          <Link
+            href="/"
+            className="mt-3 inline-block text-sm text-muted-foreground transition-colors duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+          >
             ← Back to all tools
           </Link>
         </div>
@@ -43,22 +46,25 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       {tool.id === "excalidraw" && (
         <Script id="excalidraw-asset-path" strategy="beforeInteractive">
           {`window["EXCALIDRAW_ASSET_PATH"] = window.origin;`}
         </Script>
       )}
-      <header className="border-b border-border px-6 py-3 flex items-center gap-4">
-        <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+      <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-border/80 bg-background/80 px-6 py-3 backdrop-blur-sm">
+        <Link
+          href="/"
+          className="text-sm text-muted-foreground transition-colors duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+        >
           ← All Tools
         </Link>
-        <span className="text-muted-foreground">/</span>
-        <span className="text-sm font-medium flex-1">{tool.name}</span>
+        <span className="text-border">/</span>
+        <span className="flex-1 text-sm font-medium tracking-tight">{tool.name}</span>
         <ThemeToggle />
       </header>
-      <main className="flex-1 p-6">
-        <div className={tool.id === "excalidraw" ? "w-full" : "max-w-3xl mx-auto"}>
+      <main className="flex-1 p-6 md:p-8">
+        <div className={tool.id === "excalidraw" ? "w-full" : "mx-auto max-w-3xl"}>
           <ToolHost
             key={`${tool.id}-${initialInput}`}
             tool={tool}

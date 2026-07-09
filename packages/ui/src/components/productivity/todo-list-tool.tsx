@@ -131,7 +131,7 @@ export function TodoListTool({
             <button
               type="button"
               onClick={addItem}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-[transform,background-color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-primary/90 motion-reduce:transition-none motion-reduce:active:scale-100"
             >
               Add
             </button>
@@ -143,28 +143,28 @@ export function TodoListTool({
                 key={filter}
                 type="button"
                 onClick={() => setFilter(filter)}
-                className={`rounded-full px-3 py-1 capitalize transition-colors ${
+                className={`rounded-md px-3 py-1.5 capitalize transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 ${
                   state.filter === filter
                     ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-accent"
+                    : "bg-muted text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent"
                 }`}
               >
                 {filter}
               </button>
             ))}
-            <span className="ml-auto text-muted-foreground">{activeCount} active</span>
+            <span className="ml-auto tabular-nums text-muted-foreground">{activeCount} active</span>
           </div>
 
-          <ul className="flex flex-col gap-2 min-h-[12rem]">
+          <ul className="flex min-h-[12rem] flex-col gap-2">
             {visibleItems.length === 0 ? (
-              <li className="text-sm text-muted-foreground text-center py-8">
+              <li className="py-8 text-center text-sm text-muted-foreground">
                 No tasks yet. Add one above.
               </li>
             ) : (
               visibleItems.map((item) => (
                 <li
                   key={item.id}
-                  className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2"
+                  className="flex items-center gap-3 rounded-lg border border-border bg-card/80 px-3 py-2 transition-[border-color,background-color] duration-150 ease-out-strong"
                 >
                   <input
                     type="checkbox"
@@ -179,14 +179,14 @@ export function TodoListTool({
                     {item.text}
                   </span>
                   <span
-                    className={`text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full ${PRIORITY_STYLES[item.priority]}`}
+                    className={`rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wide ${PRIORITY_STYLES[item.priority]}`}
                   >
                     {item.priority}
                   </span>
                   <button
                     type="button"
                     onClick={() => deleteItem(item.id)}
-                    className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+                    className="text-xs text-muted-foreground transition-[transform,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:text-destructive motion-reduce:transition-none"
                     aria-label={`Delete "${item.text}"`}
                   >
                     Delete

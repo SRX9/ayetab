@@ -168,21 +168,21 @@ export function HabitTrackerTool({
                       <button
                         type="button"
                         onClick={() => toggleToday(habit.id)}
-                        className={`h-6 w-6 rounded-full border-2 flex items-center justify-center text-xs transition-colors ${
+                        className={`flex h-6 w-6 items-center justify-center rounded-md border-2 text-xs transition-[transform,background-color,border-color,color] duration-150 ease-out-strong active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 ${
                           doneToday
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border hover:border-primary"
+                            ? "border-brand bg-brand text-brand-foreground"
+                            : "border-border [@media(hover:hover)_and_(pointer:fine)]:hover:border-brand"
                         }`}
                         aria-label={`Mark "${habit.name}" for today`}
                       >
                         {doneToday ? "✓" : ""}
                       </button>
                       <span className="flex-1 text-sm font-medium">{habit.name}</span>
-                      <span className="text-xs text-muted-foreground">{streak} day streak</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">{streak} day streak</span>
                       <button
                         type="button"
                         onClick={() => deleteHabit(habit.id)}
-                        className="text-xs text-muted-foreground hover:text-destructive"
+                        className="text-xs text-muted-foreground transition-[transform,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:text-destructive motion-reduce:transition-none"
                         aria-label={`Delete habit "${habit.name}"`}
                       >
                         Delete
@@ -196,11 +196,11 @@ export function HabitTrackerTool({
                           <div
                             key={day}
                             title={day}
-                            className={`h-6 flex-1 rounded-sm transition-colors ${
+                            className={`h-6 flex-1 rounded-sm transition-[background-color,border-color] duration-150 ease-out-strong ${
                               done
-                                ? "bg-primary"
+                                ? "bg-brand"
                                 : isToday
-                                  ? "bg-muted border border-dashed border-border"
+                                  ? "border border-dashed border-border bg-muted"
                                   : "bg-muted/50"
                             }`}
                           />

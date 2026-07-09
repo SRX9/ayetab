@@ -4,48 +4,64 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 210 20% 98%;
+    --foreground: 222 28% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 222 28% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --popover-foreground: 222 28% 10%;
+    --primary: 222 28% 12%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 16% 94%;
+    --secondary-foreground: 222 28% 12%;
+    --muted: 210 16% 94%;
+    --muted-foreground: 215 14% 42%;
+    --accent: 210 18% 93%;
+    --accent-foreground: 222 28% 12%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --border: 214 18% 88%;
+    --input: 214 18% 88%;
+    --ring: 222 28% 12%;
+    --radius: 0.625rem;
+
+    --surface-glow: 210 40% 96%;
+    --surface-grid: 214 20% 90%;
+    --brand: 199 89% 42%;
+    --brand-foreground: 0 0% 100%;
+    --favorite: 38 92% 50%;
+
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --background: 222 28% 7%;
+    --foreground: 210 20% 96%;
+    --card: 222 24% 9%;
+    --card-foreground: 210 20% 96%;
+    --popover: 222 24% 9%;
+    --popover-foreground: 210 20% 96%;
+    --primary: 210 20% 96%;
+    --primary-foreground: 222 28% 10%;
+    --secondary: 222 18% 14%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 222 18% 14%;
+    --muted-foreground: 215 12% 62%;
+    --accent: 222 16% 16%;
+    --accent-foreground: 210 20% 96%;
+    --destructive: 0 62% 40%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 222 16% 18%;
+    --input: 222 16% 18%;
+    --ring: 210 20% 80%;
+
+    --surface-glow: 222 30% 11%;
+    --surface-grid: 222 16% 16%;
+    --brand: 199 89% 55%;
+    --brand-foreground: 222 28% 8%;
+    --favorite: 38 92% 55%;
   }
 }
 
@@ -53,12 +69,89 @@
   * {
     @apply border-border;
   }
+
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
   body {
-    @apply bg-background text-foreground text-sm;
+    @apply bg-background text-foreground text-sm antialiased;
     margin: 0;
     padding: 0;
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
+    background-image:
+      radial-gradient(ellipse 90% 40% at 50% -10%, hsl(var(--surface-glow)), transparent 55%);
+  }
+
+  ::selection {
+    background: hsl(var(--brand) / 0.22);
+  }
+
+  kbd {
+    @apply inline-flex items-center rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground;
+  }
+}
+
+@layer utilities {
+  .ease-out-strong {
+    transition-timing-function: var(--ease-out);
+  }
+
+  .ease-in-out-strong {
+    transition-timing-function: var(--ease-in-out);
+  }
+
+  .ease-drawer {
+    transition-timing-function: var(--ease-drawer);
+  }
+
+  .surface-panel {
+    background:
+      linear-gradient(180deg, hsl(var(--card) / 0.92), hsl(var(--card))),
+      hsl(var(--card));
+    box-shadow:
+      0 1px 0 hsl(var(--foreground) / 0.04),
+      0 8px 24px -12px hsl(var(--foreground) / 0.12);
+  }
+
+  .stagger-in {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: ayetab-fade-up 280ms var(--ease-out) forwards;
+  }
+
+  .stagger-in:nth-child(1) { animation-delay: 0ms; }
+  .stagger-in:nth-child(2) { animation-delay: 30ms; }
+  .stagger-in:nth-child(3) { animation-delay: 60ms; }
+  .stagger-in:nth-child(4) { animation-delay: 90ms; }
+  .stagger-in:nth-child(5) { animation-delay: 120ms; }
+  .stagger-in:nth-child(6) { animation-delay: 150ms; }
+  .stagger-in:nth-child(7) { animation-delay: 180ms; }
+  .stagger-in:nth-child(8) { animation-delay: 210ms; }
+  .stagger-in:nth-child(9) { animation-delay: 240ms; }
+  .stagger-in:nth-child(10) { animation-delay: 270ms; }
+  .stagger-in:nth-child(11) { animation-delay: 300ms; }
+  .stagger-in:nth-child(12) { animation-delay: 330ms; }
+  .stagger-in:nth-child(n+13) { animation-delay: 360ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stagger-in {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+}
+
+@keyframes ayetab-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

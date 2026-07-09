@@ -2,6 +2,7 @@
 
 import type { ToolDefinition } from "@ayetab/utils";
 import { FavoriteButton } from "../favorite-button";
+import { Button } from "../button";
 
 export interface CustomToolProps {
   tool: ToolDefinition;
@@ -31,20 +32,20 @@ export function ToolActions({ onClear, isFavorite, onToggleFavorite, extra }: To
     <>
       {onToggleFavorite && <FavoriteButton active={!!isFavorite} onClick={onToggleFavorite} />}
       {extra}
-      <button
-        type="button"
-        onClick={onClear}
-        className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
-      >
+      <Button variant="outline" size="sm" onClick={onClear}>
         Clear
-      </button>
+      </Button>
     </>
   );
 }
 
 export function LoadingState({ label = "Loading saved data…" }: { label?: string }) {
   return (
-    <div className="flex min-h-[16rem] items-center justify-center text-sm text-muted-foreground">
+    <div className="flex min-h-[16rem] flex-col items-center justify-center gap-3 text-sm text-muted-foreground">
+      <span
+        className="h-5 w-5 animate-spin rounded-full border-2 border-border border-t-brand motion-reduce:animate-none"
+        aria-hidden
+      />
       {label}
     </div>
   );

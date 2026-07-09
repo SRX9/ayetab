@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 
 interface InputPanelProps {
   value: string;
@@ -59,19 +60,15 @@ export function InputPanel({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+        <label className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
           {label}
         </label>
         {allowUpload && (
           <>
             <input ref={fileRef} type="file" className="hidden" onChange={handleFile} />
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Button variant="ghost" size="sm" onClick={() => fileRef.current?.click()} className="h-6 px-2">
               Upload file
-            </button>
+            </Button>
           </>
         )}
       </div>
@@ -84,7 +81,13 @@ export function InputPanel({
         rows={rows}
         data-testid="tool-input"
         autoFocus={autoFocus}
-        className="w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm font-mono placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(
+          "w-full resize-y rounded-lg border border-input bg-card/60 px-3 py-2.5 text-sm font-mono shadow-sm",
+          "placeholder:text-muted-foreground",
+          "transition-[border-color,box-shadow] duration-150 ease-out-strong",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "motion-reduce:transition-none"
+        )}
         spellCheck={false}
       />
     </div>

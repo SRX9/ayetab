@@ -13,15 +13,17 @@ interface ToolShellProps {
 
 export function ToolShell({ title, description, children, actions, className }: ToolShellProps) {
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div className={cn("flex flex-col gap-5 animate-fade-up motion-reduce:animate-none", className)}>
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
           {description && (
-            <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{description}</p>
           )}
         </div>
-        {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+        {actions && (
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">{actions}</div>
+        )}
       </div>
       {children}
     </div>

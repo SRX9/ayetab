@@ -1,4 +1,7 @@
 export { cn } from "./lib/utils";
+export { pressable } from "./lib/pressable";
+export { Button } from "./components/button";
+export { Dialog } from "./components/dialog";
 export { InputPanel } from "./components/input-panel";
 export { OutputPanel } from "./components/output-panel";
 export { ToolShell } from "./components/tool-shell";

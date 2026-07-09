@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { UserPreferences } from "../lib/preferences";
 import { exportPreferences, importPreferences } from "../lib/preferences";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 
 interface SettingsMenuProps {
   prefs: UserPreferences;
@@ -14,8 +15,10 @@ interface SettingsMenuProps {
 
 export function SettingsMenu({ prefs, onImport, className, compact }: SettingsMenuProps) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleExport = () => {
+    setError(null);
     const blob = new Blob([exportPreferences(prefs)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -33,8 +36,9 @@ export function SettingsMenu({ prefs, onImport, className, compact }: SettingsMe
       try {
         const imported = importPreferences(String(reader.result));
         onImport(imported);
+        setError(null);
       } catch {
-        alert("Invalid preferences file");
+        setError("Invalid preferences file");
       }
     };
     reader.readAsText(file);
@@ -42,26 +46,31 @@ export function SettingsMenu({ prefs, onImport, className, compact }: SettingsMe
   };
 
   return (
-    <div className={cn("flex gap-1.5", className)}>
-      <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
-      <button
-        onClick={handleExport}
-        className={cn(
-          "rounded border border-border hover:bg-accent text-muted-foreground hover:text-foreground transition-colors",
-          compact ? "text-[10px] px-1.5 py-0.5" : "text-xs px-2 py-1"
-        )}
-      >
-        Export
-      </button>
-      <button
-        onClick={() => fileRef.current?.click()}
-        className={cn(
-          "rounded border border-border hover:bg-accent text-muted-foreground hover:text-foreground transition-colors",
-          compact ? "text-[10px] px-1.5 py-0.5" : "text-xs px-2 py-1"
-        )}
-      >
-        Import
-      </button>
+    <div className={cn("flex flex-col gap-1.5", className)}>
+      <div className="flex gap-1.5">
+        <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
+        <Button
+          variant="outline"
+          size={compact ? "sm" : "sm"}
+          onClick={handleExport}
+          className={cn(compact && "h-6 px-1.5 text-[10px]")}
+        >
+          Export
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => fileRef.current?.click()}
+          className={cn(compact && "h-6 px-1.5 text-[10px]")}
+        >
+          Import
+        </Button>
+      </div>
+      {error && (
+        <p className="text-[10px] text-destructive" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

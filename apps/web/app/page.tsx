@@ -20,6 +20,7 @@ import {
   useShortcutsModal,
   SettingsMenu,
 } from "@ayetab/ui";
+import { cn } from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
 
@@ -66,25 +67,34 @@ export default function HomePage() {
       <OnboardingModal />
       <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
 
-      <aside className="w-56 shrink-0 border-r border-border p-4 flex flex-col gap-4">
+      <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col gap-5 border-r border-border/80 bg-card/40 px-4 py-5 backdrop-blur-sm">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h1 className="text-lg font-bold tracking-tight">AyeTab</h1>
-            <p className="text-xs text-muted-foreground">Developer Utilities</p>
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-brand text-[11px] font-bold text-brand-foreground">
+                A
+              </span>
+              <h1 className="text-lg font-bold tracking-tight">AyeTab</h1>
+            </div>
+            <p className="mt-1.5 text-xs text-muted-foreground">Developer Utilities</p>
           </div>
           <ThemeToggle />
         </div>
 
         <button
+          type="button"
           onClick={() => setActiveCategory("favorites")}
-          className={`flex items-center justify-between rounded-md px-3 py-2 text-sm text-left transition-colors ${
+          className={cn(
+            "flex items-center justify-between rounded-md px-3 py-2 text-left text-sm",
+            "transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97]",
+            "motion-reduce:transition-none motion-reduce:active:scale-100",
             activeCategory === "favorites"
-              ? "bg-accent text-accent-foreground font-medium"
-              : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
-          }`}
+              ? "bg-accent font-medium text-accent-foreground shadow-[inset_2px_0_0_0_hsl(var(--brand))]"
+              : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/50 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+          )}
         >
           <span>★ Favorites</span>
-          <span className="text-xs text-muted-foreground">{prefs.favorites.length}</span>
+          <span className="text-xs tabular-nums text-muted-foreground">{prefs.favorites.length}</span>
         </button>
 
         <CategoryNav
@@ -96,15 +106,16 @@ export default function HomePage() {
 
         {prefs.recents.length > 0 && (
           <div className="flex flex-col gap-1">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider px-3">Recent</p>
+            <p className="px-3 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Recent</p>
             {prefs.recents.slice(0, 5).map((id) => {
               const tool = TOOL_REGISTRY.find((t) => t.id === id);
               if (!tool) return null;
               return (
                 <button
                   key={id}
+                  type="button"
                   onClick={() => handleSelect(tool)}
-                  className="rounded-md px-3 py-1.5 text-xs text-left text-muted-foreground hover:bg-accent hover:text-foreground truncate"
+                  className="truncate rounded-md px-3 py-1.5 text-left text-xs text-muted-foreground transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground motion-reduce:transition-none"
                 >
                   {tool.name}
                 </button>
@@ -113,27 +124,33 @@ export default function HomePage() {
           </div>
         )}
 
-        <p className="text-[10px] text-muted-foreground mt-auto">
-          Press <kbd className="px-1 py-0.5 rounded border border-border text-[9px]">⌘K</kbd> to search ·{" "}
-          <button onClick={() => setShortcutsOpen(true)} className="hover:text-foreground underline-offset-2 hover:underline">
-            ?
-          </button>{" "}
-          for shortcuts
-        </p>
-        <SettingsMenu prefs={prefs} onImport={importPrefs} />
+        <div className="mt-auto flex flex-col gap-3">
+          <p className="text-[10px] leading-relaxed text-muted-foreground">
+            Press <kbd>⌘K</kbd> to search ·{" "}
+            <button
+              type="button"
+              onClick={() => setShortcutsOpen(true)}
+              className="underline-offset-2 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
+            >
+              ?
+            </button>{" "}
+            for shortcuts
+          </p>
+          <SettingsMenu prefs={prefs} onImport={importPrefs} />
+        </div>
       </aside>
 
-      <main className="flex-1 p-6 overflow-auto">
-        <div className="max-w-4xl mx-auto flex flex-col gap-6">
-          <div>
-            <h2 className="text-2xl font-semibold">
+      <main className="flex-1 overflow-auto p-6 md:p-8">
+        <div className="mx-auto flex max-w-4xl flex-col gap-7">
+          <div className="animate-fade-up motion-reduce:animate-none">
+            <h2 className="text-2xl font-semibold tracking-tight">
               {activeCategory === "favorites"
                 ? "Favorites"
                 : activeCategory === "all"
                   ? "All Tools"
                   : CATEGORY_LABELS[activeCategory]}
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="mt-1.5 text-sm text-muted-foreground">
               {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available
             </p>
           </div>
@@ -150,7 +167,7 @@ export default function HomePage() {
             />
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {filteredTools.map((tool) => (
               <ToolCard
                 key={tool.id}
@@ -158,6 +175,7 @@ export default function HomePage() {
                 onClick={handleSelect}
                 isFavorite={isFavorite(tool.id)}
                 onToggleFavorite={handleToggleFavorite}
+                className="stagger-in"
               />
             ))}
           </div>

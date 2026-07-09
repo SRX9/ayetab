@@ -3,6 +3,7 @@
 import type { ToolResult } from "@ayetab/utils";
 import { cn } from "../lib/utils";
 import { useClipboard } from "../hooks/use-clipboard";
+import { Button } from "./button";
 import { CodeOutput } from "./code-output";
 import { DiffView } from "./diff-view";
 import { HtmlPreview } from "./html-preview";
@@ -31,22 +32,31 @@ export function OutputPanel({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+        <label className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
           {label}
         </label>
         {value && (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => copy(copyText)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className={cn("h-6 px-2", copied && "text-brand")}
           >
-            {copied ? "Copied!" : "Copy"}
-          </button>
+            <span
+              className={cn(
+                "inline-flex transition-[filter,opacity] duration-200 ease-out-strong",
+                copied && "opacity-90"
+              )}
+            >
+              {copied ? "Copied" : "Copy"}
+            </span>
+          </Button>
         )}
       </div>
       {error ? (
         <div
           data-testid="tool-output-error"
-          className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2.5 text-sm text-destructive animate-fade-up motion-reduce:animate-none"
         >
           {error}
         </div>
@@ -64,7 +74,7 @@ export function OutputPanel({
           readOnly
           rows={rows}
           data-testid="tool-output-text"
-          className="w-full resize-y rounded-md border border-input bg-muted/50 px-3 py-2 text-sm font-mono focus-visible:outline-none"
+          className="w-full resize-y rounded-lg border border-input bg-muted/40 px-3 py-2.5 text-sm font-mono focus-visible:outline-none"
           spellCheck={false}
         />
       )}
