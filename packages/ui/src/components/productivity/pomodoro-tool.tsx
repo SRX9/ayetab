@@ -135,10 +135,10 @@ export function PomodoroTool({
                 type="button"
                 onClick={() => resetTimer(p)}
                 disabled={running}
-                className={`rounded-full px-3 py-1 capitalize transition-colors disabled:opacity-50 ${
+                className={`rounded-md px-3 py-1.5 capitalize transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97] disabled:opacity-50 motion-reduce:transition-none motion-reduce:active:scale-100 ${
                   phase === p
                     ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-accent"
+                    : "bg-muted text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent"
                 }`}
               >
                 {p === "longBreak" ? "Long break" : p}
@@ -159,12 +159,12 @@ export function PomodoroTool({
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 45}`}
                 strokeDashoffset={`${2 * Math.PI * 45 * (1 - progress / 100)}`}
-                className="text-primary transition-all duration-1000"
+                className="text-brand transition-[stroke-dashoffset] duration-1000 ease-linear motion-reduce:transition-none"
               />
             </svg>
             <div className="text-center z-10">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">{phaseLabel}</p>
-              <p className="text-4xl font-mono font-semibold tabular-nums">{formatClock(secondsLeft)}</p>
+              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{phaseLabel}</p>
+              <p className="text-4xl font-mono font-semibold tabular-nums tracking-tight">{formatClock(secondsLeft)}</p>
             </div>
           </div>
 
@@ -172,14 +172,14 @@ export function PomodoroTool({
             <button
               type="button"
               onClick={() => setRunning((r) => !r)}
-              className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-[transform,background-color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-primary/90 motion-reduce:transition-none motion-reduce:active:scale-100"
             >
               {running ? "Pause" : "Start"}
             </button>
             <button
               type="button"
               onClick={() => resetTimer(phase)}
-              className="rounded-md border border-border px-6 py-2 text-sm hover:bg-accent transition-colors"
+              className="rounded-md border border-border px-6 py-2 text-sm transition-[transform,background-color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent motion-reduce:transition-none motion-reduce:active:scale-100"
             >
               Reset
             </button>

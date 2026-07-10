@@ -8,8 +8,10 @@ import { InputPanel } from "./input-panel";
 import { OutputPanel } from "./output-panel";
 import { SmartPasteBanner } from "./smart-paste-banner";
 import { FavoriteButton } from "./favorite-button";
+import { Button } from "./button";
 import { useToolState } from "../hooks/use-tool-state";
 import { loadToolSession, saveToolOptions } from "../lib/tool-storage";
+import { cn } from "../lib/utils";
 
 const MINIFY_TOOLS = new Set([
   "json-formatter",
@@ -53,6 +55,27 @@ function getPlaceholder(toolId: string): string {
     default:
       return "Paste or type your input here...";
   }
+}
+
+function SegmentedOption({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <Button
+      variant={active ? "secondary" : "outline"}
+      size="sm"
+      onClick={onClick}
+      className={cn(active && "border-border bg-accent shadow-sm")}
+    >
+      {children}
+    </Button>
+  );
 }
 
 export function ToolRunner({
@@ -139,86 +162,76 @@ export function ToolRunner({
       {onToggleFavorite && <FavoriteButton active={!!isFavorite} onClick={onToggleFavorite} />}
       {tool.id === "curl-code" && (
         <>
-          <button
-            onClick={() => setCurlLang("fetch")}
-            className={`text-xs px-2 py-1 rounded border ${curlLang === "fetch" ? "bg-accent" : "border-border"}`}
-          >
+          <SegmentedOption active={curlLang === "fetch"} onClick={() => setCurlLang("fetch")}>
             fetch
-          </button>
-          <button
-            onClick={() => setCurlLang("python")}
-            className={`text-xs px-2 py-1 rounded border ${curlLang === "python" ? "bg-accent" : "border-border"}`}
-          >
+          </SegmentedOption>
+          <SegmentedOption active={curlLang === "python"} onClick={() => setCurlLang("python")}>
             Python
-          </button>
+          </SegmentedOption>
         </>
       )}
       {tool.id === "json-to-code" && (
         <>
-          <button
-            onClick={() => setCodeLang("typescript")}
-            className={`text-xs px-2 py-1 rounded border ${codeLang === "typescript" ? "bg-accent" : "border-border"}`}
-          >
+          <SegmentedOption active={codeLang === "typescript"} onClick={() => setCodeLang("typescript")}>
             TS
-          </button>
-          <button
-            onClick={() => setCodeLang("go")}
-            className={`text-xs px-2 py-1 rounded border ${codeLang === "go" ? "bg-accent" : "border-border"}`}
-          >
+          </SegmentedOption>
+          <SegmentedOption active={codeLang === "go"} onClick={() => setCodeLang("go")}>
             Go
-          </button>
+          </SegmentedOption>
         </>
       )}
       {MINIFY_TOOLS.has(tool.id) && (
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={async () => setResult(await executeTool(tool.id, input, { action: "minify" }))}
-          className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Minify
-        </button>
+        </Button>
       )}
       {tool.id === "uuid-generator" && (
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={async () => setResult(await executeTool(tool.id, "", { count: 5 }))}
-          className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Generate
-        </button>
+        </Button>
       )}
       {(tool.id === "random-string" || tool.id === "ulid-generator") && (
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={async () =>
             setResult(
               await executeTool(tool.id, "", tool.id === "ulid-generator" ? { action: "generate" } : { length: 32 })
             )
           }
-          className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Generate
-        </button>
+        </Button>
       )}
       {tool.id === "lorem-ipsum" && (
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={async () => setResult(await executeTool(tool.id, "", { paragraphs: 3 }))}
-          className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Generate
-        </button>
+        </Button>
       )}
       {tool.id === "qr-code" && (
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={async () => setResult(await executeTool(tool.id, input || "https://ayetab.dev"))}
-          className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
         >
           Generate QR
-        </button>
+        </Button>
       )}
-      <button
-        onClick={reset}
-        className="text-xs px-2 py-1 rounded border border-border hover:bg-accent transition-colors"
-      >
+      <Button variant="outline" size="sm" onClick={reset}>
         Clear
-      </button>
+      </Button>
     </>
   );
 

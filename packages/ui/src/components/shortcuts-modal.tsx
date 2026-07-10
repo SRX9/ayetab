@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
 import { useKeyboardShortcut } from "../hooks/use-keyboard-shortcut";
-import { cn } from "../lib/utils";
+import { Dialog } from "./dialog";
+import { Button } from "./button";
 
 interface ShortcutsModalProps {
   open: boolean;
@@ -10,47 +17,71 @@ interface ShortcutsModalProps {
 }
 
 const SHORTCUTS = [
-  { keys: "⌘K / Ctrl+K", description: "Open command palette" },
+  { keys: "⌘K", description: "Open command palette" },
+  { keys: "↑ ↓", description: "Move through tool list" },
+  { keys: "↵", description: "Open selected tool" },
   { keys: "?", description: "Show keyboard shortcuts" },
-  { keys: "↑ ↓ Enter", description: "Navigate command palette" },
-  { keys: "Esc", description: "Close modal / palette" },
+  { keys: "Esc", description: "Close palette / modal" },
 ];
 
 export function ShortcutsModal({ open, onClose }: ShortcutsModalProps) {
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open, onClose]);
-
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-label="Keyboard shortcuts">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className={cn("relative w-full max-w-sm rounded-lg border border-border bg-popover p-4 shadow-2xl")}>
-        <h2 className="text-sm font-semibold mb-3">Keyboard Shortcuts</h2>
+    <Dialog open={open} onClose={onClose} labelledBy="shortcuts-title" panelClassName="max-w-sm">
+      <div className="overflow-hidden rounded-[18px] material-hud p-5">
+        <h2 id="shortcuts-title" className="mb-4 text-[15px] font-semibold tracking-tight">
+          Keyboard Shortcuts
+        </h2>
         <ul className="flex flex-col gap-2">
           {SHORTCUTS.map((s) => (
-            <li key={s.keys} className="flex items-center justify-between text-xs">
+            <li
+              key={s.keys}
+              className="flex items-center justify-between gap-4 rounded-[10px] px-2 py-1.5 text-[13px]"
+            >
               <span className="text-muted-foreground">{s.description}</span>
-              <kbd className="px-1.5 py-0.5 rounded border border-border font-mono text-[10px]">{s.keys}</kbd>
+              <kbd className="shrink-0">{s.keys}</kbd>
             </li>
           ))}
         </ul>
-        <button onClick={onClose} className="mt-4 w-full text-xs py-1.5 rounded border border-border hover:bg-accent">
+        <Button variant="outline" size="md" onClick={onClose} className="mt-5 w-full rounded-xl">
           Close
-        </button>
+        </Button>
       </div>
-    </div>
+    </Dialog>
+  );
+}
+
+interface ShortcutsContextValue {
+  open: boolean;
+  setOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
+  show: () => void;
+  close: () => void;
+}
+
+const ShortcutsContext = createContext<ShortcutsContextValue | null>(null);
+
+export function ShortcutsProvider({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const show = useCallback(() => setOpen(true), []);
+  const close = useCallback(() => setOpen(false), []);
+
+  useKeyboardShortcut("?", () => setOpen((o) => !o), { meta: false });
+
+  return (
+    <ShortcutsContext.Provider value={{ open, setOpen, show, close }}>
+      {children}
+      <ShortcutsModal open={open} onClose={close} />
+    </ShortcutsContext.Provider>
   );
 }
 
 export function useShortcutsModal() {
-  const [open, setOpen] = useState(false);
-  useKeyboardShortcut("?", () => setOpen((o) => !o), { meta: false });
-  return { open, setOpen, close: () => setOpen(false) };
+  const ctx = useContext(ShortcutsContext);
+  if (!ctx) {
+    throw new Error("useShortcutsModal must be used within ShortcutsProvider");
+  }
+  return ctx;
+}
+
+export function useShortcutsModalOptional() {
+  return useContext(ShortcutsContext);
 }

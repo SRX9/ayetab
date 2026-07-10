@@ -25,9 +25,9 @@ export function ToolListSection({
   if (tools.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-2">
-      <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{title}</h3>
-      <div className={compact ? "flex flex-col gap-1" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"}>
+    <section className="flex flex-col gap-1">
+      <h3 className="px-2.5 pt-1 text-[11px] font-medium tracking-wide text-muted-foreground">{title}</h3>
+      <div className="flex flex-col">
         {tools.map((tool) => (
           <ToolCard
             key={tool.id}
@@ -36,6 +36,7 @@ export function ToolListSection({
             isFavorite={isFavorite?.(tool.id)}
             onToggleFavorite={onToggleFavorite}
             compact={compact}
+            variant="row"
           />
         ))}
       </div>

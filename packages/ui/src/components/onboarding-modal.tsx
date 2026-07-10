@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { isOnboarded, setOnboarded } from "../lib/preferences";
-import { cn } from "../lib/utils";
+import { Dialog } from "./dialog";
+import { Button } from "./button";
 
 export function OnboardingModal() {
   const [open, setOpen] = useState(false);
@@ -18,30 +19,49 @@ export function OnboardingModal() {
     setOpen(false);
   };
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-label="Welcome">
-      <div className="fixed inset-0 bg-black/50" />
-      <div className={cn("relative w-full max-w-md rounded-lg border border-border bg-popover p-5 shadow-2xl mx-4")}>
-        <h2 className="text-lg font-semibold">Welcome to AyeTab</h2>
-        <p className="text-sm text-muted-foreground mt-2">
-          Your all-in-one developer toolbox — 40+ utilities that run entirely offline in your browser.
+    <Dialog open={open} onClose={dismiss} labelledBy="onboarding-title" panelClassName="max-w-md">
+      <div className="overflow-hidden rounded-[20px] material-hud p-6">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-selection" />
+          Local · Offline · Instant
+        </div>
+        <h2 id="onboarding-title" className="text-[22px] font-semibold tracking-tight">
+          Welcome to AyeTab
+        </h2>
+        <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
+          A Raycast-fast toolbox for developers — search, open, and run utilities without leaving your flow.
         </p>
-        <ul className="mt-4 flex flex-col gap-2 text-sm">
-          <li>Press <kbd className="px-1 py-0.5 rounded border border-border text-xs">⌘K</kbd> to search any tool instantly</li>
-          <li>Star ★ your favorites for quick access</li>
-          <li>Paste data and we&apos;ll suggest the right tool</li>
-          <li>All processing happens locally — your data never leaves your device</li>
+        <ul className="mt-5 flex flex-col gap-2.5 text-[13px]">
+          <li className="flex gap-2.5">
+            <kbd className="shrink-0">⌘K</kbd>
+            <span className="text-muted-foreground">Search any tool instantly</span>
+          </li>
+          <li className="flex gap-2.5">
+            <kbd className="shrink-0">↑↓</kbd>
+            <span className="text-muted-foreground">Move through the list, ↵ to open</span>
+          </li>
+          <li className="flex gap-2.5">
+            <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center text-favorite">★</span>
+            <span className="text-muted-foreground">Star favorites for one-tap access</span>
+          </li>
+          <li className="flex gap-2.5">
+            <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md bg-selection/15 text-[10px] font-bold text-selection">
+              A
+            </span>
+            <span className="text-muted-foreground">Everything stays on your device</span>
+          </li>
         </ul>
-        <button
+        <Button
+          variant="primary"
+          size="lg"
           onClick={dismiss}
           data-testid="onboarding-dismiss"
-          className="mt-5 w-full py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90"
+          className="mt-6 w-full rounded-xl bg-selection text-selection-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection/90"
         >
           Get started
-        </button>
+        </Button>
       </div>
-    </div>
+    </Dialog>
   );
 }
