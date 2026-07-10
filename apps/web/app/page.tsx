@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   TOOL_REGISTRY,
@@ -16,7 +16,6 @@ import {
   ToolListSection,
   usePreferences,
   OnboardingModal,
-  ShortcutsModal,
   useShortcutsModal,
   SettingsMenu,
   cn,
@@ -28,8 +27,9 @@ export default function HomePage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
   const [activeIndex, setActiveIndex] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
   const { prefs, toggleFavorite, isFavorite, importPrefs } = usePreferences();
-  const { open: shortcutsOpen, setOpen: setShortcutsOpen, close: closeShortcuts } = useShortcutsModal();
+  const { setOpen: setShortcutsOpen } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
     if (activeCategory === "favorites") {
@@ -67,33 +67,48 @@ export default function HomePage() {
     setActiveIndex(0);
   }, [activeCategory, filteredTools.length]);
 
-  /* Arrow-key list navigation on home — Raycast quick-access feel (skip when typing) */
+  useEffect(() => {
+    const active = listRef.current?.querySelector("[data-list-active='true']");
+    active?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
+
+  /* Arrow-key list navigation — Raycast quick-access (never open on arrow) */
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       const tag = target?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // Don't steal keys while a dialog/palette is open
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
+        e.stopPropagation();
         setActiveIndex((i) => Math.min(i + 1, Math.max(filteredTools.length - 1, 0)));
-      } else if (e.key === "ArrowUp") {
+        return;
+      }
+      if (e.key === "ArrowUp") {
         e.preventDefault();
+        e.stopPropagation();
         setActiveIndex((i) => Math.max(i - 1, 0));
-      } else if (e.key === "Enter" && filteredTools[activeIndex]) {
+        return;
+      }
+      if (e.key === "Enter") {
+        const tool = filteredTools[activeIndex];
+        if (!tool) return;
         e.preventDefault();
-        handleSelect(filteredTools[activeIndex]!);
+        e.stopPropagation();
+        handleSelect(tool);
       }
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
   }, [filteredTools, activeIndex, handleSelect]);
 
   return (
     <div className="flex min-h-screen">
       <OnboardingModal />
-      <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
 
       <aside className="material-sidebar sticky top-0 flex h-screen w-[220px] shrink-0 flex-col gap-4 px-3 py-4">
         <div className="flex items-center justify-between gap-2 px-1.5 pt-1">
@@ -214,21 +229,22 @@ export default function HomePage() {
             </div>
           )}
 
-          <div className="material-window overflow-hidden rounded-2xl p-1.5">
+          <div ref={listRef} className="material-window overflow-hidden rounded-2xl p-1.5">
             {filteredTools.length === 0 ? (
               <p className="px-3 py-12 text-center text-sm text-muted-foreground">No tools in this list</p>
             ) : (
               filteredTools.map((tool, i) => (
-                <ToolCard
-                  key={tool.id}
-                  tool={tool}
-                  onClick={handleSelect}
-                  isFavorite={isFavorite(tool.id)}
-                  onToggleFavorite={handleToggleFavorite}
-                  selected={i === activeIndex}
-                  className="stagger-in"
-                  onMouseEnter={() => setActiveIndex(i)}
-                />
+                <div key={tool.id} data-list-active={i === activeIndex || undefined}>
+                  <ToolCard
+                    tool={tool}
+                    onClick={handleSelect}
+                    isFavorite={isFavorite(tool.id)}
+                    onToggleFavorite={handleToggleFavorite}
+                    selected={i === activeIndex}
+                    className="stagger-in"
+                    onMouseEnter={() => setActiveIndex(i)}
+                  />
+                </div>
               ))
             )}
           </div>

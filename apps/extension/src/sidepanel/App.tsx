@@ -17,9 +17,9 @@ import {
   ToolListSection,
   usePreferences,
   OnboardingModal,
-  ShortcutsModal,
   useShortcutsModal,
   SettingsMenu,
+  ShortcutsProvider,
   cn,
 } from "@ayetab/ui";
 
@@ -30,7 +30,7 @@ function AppContent() {
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
   const [initialInput, setInitialInput] = useState("");
   const { prefs, toggleFavorite, isFavorite, addRecent, importPrefs } = usePreferences();
-  const { open: shortcutsOpen, close: closeShortcuts, setOpen: setShortcutsOpen } = useShortcutsModal();
+  const { setOpen: setShortcutsOpen } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
     if (activeCategory === "favorites") {
@@ -72,7 +72,6 @@ function AppContent() {
   const modals = (
     <>
       <OnboardingModal />
-      <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
     </>
   );
 
@@ -255,7 +254,9 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <ShortcutsProvider>
+        <AppContent />
+      </ShortcutsProvider>
     </ThemeProvider>
   );
 }

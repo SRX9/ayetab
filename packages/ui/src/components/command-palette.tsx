@@ -160,7 +160,7 @@ export function CommandPalette({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search for a tool…"
+            placeholder="Search tools..."
             className="flex-1 bg-transparent py-[18px] text-[17px] tracking-tight outline-none placeholder:text-muted-foreground/70"
             autoComplete="off"
             spellCheck={false}

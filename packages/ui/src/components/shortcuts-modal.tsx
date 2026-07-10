@@ -1,6 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
 import { useKeyboardShortcut } from "../hooks/use-keyboard-shortcut";
 import { Dialog } from "./dialog";
 import { Button } from "./button";
@@ -44,8 +50,38 @@ export function ShortcutsModal({ open, onClose }: ShortcutsModalProps) {
   );
 }
 
-export function useShortcutsModal() {
+interface ShortcutsContextValue {
+  open: boolean;
+  setOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
+  show: () => void;
+  close: () => void;
+}
+
+const ShortcutsContext = createContext<ShortcutsContextValue | null>(null);
+
+export function ShortcutsProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const show = useCallback(() => setOpen(true), []);
+  const close = useCallback(() => setOpen(false), []);
+
   useKeyboardShortcut("?", () => setOpen((o) => !o), { meta: false });
-  return { open, setOpen, close: () => setOpen(false) };
+
+  return (
+    <ShortcutsContext.Provider value={{ open, setOpen, show, close }}>
+      {children}
+      <ShortcutsModal open={open} onClose={close} />
+    </ShortcutsContext.Provider>
+  );
+}
+
+export function useShortcutsModal() {
+  const ctx = useContext(ShortcutsContext);
+  if (!ctx) {
+    throw new Error("useShortcutsModal must be used within ShortcutsProvider");
+  }
+  return ctx;
+}
+
+export function useShortcutsModalOptional() {
+  return useContext(ShortcutsContext);
 }
