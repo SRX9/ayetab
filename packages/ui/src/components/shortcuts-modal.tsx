@@ -11,28 +11,32 @@ interface ShortcutsModalProps {
 }
 
 const SHORTCUTS = [
-  { keys: "⌘K / Ctrl+K", description: "Open command palette" },
+  { keys: "⌘K", description: "Open command palette" },
+  { keys: "↑ ↓", description: "Move through tool list" },
+  { keys: "↵", description: "Open selected tool" },
   { keys: "?", description: "Show keyboard shortcuts" },
-  { keys: "↑ ↓ Enter", description: "Navigate command palette" },
-  { keys: "Esc", description: "Close modal / palette" },
+  { keys: "Esc", description: "Close palette / modal" },
 ];
 
 export function ShortcutsModal({ open, onClose }: ShortcutsModalProps) {
   return (
     <Dialog open={open} onClose={onClose} labelledBy="shortcuts-title" panelClassName="max-w-sm">
-      <div className="rounded-xl border border-border bg-popover p-5 shadow-2xl surface-panel">
-        <h2 id="shortcuts-title" className="mb-4 text-sm font-semibold tracking-tight">
+      <div className="overflow-hidden rounded-[18px] material-hud p-5">
+        <h2 id="shortcuts-title" className="mb-4 text-[15px] font-semibold tracking-tight">
           Keyboard Shortcuts
         </h2>
-        <ul className="flex flex-col gap-2.5">
+        <ul className="flex flex-col gap-2">
           {SHORTCUTS.map((s) => (
-            <li key={s.keys} className="flex items-center justify-between gap-4 text-xs">
+            <li
+              key={s.keys}
+              className="flex items-center justify-between gap-4 rounded-[10px] px-2 py-1.5 text-[13px]"
+            >
               <span className="text-muted-foreground">{s.description}</span>
               <kbd className="shrink-0">{s.keys}</kbd>
             </li>
           ))}
         </ul>
-        <Button variant="outline" size="md" onClick={onClose} className="mt-5 w-full">
+        <Button variant="outline" size="md" onClick={onClose} className="mt-5 w-full rounded-xl">
           Close
         </Button>
       </div>

@@ -21,17 +21,17 @@ export function FavoriteButton({ active, onClick, className }: FavoriteButtonPro
       aria-pressed={active}
       className={cn(
         pressable(
-          "inline-flex h-7 w-7 items-center justify-center rounded-md text-sm leading-none"
+          "inline-flex h-7 w-7 items-center justify-center rounded-[8px] text-sm leading-none"
         ),
         active
           ? "text-favorite"
-          : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:text-favorite [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
+          : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.05] [@media(hover:hover)_and_(pointer:fine)]:hover:text-favorite dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08]",
         className
       )}
     >
       <span
         className={cn(
-          "inline-block transition-[transform,filter,opacity] duration-150 ease-out-strong",
+          "inline-block transition-[transform] duration-120 ease-out-strong",
           active && "scale-110"
         )}
         aria-hidden

@@ -47,11 +47,17 @@ const config: Config = {
           foreground: "hsl(var(--brand-foreground))",
         },
         favorite: "hsl(var(--favorite))",
+        selection: {
+          DEFAULT: "hsl(var(--selection))",
+          foreground: "hsl(var(--selection-foreground))",
+          soft: "hsl(var(--selection-soft))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "calc(var(--radius) + 4px)",
       },
       transitionTimingFunction: {
         "out-strong": "var(--ease-out)",

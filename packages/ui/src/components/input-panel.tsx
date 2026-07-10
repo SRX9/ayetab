@@ -82,10 +82,10 @@ export function InputPanel({
         data-testid="tool-input"
         autoFocus={autoFocus}
         className={cn(
-          "w-full resize-y rounded-lg border border-input bg-card/60 px-3 py-2.5 text-sm font-mono shadow-sm",
+          "w-full resize-y rounded-xl border border-border/70 bg-background/60 px-3.5 py-3 text-sm font-mono shadow-[inset_0_1px_2px_hsl(var(--shadow-color)/0.04)]",
           "placeholder:text-muted-foreground",
           "transition-[border-color,box-shadow] duration-150 ease-out-strong",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection/40 focus-visible:border-selection/40",
           "motion-reduce:transition-none"
         )}
         spellCheck={false}

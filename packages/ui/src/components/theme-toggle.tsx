@@ -14,11 +14,14 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={toggleTheme}
       aria-label={`Switch to ${next} mode`}
-      className={cn("text-muted-foreground", className)}
+      className={cn(
+        "h-7 w-7 rounded-[9px] text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.06] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08]",
+        className
+      )}
       title={`Switch to ${next} mode`}
     >
       {theme === "dark" ? (

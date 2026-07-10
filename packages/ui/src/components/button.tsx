@@ -14,22 +14,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-primary-foreground shadow-sm [@media(hover:hover)_and_(pointer:fine)]:hover:bg-primary/90",
+    "bg-selection text-selection-foreground shadow-sm [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection/90",
   secondary:
     "bg-secondary text-secondary-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/80",
   ghost:
-    "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
+    "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.05] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
   outline:
-    "border border-border bg-transparent text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
+    "border border-border/80 bg-card/50 text-foreground shadow-[0_1px_0_hsl(var(--hairline))] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent",
   destructive:
     "bg-destructive text-destructive-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-destructive/90",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-7 px-2.5 text-xs rounded-md gap-1.5",
-  md: "h-9 px-3.5 text-sm rounded-md gap-2",
-  lg: "h-10 px-4 text-sm rounded-lg gap-2",
-  icon: "h-8 w-8 rounded-md",
+  sm: "h-7 px-2.5 text-xs rounded-[8px] gap-1.5",
+  md: "h-9 px-3.5 text-sm rounded-[10px] gap-2",
+  lg: "h-10 px-4 text-sm rounded-xl gap-2",
+  icon: "h-8 w-8 rounded-[9px]",
 };
 
 export function Button({

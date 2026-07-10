@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Sans } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
-const sans = Instrument_Sans({
+/* Geist reads close to SF Pro — clean macOS app typography */
+const sans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist",
   display: "swap",
 });
 
@@ -29,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${sans.variable} ${geist.variable} ${mono.variable} font-sans`}>
+      <body className={`${sans.variable} ${mono.variable} font-sans`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -3,7 +3,6 @@
 import type { ToolCategory } from "@ayetab/utils";
 import { CATEGORY_LABELS } from "@ayetab/utils";
 import { cn } from "../lib/utils";
-import { pressable } from "../lib/pressable";
 
 interface CategoryNavProps {
   categories: ToolCategory[];
@@ -29,15 +28,24 @@ export function CategoryNav({ categories, active, onSelect, counts, className }:
             type="button"
             onClick={() => onSelect(item.id)}
             className={cn(
-              pressable("flex items-center justify-between rounded-md px-3 py-2 text-sm text-left"),
+              "flex items-center justify-between rounded-[9px] px-2.5 py-[7px] text-left text-[13px]",
+              "transition-[transform,background-color,color] duration-100 ease-out-strong",
+              "active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100",
               isActive
-                ? "bg-accent text-accent-foreground font-medium shadow-[inset_2px_0_0_0_hsl(var(--brand))]"
-                : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/50 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+                ? "bg-selection text-selection-foreground font-medium shadow-sm"
+                : "text-foreground/80 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             )}
           >
-            <span>{item.label}</span>
+            <span className="truncate">{item.label}</span>
             {counts?.[item.id] !== undefined && (
-              <span className="text-xs tabular-nums text-muted-foreground">{counts[item.id]}</span>
+              <span
+                className={cn(
+                  "ml-2 text-[11px] tabular-nums",
+                  isActive ? "text-selection-foreground/75" : "text-muted-foreground"
+                )}
+              >
+                {counts[item.id]}
+              </span>
             )}
           </button>
         );

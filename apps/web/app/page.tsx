@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   TOOL_REGISTRY,
@@ -19,14 +19,15 @@ import {
   ShortcutsModal,
   useShortcutsModal,
   SettingsMenu,
+  cn,
 } from "@ayetab/ui";
-import { cn } from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
 
 export default function HomePage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
+  const [activeIndex, setActiveIndex] = useState(0);
   const { prefs, toggleFavorite, isFavorite, importPrefs } = usePreferences();
   const { open: shortcutsOpen, setOpen: setShortcutsOpen, close: closeShortcuts } = useShortcutsModal();
 
@@ -62,21 +63,48 @@ export default function HomePage() {
     [toggleFavorite]
   );
 
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [activeCategory, filteredTools.length]);
+
+  /* Arrow-key list navigation on home — Raycast quick-access feel (skip when typing) */
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActiveIndex((i) => Math.min(i + 1, Math.max(filteredTools.length - 1, 0)));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActiveIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === "Enter" && filteredTools[activeIndex]) {
+        e.preventDefault();
+        handleSelect(filteredTools[activeIndex]!);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [filteredTools, activeIndex, handleSelect]);
+
   return (
-    <div className="min-h-screen flex">
+    <div className="flex min-h-screen">
       <OnboardingModal />
       <ShortcutsModal open={shortcutsOpen} onClose={closeShortcuts} />
 
-      <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col gap-5 border-r border-border/80 bg-card/40 px-4 py-5 backdrop-blur-sm">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-brand text-[11px] font-bold text-brand-foreground">
-                A
-              </span>
-              <h1 className="text-lg font-bold tracking-tight">AyeTab</h1>
+      <aside className="material-sidebar sticky top-0 flex h-screen w-[220px] shrink-0 flex-col gap-4 px-3 py-4">
+        <div className="flex items-center justify-between gap-2 px-1.5 pt-1">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="flex h-7 w-7 items-center justify-center rounded-[9px] bg-selection text-[12px] font-bold text-selection-foreground shadow-sm">
+              A
+            </span>
+            <div className="min-w-0">
+              <h1 className="truncate text-[15px] font-semibold tracking-tight">AyeTab</h1>
+              <p className="truncate text-[11px] text-muted-foreground">Quick tools</p>
             </div>
-            <p className="mt-1.5 text-xs text-muted-foreground">Developer Utilities</p>
           </div>
           <ThemeToggle />
         </div>
@@ -85,16 +113,23 @@ export default function HomePage() {
           type="button"
           onClick={() => setActiveCategory("favorites")}
           className={cn(
-            "flex items-center justify-between rounded-md px-3 py-2 text-left text-sm",
-            "transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97]",
+            "flex items-center justify-between rounded-[9px] px-2.5 py-[7px] text-left text-[13px]",
+            "transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
             "motion-reduce:transition-none motion-reduce:active:scale-100",
             activeCategory === "favorites"
-              ? "bg-accent font-medium text-accent-foreground shadow-[inset_2px_0_0_0_hsl(var(--brand))]"
-              : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/50 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+              ? "bg-selection font-medium text-selection-foreground shadow-sm"
+              : "text-foreground/80 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
           )}
         >
           <span>★ Favorites</span>
-          <span className="text-xs tabular-nums text-muted-foreground">{prefs.favorites.length}</span>
+          <span
+            className={cn(
+              "text-[11px] tabular-nums",
+              activeCategory === "favorites" ? "text-selection-foreground/75" : "text-muted-foreground"
+            )}
+          >
+            {prefs.favorites.length}
+          </span>
         </button>
 
         <CategoryNav
@@ -105,8 +140,10 @@ export default function HomePage() {
         />
 
         {prefs.recents.length > 0 && (
-          <div className="flex flex-col gap-1">
-            <p className="px-3 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Recent</p>
+          <div className="flex flex-col gap-0.5">
+            <p className="px-2.5 pb-1 text-[10px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+              Recent
+            </p>
             {prefs.recents.slice(0, 5).map((id) => {
               const tool = TOOL_REGISTRY.find((t) => t.id === id);
               if (!tool) return null;
@@ -115,7 +152,7 @@ export default function HomePage() {
                   key={id}
                   type="button"
                   onClick={() => handleSelect(tool)}
-                  className="truncate rounded-md px-3 py-1.5 text-left text-xs text-muted-foreground transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground motion-reduce:transition-none"
+                  className="truncate rounded-[9px] px-2.5 py-1.5 text-left text-[12px] text-muted-foreground transition-[background-color,color,transform] duration-100 ease-out-strong active:scale-[0.98] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                 >
                   {tool.name}
                 </button>
@@ -124,60 +161,76 @@ export default function HomePage() {
           </div>
         )}
 
-        <div className="mt-auto flex flex-col gap-3">
-          <p className="text-[10px] leading-relaxed text-muted-foreground">
-            Press <kbd>⌘K</kbd> to search ·{" "}
+        <div className="mt-auto flex flex-col gap-2.5 px-1 pb-1">
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
+            <kbd className="mr-0.5">⌘</kbd>
+            <kbd>K</kbd>
+            <span className="mx-1">search</span>
             <button
               type="button"
               onClick={() => setShortcutsOpen(true)}
-              className="underline-offset-2 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
+              className="text-foreground/70 underline-offset-2 [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
             >
               ?
-            </button>{" "}
-            for shortcuts
+            </button>
           </p>
           <SettingsMenu prefs={prefs} onImport={importPrefs} />
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto p-6 md:p-8">
-        <div className="mx-auto flex max-w-4xl flex-col gap-7">
+      <main className="flex-1 overflow-auto">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-6 py-7 md:px-10 md:py-9">
           <div className="animate-fade-up motion-reduce:animate-none">
-            <h2 className="text-2xl font-semibold tracking-tight">
+            <p className="text-[12px] font-medium text-muted-foreground">
+              {activeCategory === "favorites"
+                ? "Favorites"
+                : activeCategory === "all"
+                  ? "Library"
+                  : CATEGORY_LABELS[activeCategory]}
+            </p>
+            <h2 className="mt-1 text-[28px] font-semibold tracking-tight">
               {activeCategory === "favorites"
                 ? "Favorites"
                 : activeCategory === "all"
                   ? "All Tools"
                   : CATEGORY_LABELS[activeCategory]}
             </h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available
+            <p className="mt-1 text-[13px] text-muted-foreground">
+              {filteredTools.length} tool{filteredTools.length !== 1 ? "s" : ""} available · ↑↓ to move · ↵ to open
             </p>
           </div>
 
           <SearchBar tools={TOOL_REGISTRY} onSelect={handleSelect} />
 
           {activeCategory === "all" && prefs.favorites.length > 0 && (
-            <ToolListSection
-              title="Favorites"
-              toolIds={prefs.favorites}
-              onSelect={handleSelect}
-              isFavorite={isFavorite}
-              onToggleFavorite={handleToggleFavorite}
-            />
+            <div className="material-window overflow-hidden rounded-2xl p-2">
+              <ToolListSection
+                title="Favorites"
+                toolIds={prefs.favorites}
+                onSelect={handleSelect}
+                isFavorite={isFavorite}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            </div>
           )}
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredTools.map((tool) => (
-              <ToolCard
-                key={tool.id}
-                tool={tool}
-                onClick={handleSelect}
-                isFavorite={isFavorite(tool.id)}
-                onToggleFavorite={handleToggleFavorite}
-                className="stagger-in"
-              />
-            ))}
+          <div className="material-window overflow-hidden rounded-2xl p-1.5">
+            {filteredTools.length === 0 ? (
+              <p className="px-3 py-12 text-center text-sm text-muted-foreground">No tools in this list</p>
+            ) : (
+              filteredTools.map((tool, i) => (
+                <ToolCard
+                  key={tool.id}
+                  tool={tool}
+                  onClick={handleSelect}
+                  isFavorite={isFavorite(tool.id)}
+                  onToggleFavorite={handleToggleFavorite}
+                  selected={i === activeIndex}
+                  className="stagger-in"
+                  onMouseEnter={() => setActiveIndex(i)}
+                />
+              ))
+            )}
           </div>
         </div>
       </main>

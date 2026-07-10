@@ -74,7 +74,7 @@ export function OutputPanel({
           readOnly
           rows={rows}
           data-testid="tool-output-text"
-          className="w-full resize-y rounded-lg border border-input bg-muted/40 px-3 py-2.5 text-sm font-mono focus-visible:outline-none"
+          className="w-full resize-y rounded-xl border border-border/70 bg-muted/30 px-3.5 py-3 text-sm font-mono focus-visible:outline-none"
           spellCheck={false}
         />
       )}

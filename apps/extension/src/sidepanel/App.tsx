@@ -81,15 +81,15 @@ function AppContent() {
       <>
         {modals}
         <div className="flex h-screen flex-col bg-background text-foreground">
-          <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} />
-          <header className="flex shrink-0 items-center gap-2 border-b border-border/80 bg-card/40 px-3 py-2 backdrop-blur-sm">
+          <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
+          <header className="material-sidebar flex shrink-0 items-center gap-2 border-b-0 px-3 py-2">
             <button
               type="button"
               onClick={() => {
                 setSelectedTool(null);
                 setInitialInput("");
               }}
-              className="text-xs text-muted-foreground transition-[transform,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground motion-reduce:transition-none"
+              className="rounded-lg px-2 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             >
               ← Back
             </button>
@@ -97,16 +97,18 @@ function AppContent() {
             <ThemeToggle />
           </header>
           <div className={`flex-1 overflow-auto p-3 ${selectedTool.id === "excalidraw" ? "flex flex-col" : ""}`}>
-            <ToolHost
-              key={`${selectedTool.id}-${initialInput}`}
-              tool={selectedTool}
-              initialInput={initialInput}
-              onNavigate={handleNavigate}
-              onRecent={addRecent}
-              isFavorite={isFavorite(selectedTool.id)}
-              onToggleFavorite={() => toggleFavorite(selectedTool.id)}
-              compact
-            />
+            <div className={selectedTool.id === "excalidraw" ? "flex flex-1 flex-col" : "material-window rounded-xl p-3"}>
+              <ToolHost
+                key={`${selectedTool.id}-${initialInput}`}
+                tool={selectedTool}
+                initialInput={initialInput}
+                onNavigate={handleNavigate}
+                onRecent={addRecent}
+                isFavorite={isFavorite(selectedTool.id)}
+                onToggleFavorite={() => toggleFavorite(selectedTool.id)}
+                compact
+              />
+            </div>
           </div>
         </div>
       </>
@@ -117,16 +119,16 @@ function AppContent() {
     <>
       {modals}
       <div className="flex h-screen flex-col bg-background text-foreground">
-        <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} />
-        <header className="flex shrink-0 items-start justify-between gap-2 border-b border-border/80 bg-card/40 px-3 py-3 backdrop-blur-sm">
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-brand text-[9px] font-bold text-brand-foreground">
-                A
-              </span>
-              <h1 className="text-sm font-bold tracking-tight">AyeTab</h1>
+        <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
+        <header className="material-sidebar flex shrink-0 items-start justify-between gap-2 border-b-0 px-3 py-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-selection text-[10px] font-bold text-selection-foreground">
+              A
+            </span>
+            <div>
+              <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
+              <p className="text-[10px] text-muted-foreground">Quick tools</p>
             </div>
-            <p className="mt-1 text-[10px] text-muted-foreground">Developer Utilities</p>
           </div>
           <ThemeToggle />
         </header>
@@ -136,12 +138,12 @@ function AppContent() {
         </div>
 
         <div className="flex flex-1 flex-col overflow-auto">
-          <div className="border-b border-border p-3">
+          <div className="border-b border-border/50 px-3 pb-3">
             <SearchBar tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} placeholder="Search tools..." />
           </div>
 
           {prefs.favorites.length > 0 && (
-            <div className="border-b border-border p-2">
+            <div className="border-b border-border/50 p-2">
               <ToolListSection
                 title="Favorites"
                 toolIds={prefs.favorites}
@@ -154,15 +156,15 @@ function AppContent() {
           )}
 
           <div className="flex flex-1 overflow-hidden">
-            <nav className="flex w-32 shrink-0 flex-col gap-1 overflow-auto border-r border-border p-2">
+            <nav className="material-sidebar flex w-[7.5rem] shrink-0 flex-col gap-1 overflow-auto border-r-0 p-2">
               <button
                 type="button"
                 onClick={() => setActiveCategory("favorites")}
                 className={cn(
-                  "rounded-md px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97] motion-reduce:transition-none",
+                  "rounded-[8px] px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
                   activeCategory === "favorites"
-                    ? "bg-accent font-medium"
-                    : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/50"
+                    ? "bg-selection font-medium text-selection-foreground"
+                    : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                 )}
               >
                 ★ Fav ({prefs.favorites.length})
@@ -174,8 +176,8 @@ function AppContent() {
                 counts={counts}
               />
               {prefs.recents.length > 0 && (
-                <div className="mt-2 border-t border-border pt-2">
-                  <p className="mb-1 px-2 text-[9px] uppercase tracking-[0.12em] text-muted-foreground">Recent</p>
+                <div className="mt-2 border-t border-border/50 pt-2">
+                  <p className="mb-1 px-2 text-[9px] uppercase tracking-[0.08em] text-muted-foreground">Recent</p>
                   {prefs.recents.slice(0, 4).map((id) => {
                     const tool = TOOL_REGISTRY.find((t) => t.id === id);
                     if (!tool) return null;
@@ -184,7 +186,7 @@ function AppContent() {
                         key={id}
                         type="button"
                         onClick={() => openTool(tool)}
-                        className="w-full truncate rounded-md px-2 py-1 text-left text-[10px] text-muted-foreground transition-[background-color,color] duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent"
+                        className="w-full truncate rounded-[8px] px-2 py-1 text-left text-[10px] text-muted-foreground transition-colors duration-100 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                       >
                         {tool.name}
                       </button>
@@ -202,33 +204,38 @@ function AppContent() {
             </nav>
 
             <div className="flex-1 overflow-auto p-2">
-              <p className="mb-2 px-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="mb-1.5 px-2 text-[10px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
                 {activeCategory === "favorites"
                   ? "Favorites"
                   : activeCategory === "all"
                     ? "All Tools"
                     : CATEGORY_LABELS[activeCategory]}
               </p>
-              <div className="flex flex-col gap-1">
+              <div className="material-window flex flex-col rounded-xl p-1">
                 {filteredTools.map((tool) => (
                   <div
                     key={tool.id}
-                    className="group flex items-center gap-2 rounded-md px-2 py-2 transition-[background-color,transform] duration-150 ease-out-strong active:scale-[0.99] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent motion-reduce:transition-none"
+                    className="group flex items-center gap-1 rounded-lg px-1 transition-[background-color] duration-100 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft"
                   >
                     <button
                       type="button"
                       onClick={() => openTool(tool)}
-                      className="flex min-w-0 flex-1 flex-col gap-0.5 text-left"
+                      className="flex min-w-0 flex-1 items-center gap-2 px-1.5 py-2 text-left"
                     >
-                      <span className="text-xs font-medium">{tool.name}</span>
-                      <span className="line-clamp-1 text-[10px] text-muted-foreground">{tool.description}</span>
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px] border border-border/70 bg-muted/50 text-[10px] font-semibold text-muted-foreground">
+                        {tool.name.charAt(0)}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-xs font-medium">{tool.name}</span>
+                        <span className="block truncate text-[10px] text-muted-foreground">{tool.description}</span>
+                      </span>
                     </button>
                     <button
                       type="button"
                       onClick={() => handleToggleFavorite(tool)}
                       className={cn(
-                        "shrink-0 text-xs transition-[transform,color] duration-150 ease-out-strong active:scale-[0.97]",
-                        isFavorite(tool.id) ? "text-favorite" : "text-muted-foreground"
+                        "mr-1 shrink-0 text-xs transition-[transform,color] duration-100 ease-out-strong active:scale-[0.97]",
+                        isFavorite(tool.id) ? "text-favorite" : "text-muted-foreground opacity-0 group-hover:opacity-100"
                       )}
                       aria-label={isFavorite(tool.id) ? "Remove favorite" : "Add favorite"}
                     >
