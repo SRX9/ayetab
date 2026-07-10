@@ -101,10 +101,11 @@ Side Panel ──sendMessage──▶ Service Worker ──sendMessage──▶ 
 
 ```json
 {
-  "permissions": ["sidePanel", "storage", "clipboardRead", "activeTab"],
-  "host_permissions": ["<all_urls>"]
+  "permissions": ["sidePanel", "storage"]
 }
 ```
+
+No host permissions or content scripts — the side panel is self-contained and processes only user-provided input.
 
 ## Web App Architecture
 

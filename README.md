@@ -54,7 +54,7 @@ Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/ma
 ```
 apps/web          → Next.js 15
 apps/extension    → Chrome MV3 + Firefox sidebar
-packages/utils    → executeTool() + 41 tool implementations
+packages/utils    → executeTool() + tool implementations (43 routed + 7 custom UI)
 packages/ui       → Shared React components
 docs/             → Analysis, architecture, store listing guide
 ```

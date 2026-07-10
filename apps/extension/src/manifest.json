@@ -3,8 +3,7 @@
   "name": "AyeTab — Developer Utilities",
   "description": "All-in-one developer toolbox in your browser sidebar. Format, convert, generate, and debug — all offline.",
   "version": "1.0.0",
-  "permissions": ["sidePanel", "storage", "activeTab"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["sidePanel", "storage"],
   "background": {
     "service_worker": "src/background/index.ts",
     "type": "module"
@@ -17,7 +16,12 @@
     "default_title": "AyeTab"
   },
   "action": {
-    "default_title": "Open AyeTab"
+    "default_title": "Open AyeTab",
+    "default_icon": {
+      "16": "public/icons/icon-16.png",
+      "48": "public/icons/icon-48.png",
+      "128": "public/icons/icon-128.png"
+    }
   },
   "icons": {
     "16": "public/icons/icon-16.png",
