@@ -18,10 +18,10 @@ Upload the contents of `apps/extension/dist/` to the [Chrome Web Store Developer
 
 **Detailed description:**
 
-AyeTab brings 40+ developer utilities into a persistent browser sidebar — format JSON, debug JWTs, convert YAML, generate hashes, diff text, and more. Inspired by DevUtils, but free and cross-platform.
+AyeTab brings 50 developer utilities into a persistent browser sidebar — format JSON, debug JWTs, convert YAML, generate hashes, diff text, and more. Inspired by DevUtils, but free and cross-platform.
 
 - Works entirely offline — your data never leaves your device
-- 40+ tools: formatters, converters, generators, debuggers
+- 50 tools: formatters, converters, generators, debuggers, productivity
 - Command palette (⌘K) for instant tool search
 - Favorites and recent tools for quick access
 - Smart paste detection suggests the right tool automatically
@@ -44,10 +44,10 @@ State clearly: *No data is collected, stored, or transmitted. All processing hap
 
 | Permission | Reason |
 |------------|--------|
-| `sidePanel` | Display the utility sidebar |
-| `storage` | Save favorites, recents, and theme preference locally |
-| `activeTab` | Optional future: read page selection |
-| `<all_urls>` | Side panel is available on all pages (no data read) |
+| `sidePanel` | Display the utility sidebar (Chrome) |
+| `storage` | Save favorites and recents locally via `chrome.storage.local` |
+
+No host permissions, `activeTab`, or clipboard permissions are required — all tools run offline on user-provided input.
 
 ## Firefox Add-ons
 

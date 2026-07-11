@@ -67,9 +67,10 @@ test.describe("Tool execution", () => {
   test("Markdown preview renders heading", async ({ page }) => {
     await page.goto("/tools/markdown-preview");
     await page.getByTestId("tool-input").fill("# Hello World");
-    await expect(page.getByTestId("tool-output-html").getByRole("heading", { name: "Hello World" })).toBeVisible({
-      timeout: 10_000,
-    });
+    await expect(page.getByTestId("tool-output-html")).toBeVisible({ timeout: 10_000 });
+    await expect(
+      page.frameLocator('[data-testid="tool-output-html"]').getByRole("heading", { name: "Hello World" })
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("QR code generator produces image", async ({ page }) => {
