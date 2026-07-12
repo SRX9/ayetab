@@ -1,5 +1,6 @@
 "use client";
 
+import { Star } from "lucide-react";
 import { cn } from "../lib/utils";
 import { pressable } from "../lib/pressable";
 
@@ -20,24 +21,21 @@ export function FavoriteButton({ active, onClick, className }: FavoriteButtonPro
       aria-label={active ? "Remove from favorites" : "Add to favorites"}
       aria-pressed={active}
       className={cn(
-        pressable(
-          "inline-flex h-7 w-7 items-center justify-center rounded-[10px] text-sm leading-none"
-        ),
+        pressable("inline-flex h-7 w-7 items-center justify-center rounded-lg"),
         active
           ? "text-favorite"
-          : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.05] [@media(hover:hover)_and_(pointer:fine)]:hover:text-favorite dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08]",
+          : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:text-favorite",
         className
       )}
     >
-      <span
+      <Star
         className={cn(
-          "inline-block transition-[transform] duration-120 ease-out-strong",
-          active && "scale-110"
+          "h-4 w-4 transition-transform duration-120 ease-out-strong",
+          active && "scale-110 fill-current"
         )}
+        strokeWidth={1.75}
         aria-hidden
-      >
-        {active ? "★" : "☆"}
-      </span>
+      />
     </button>
   );
 }

@@ -14,6 +14,7 @@ export { ThemeProvider, useTheme } from "./components/theme-provider";
 export { ThemeToggle } from "./components/theme-toggle";
 export { SmartPasteBanner } from "./components/smart-paste-banner";
 export { FavoriteButton } from "./components/favorite-button";
+export { ToolIcon } from "./components/tool-icon";
 export { ImagePreview } from "./components/image-preview";
 export { CodeOutput } from "./components/code-output";
 export { DiffView } from "./components/diff-view";

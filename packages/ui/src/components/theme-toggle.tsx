@@ -1,5 +1,6 @@
 "use client";
 
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "./theme-provider";
 import { Button } from "./button";
 import { cn } from "../lib/utils";
@@ -18,25 +19,13 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       size="icon"
       onClick={toggleTheme}
       aria-label={`Switch to ${next} mode`}
-      className={cn(
-        "h-8 w-8 rounded-[11px] text-muted-foreground material-chip [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.06] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.1]",
-        className
-      )}
+      className={cn("h-8 w-8 text-muted-foreground", className)}
       title={`Switch to ${next} mode`}
     >
       {theme === "dark" ? (
-        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="4" />
-          <path strokeLinecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-        </svg>
+        <Sun className="h-4 w-4" strokeWidth={1.75} />
       ) : (
-        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 14.5A8.5 8.5 0 1110.5 3a6.5 6.5 0 0010.5 11.5z"
-          />
-        </svg>
+        <Moon className="h-4 w-4" strokeWidth={1.75} />
       )}
     </Button>
   );

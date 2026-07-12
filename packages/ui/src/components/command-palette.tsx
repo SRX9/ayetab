@@ -3,9 +3,11 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import type { ToolDefinition } from "@ayetab/utils";
 import { fuzzySearchTools, CATEGORY_LABELS } from "@ayetab/utils";
+import { Search } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useKeyboardShortcut } from "../hooks/use-keyboard-shortcut";
 import { Dialog } from "./dialog";
+import { ToolIcon } from "./tool-icon";
 
 interface CommandPaletteProps {
   tools: ToolDefinition[];
@@ -144,13 +146,9 @@ export function CommandPalette({
       testId="command-palette"
       panelClassName="max-w-[640px] mx-auto"
     >
-      <div className="overflow-hidden rounded-[22px] material-hud">
+      <div className="overflow-hidden rounded-[20px] material-hud">
         <div className="flex items-center gap-3 border-b border-border/40 px-4">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] material-chip text-muted-foreground">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </span>
+          <Search className="h-[18px] w-[18px] shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
           <input
             ref={inputRef}
             value={query}
@@ -186,21 +184,15 @@ export function CommandPalette({
                   }}
                   onMouseEnter={() => setActiveIndex(i)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-[12px] px-2.5 py-2 text-left",
-                    "transition-[background-color,color,box-shadow] duration-75 ease-out-strong motion-reduce:transition-none",
+                    "flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left",
+                    "transition-[background-color,color] duration-75 ease-out-strong motion-reduce:transition-none",
                     isActive ? "row-selected" : "row-idle"
                   )}
                 >
-                  <div
-                    className={cn(
-                      "row-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] border text-xs font-semibold shadow-[inset_0_1px_0_hsl(var(--specular)/0.35)]",
-                      isActive
-                        ? "border-white/20 bg-white/15"
-                        : "border-border/60 bg-muted/40 text-muted-foreground"
-                    )}
-                  >
-                    {tool.name.charAt(0)}
-                  </div>
+                  <ToolIcon
+                    name={tool.icon}
+                    className={cn("row-icon h-[18px] w-[18px]", !isActive && "text-muted-foreground")}
+                  />
                   <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="truncate text-[13px] font-medium tracking-tight">
                       <HighlightedText text={tool.name} indices={nameIndices} inverted={isActive} />
@@ -221,7 +213,7 @@ export function CommandPalette({
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-border/40 bg-black/[0.02] px-4 py-2.5 text-[11px] text-muted-foreground dark:bg-white/[0.03]">
+        <div className="flex items-center justify-between border-t border-border/40 px-4 py-2.5 text-[11px] text-muted-foreground">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5">
               <kbd>↑</kbd>

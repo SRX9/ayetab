@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { ChevronLeft, Star } from "lucide-react";
 import {
   TOOL_REGISTRY,
   type ToolCategory,
@@ -89,9 +90,10 @@ function AppContent() {
                 setSelectedTool(null);
                 setInitialInput("");
               }}
-              className="rounded-[10px] px-2 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] material-chip [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+              className="inline-flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             >
-              ← Back
+              <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden />
+              Back
             </button>
             <span className="flex-1 truncate text-xs font-medium tracking-tight">{selectedTool.name}</span>
             <ThemeToggle />
@@ -127,14 +129,9 @@ function AppContent() {
       <div className="flex h-screen flex-col text-foreground">
         <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
         <header className="material-sidebar flex shrink-0 items-start justify-between gap-2 border-b-0 px-3 py-3">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-[10px] bg-selection text-[11px] font-bold text-selection-foreground shadow-[inset_0_1px_0_hsl(var(--specular)/0.3)]">
-              A
-            </span>
-            <div>
-              <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
-              <p className="text-[10px] text-muted-foreground">Quick tools</p>
-            </div>
+          <div>
+            <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
+            <p className="text-[10px] text-muted-foreground">Quick tools</p>
           </div>
           <ThemeToggle />
         </header>
@@ -167,12 +164,17 @@ function AppContent() {
                 type="button"
                 onClick={() => setActiveCategory("favorites")}
                 className={cn(
-                  "rounded-[10px] px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
+                  "flex items-center gap-1.5 rounded-[10px] px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
                   activeCategory === "favorites"
                     ? "nav-active"
                     : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                 )}
               >
+                <Star
+                  className={cn("h-3 w-3 shrink-0", activeCategory === "favorites" && "fill-current")}
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
                 Fav ({prefs.favorites.length})
               </button>
               <CategoryNav

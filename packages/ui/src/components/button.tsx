@@ -14,13 +14,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-selection text-selection-foreground shadow-[inset_0_1px_0_hsl(var(--specular)/0.28),0_1px_2px_hsl(var(--selection)/0.28)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection/90",
+    "bg-selection text-selection-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection/90",
   secondary:
-    "bg-secondary/80 text-secondary-foreground backdrop-blur-sm [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary",
+    "bg-secondary/80 text-secondary-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary",
   ghost:
     "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.05] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
   outline:
-    "border border-border/60 bg-card/40 text-foreground backdrop-blur-sm shadow-[inset_0_1px_0_hsl(var(--specular)/0.4)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/70",
+    "border border-border/55 bg-card/35 text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/70",
   destructive:
     "bg-destructive text-destructive-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-destructive/90",
 };
@@ -45,7 +45,7 @@ export function Button({
       type={type}
       className={cn(
         "inline-flex items-center justify-center font-medium select-none",
-        "transition-[transform,background-color,color,border-color,opacity,box-shadow] duration-150 ease-out-strong",
+        "transition-[transform,background-color,color,border-color,opacity] duration-150 ease-out-strong",
         "active:scale-[0.97]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:pointer-events-none disabled:opacity-50",
