@@ -16,9 +16,9 @@ export function ToolShell({ title, description, children, actions, className }: 
     <div className={cn("flex flex-col gap-5 animate-fade-up motion-reduce:animate-none", className)}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          <h2 className="text-[22px] font-semibold tracking-tight">{title}</h2>
           {description && (
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{description}</p>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{description}</p>
           )}
         </div>
         {actions && (

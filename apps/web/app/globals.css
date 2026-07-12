@@ -1,240 +1,42 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "../../../packages/ui/src/styles/design-system.css";
 
 @layer base {
-  :root {
-    /* macOS light — soft system gray canvas */
-    --background: 240 6% 97%;
-    --foreground: 240 8% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 8% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 8% 10%;
-    --primary: 240 8% 12%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 6% 93%;
-    --secondary-foreground: 240 8% 12%;
-    --muted: 240 6% 93%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 240 6% 92%;
-    --accent-foreground: 240 8% 12%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 6% 88%;
-    --input: 240 6% 88%;
-    --ring: 211 100% 50%;
-    --radius: 0.75rem;
-
-    /* System selection blue (macOS / Raycast) */
-    --selection: 211 100% 50%;
-    --selection-foreground: 0 0% 100%;
-    --selection-soft: 211 100% 96%;
-
-    --brand: 211 100% 50%;
-    --brand-foreground: 0 0% 100%;
-    --favorite: 38 92% 50%;
-
-    /* Materials */
-    --vibrancy: 240 10% 98%;
-    --vibrancy-border: 240 8% 86%;
-    --hairline: 240 8% 0% / 0.08;
-    --shadow-color: 240 10% 20%;
-
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-  }
-
-  .dark {
-    /* macOS dark — deep charcoal with soft elevation */
-    --background: 240 6% 8%;
-    --foreground: 240 6% 96%;
-    --card: 240 5% 12%;
-    --card-foreground: 240 6% 96%;
-    --popover: 240 5% 13%;
-    --popover-foreground: 240 6% 96%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 8% 10%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 240 6% 96%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 4% 62%;
-    --accent: 240 4% 18%;
-    --accent-foreground: 240 6% 96%;
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
-    --ring: 211 100% 55%;
-
-    --selection: 211 100% 50%;
-    --selection-foreground: 0 0% 100%;
-    --selection-soft: 211 60% 18%;
-
-    --brand: 211 100% 55%;
-    --brand-foreground: 0 0% 100%;
-    --favorite: 38 92% 55%;
-
-    --vibrancy: 240 5% 11%;
-    --vibrancy-border: 240 4% 22%;
-    --hairline: 0 0% 100% / 0.08;
-    --shadow-color: 0 0% 0%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  html {
-    color-scheme: light;
-  }
-
-  html.dark {
-    color-scheme: dark;
-  }
-
   body {
     @apply bg-background text-foreground antialiased;
-    /* Soft macOS desktop wash — not flat, not purple */
-    background-image:
-      radial-gradient(ellipse 100% 80% at 50% -30%, hsl(211 80% 92% / 0.55), transparent 55%),
-      radial-gradient(ellipse 60% 40% at 100% 0%, hsl(240 20% 94% / 0.8), transparent 50%),
-      linear-gradient(180deg, hsl(var(--background)), hsl(240 6% 95%));
-    background-attachment: fixed;
     min-height: 100vh;
-    letter-spacing: -0.011em;
+    letter-spacing: -0.015em;
+    /* Atmospheric desktop wallpaper — soft sky mesh that bleeds through glass */
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(ellipse 90% 70% at 15% -10%, hsl(199 85% 88% / 0.7), transparent 55%),
+      radial-gradient(ellipse 70% 55% at 95% 5%, hsl(210 60% 90% / 0.55), transparent 50%),
+      radial-gradient(ellipse 55% 45% at 70% 95%, hsl(195 50% 92% / 0.45), transparent 55%),
+      radial-gradient(ellipse 40% 35% at 5% 80%, hsl(220 30% 90% / 0.4), transparent 50%),
+      linear-gradient(165deg, hsl(210 22% 96%) 0%, hsl(210 16% 93%) 50%, hsl(215 18% 94%) 100%);
+    background-attachment: fixed;
   }
 
   .dark body {
     background-image:
-      radial-gradient(ellipse 100% 70% at 50% -20%, hsl(211 60% 20% / 0.35), transparent 55%),
-      radial-gradient(ellipse 50% 40% at 100% 0%, hsl(240 10% 14% / 0.6), transparent 50%),
-      linear-gradient(180deg, hsl(var(--background)), hsl(240 6% 6%));
-  }
-
-  ::selection {
-    background: hsl(var(--selection) / 0.28);
-  }
-
-  kbd {
-    @apply inline-flex items-center rounded-md border border-border/80 bg-muted/70 px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground;
-    box-shadow: 0 1px 0 hsl(var(--hairline));
-  }
-}
-
-@layer components {
-  /* macOS vibrancy sidebar material */
-  .material-sidebar {
-    background: hsl(var(--vibrancy) / 0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-right: 1px solid hsl(var(--vibrancy-border) / 0.7);
-  }
-
-  /* Floating Raycast / HUD panel */
-  .material-hud {
-    background: hsl(var(--popover) / 0.86);
-    backdrop-filter: saturate(180%) blur(28px);
-    -webkit-backdrop-filter: saturate(180%) blur(28px);
-    border: 1px solid hsl(var(--border) / 0.7);
-    box-shadow:
-      0 0 0 0.5px hsl(var(--hairline)),
-      0 12px 40px -8px hsl(var(--shadow-color) / 0.28),
-      0 4px 12px -4px hsl(var(--shadow-color) / 0.16);
-  }
-
-  /* Content window surface */
-  .material-window {
-    background: hsl(var(--card) / 0.78);
-    backdrop-filter: saturate(160%) blur(16px);
-    -webkit-backdrop-filter: saturate(160%) blur(16px);
-    border: 1px solid hsl(var(--border) / 0.65);
-    box-shadow:
-      0 0 0 0.5px hsl(var(--hairline)),
-      0 8px 28px -12px hsl(var(--shadow-color) / 0.18);
-  }
-
-  /* Raycast / macOS selected row */
-  .row-selected {
-    background: hsl(var(--selection));
-    color: hsl(var(--selection-foreground));
-  }
-
-  .row-selected .row-meta,
-  .row-selected .row-desc {
-    color: hsl(var(--selection-foreground) / 0.78);
-  }
-
-  .row-selected .row-icon {
-    background: hsl(0 0% 100% / 0.18);
-    border-color: hsl(0 0% 100% / 0.22);
-    color: hsl(var(--selection-foreground));
-  }
-
-  /* Soft inactive hover (macOS list) */
-  .row-idle {
-    @apply text-foreground;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .row-idle:hover {
-      background: hsl(var(--selection-soft));
-    }
+      radial-gradient(ellipse 90% 70% at 15% -10%, hsl(211 70% 28% / 0.35), transparent 55%),
+      radial-gradient(ellipse 70% 55% at 95% 5%, hsl(220 40% 22% / 0.3), transparent 50%),
+      radial-gradient(ellipse 55% 45% at 70% 95%, hsl(200 35% 18% / 0.25), transparent 55%),
+      radial-gradient(ellipse 40% 35% at 5% 80%, hsl(230 25% 16% / 0.3), transparent 50%),
+      linear-gradient(165deg, hsl(220 14% 8%) 0%, hsl(220 12% 6%) 100%);
   }
 }
 
 @layer utilities {
-  .ease-out-strong {
-    transition-timing-function: var(--ease-out);
+  .animate-shell-in {
+    animation: ayetab-shell-in 420ms var(--ease-out) both;
   }
-
-  .ease-in-out-strong {
-    transition-timing-function: var(--ease-in-out);
-  }
-
-  .ease-drawer {
-    transition-timing-function: var(--ease-drawer);
-  }
-
-  .surface-panel {
-    @apply material-hud;
-  }
-
-  .stagger-in {
-    opacity: 0;
-    transform: translateY(4px);
-    animation: ayetab-fade-up 220ms var(--ease-out) forwards;
-  }
-
-  .stagger-in:nth-child(1) { animation-delay: 0ms; }
-  .stagger-in:nth-child(2) { animation-delay: 18ms; }
-  .stagger-in:nth-child(3) { animation-delay: 36ms; }
-  .stagger-in:nth-child(4) { animation-delay: 54ms; }
-  .stagger-in:nth-child(5) { animation-delay: 72ms; }
-  .stagger-in:nth-child(6) { animation-delay: 90ms; }
-  .stagger-in:nth-child(7) { animation-delay: 108ms; }
-  .stagger-in:nth-child(8) { animation-delay: 126ms; }
-  .stagger-in:nth-child(9) { animation-delay: 144ms; }
-  .stagger-in:nth-child(10) { animation-delay: 162ms; }
-  .stagger-in:nth-child(11) { animation-delay: 180ms; }
-  .stagger-in:nth-child(12) { animation-delay: 198ms; }
-  .stagger-in:nth-child(n+13) { animation-delay: 210ms; }
 
   @media (prefers-reduced-motion: reduce) {
-    .stagger-in {
-      opacity: 1;
-      transform: none;
+    .animate-shell-in {
       animation: none;
     }
-  }
-}
-
-@keyframes ayetab-fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

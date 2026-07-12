@@ -5,7 +5,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getToolById, type ToolDefinition } from "@ayetab/utils";
-import { ToolHost, ThemeToggle, usePreferences } from "@ayetab/ui";
+import { ToolHost, ThemeToggle, usePreferences, cn } from "@ayetab/ui";
 
 export default function ToolPageClient({ toolId }: { toolId: string }) {
   const router = useRouter();
@@ -31,8 +31,8 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
 
   if (!tool) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-6">
-        <div className="material-window rounded-2xl px-8 py-10 text-center animate-fade-up motion-reduce:animate-none">
+      <div className="flex min-h-screen items-center justify-center p-4 md:p-6">
+        <div className="material-window max-w-sm rounded-[24px] px-8 py-10 text-center animate-fade-up motion-reduce:animate-none">
           <h1 className="text-2xl font-semibold tracking-tight">Tool not found</h1>
           <Link
             href="/"
@@ -46,42 +46,54 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen items-stretch justify-center p-0 md:p-4 lg:p-6">
       {tool.id === "excalidraw" && (
         <Script id="excalidraw-asset-path" strategy="beforeInteractive">
           {`window["EXCALIDRAW_ASSET_PATH"] = window.origin;`}
         </Script>
       )}
-      <header className="material-sidebar sticky top-0 z-10 flex items-center gap-3 border-b-0 px-5 py-2.5">
-        <Link
-          href="/"
-          className="rounded-lg px-2 py-1 text-[13px] text-muted-foreground transition-[background-color,color,transform] duration-100 ease-out-strong active:scale-[0.98] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
-        >
-          ← All Tools
-        </Link>
-        <span className="text-muted-foreground/40">/</span>
-        <span className="flex-1 truncate text-[13px] font-medium tracking-tight">{tool.name}</span>
-        <ThemeToggle />
-      </header>
-      <main className="flex-1 p-5 md:p-8">
-        <div
-          className={
-            tool.id === "excalidraw"
-              ? "w-full"
-              : "material-window mx-auto max-w-3xl rounded-2xl p-5 md:p-7"
-          }
-        >
-          <ToolHost
-            key={`${tool.id}-${initialInput}`}
-            tool={tool}
-            initialInput={initialInput}
-            onNavigate={handleNavigate}
-            onRecent={handleRecent}
-            isFavorite={isFavorite(tool.id)}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        </div>
-      </main>
+      <div
+        className={cn(
+          "app-shell flex w-full max-w-[1180px] flex-1 flex-col overflow-hidden rounded-none md:rounded-[28px] animate-shell-in motion-reduce:animate-none",
+          tool.id === "excalidraw" && "min-h-[calc(100vh-2rem)]"
+        )}
+      >
+        <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-border/30 bg-card/25 px-4 py-3 backdrop-blur-xl md:px-6">
+          <div className="hidden items-center gap-1.5 md:flex" aria-hidden>
+            <span className="h-3 w-3 rounded-full bg-[#FF5F57]/90 shadow-[inset_0_0.5px_0_rgba(255,255,255,0.35)]" />
+            <span className="h-3 w-3 rounded-full bg-[#FEBC2E]/90 shadow-[inset_0_0.5px_0_rgba(255,255,255,0.35)]" />
+            <span className="h-3 w-3 rounded-full bg-[#28C840]/90 shadow-[inset_0_0.5px_0_rgba(255,255,255,0.35)]" />
+          </div>
+          <Link
+            href="/"
+            className="rounded-[10px] px-2.5 py-1.5 text-[13px] text-muted-foreground transition-[background-color,color,transform] duration-100 ease-out-strong active:scale-[0.98] material-chip [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+          >
+            ← All Tools
+          </Link>
+          <span className="text-muted-foreground/35">/</span>
+          <span className="flex-1 truncate text-[13px] font-medium tracking-tight">{tool.name}</span>
+          <ThemeToggle />
+        </header>
+        <main className="flex-1 overflow-auto p-4 md:p-7">
+          <div
+            className={
+              tool.id === "excalidraw"
+                ? "flex h-full min-h-[60vh] w-full flex-col"
+                : "material-window mx-auto max-w-3xl rounded-[22px] p-5 md:p-7"
+            }
+          >
+            <ToolHost
+              key={`${tool.id}-${initialInput}`}
+              tool={tool}
+              initialInput={initialInput}
+              onNavigate={handleNavigate}
+              onRecent={handleRecent}
+              isFavorite={isFavorite(tool.id)}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

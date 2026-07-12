@@ -144,17 +144,13 @@ export function CommandPalette({
       testId="command-palette"
       panelClassName="max-w-[640px] mx-auto"
     >
-      <div className="overflow-hidden rounded-[18px] material-hud">
-        <div className="flex items-center gap-3 border-b border-border/50 px-4">
-          <svg
-            className="h-5 w-5 shrink-0 text-muted-foreground"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+      <div className="overflow-hidden rounded-[22px] material-hud">
+        <div className="flex items-center gap-3 border-b border-border/40 px-4">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] material-chip text-muted-foreground">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </span>
           <input
             ref={inputRef}
             value={query}
@@ -170,7 +166,7 @@ export function CommandPalette({
 
         <div ref={listRef} className="max-h-[min(420px,52vh)] overflow-auto p-2">
           {(showRecents || showSuggestions) && (
-            <p className="px-2.5 py-1.5 text-[11px] font-medium tracking-wide text-muted-foreground">
+            <p className="px-2.5 py-1.5 text-[11px] font-medium tracking-[0.06em] uppercase text-muted-foreground">
               {showRecents ? "Recent" : "Suggested"}
             </p>
           )}
@@ -190,17 +186,17 @@ export function CommandPalette({
                   }}
                   onMouseEnter={() => setActiveIndex(i)}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-[10px] px-2.5 py-2 text-left",
-                    "transition-[background-color,color] duration-75 ease-out-strong motion-reduce:transition-none",
+                    "flex w-full items-center gap-3 rounded-[12px] px-2.5 py-2 text-left",
+                    "transition-[background-color,color,box-shadow] duration-75 ease-out-strong motion-reduce:transition-none",
                     isActive ? "row-selected" : "row-idle"
                   )}
                 >
                   <div
                     className={cn(
-                      "row-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border text-xs font-semibold",
+                      "row-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] border text-xs font-semibold shadow-[inset_0_1px_0_hsl(var(--specular)/0.35)]",
                       isActive
                         ? "border-white/20 bg-white/15"
-                        : "border-border/70 bg-muted/50 text-muted-foreground"
+                        : "border-border/60 bg-muted/40 text-muted-foreground"
                     )}
                   >
                     {tool.name.charAt(0)}
@@ -225,7 +221,7 @@ export function CommandPalette({
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-border/50 px-4 py-2 text-[11px] text-muted-foreground">
+        <div className="flex items-center justify-between border-t border-border/40 bg-black/[0.02] px-4 py-2.5 text-[11px] text-muted-foreground dark:bg-white/[0.03]">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5">
               <kbd>↑</kbd>

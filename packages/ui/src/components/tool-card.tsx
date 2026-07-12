@@ -33,10 +33,10 @@ export function ToolCard({
     return (
       <div
         className={cn(
-          "group relative flex flex-col gap-1.5 rounded-xl border border-border/70 bg-card/70 text-left material-window",
+          "group relative flex flex-col gap-1.5 rounded-2xl border border-border/50 bg-card/50 text-left material-window",
           "transition-[transform,background-color,box-shadow] duration-150 ease-out-strong",
           "active:scale-[0.985] motion-reduce:transition-none motion-reduce:active:scale-100",
-          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft/80",
+          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft/70",
           compact ? "p-2.5" : "p-3.5",
           className
         )}
@@ -45,11 +45,11 @@ export function ToolCard({
           <button
             type="button"
             onClick={() => onClick?.(tool)}
-            className="flex min-w-0 flex-1 items-start gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+            className="flex min-w-0 flex-1 items-start gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
           >
             <span
               className={cn(
-                "row-icon mt-0.5 flex shrink-0 items-center justify-center rounded-[9px] border border-border/80 bg-muted/60 font-semibold text-muted-foreground",
+                "row-icon mt-0.5 flex shrink-0 items-center justify-center rounded-[11px] border border-border/60 bg-muted/50 font-semibold text-muted-foreground shadow-[inset_0_1px_0_hsl(var(--specular)/0.45)]",
                 compact ? "h-6 w-6 text-[10px]" : "h-8 w-8 text-xs"
               )}
               aria-hidden
@@ -81,13 +81,12 @@ export function ToolCard({
     );
   }
 
-  /* Raycast / macOS list row — primary browsing surface */
   return (
     <div
       onMouseEnter={onMouseEnter}
       className={cn(
-        "group relative flex items-center gap-3 rounded-lg border border-transparent px-2.5",
-        "transition-[transform,background-color,color,border-color] duration-100 ease-out-strong",
+        "group relative flex items-center gap-3 rounded-[12px] border border-transparent px-2.5",
+        "transition-[transform,background-color,color,border-color,box-shadow] duration-100 ease-out-strong",
         "active:scale-[0.995] motion-reduce:transition-none motion-reduce:active:scale-100",
         selected ? "row-selected" : "row-idle",
         compact ? "py-1.5" : "py-2",
@@ -97,11 +96,11 @@ export function ToolCard({
       <button
         type="button"
         onClick={() => onClick?.(tool)}
-        className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+        className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
       >
         <span
           className={cn(
-            "row-icon flex shrink-0 items-center justify-center rounded-[9px] border border-border/70 bg-muted/50 font-semibold",
+            "row-icon flex shrink-0 items-center justify-center rounded-[11px] border border-border/55 bg-muted/40 font-semibold shadow-[inset_0_1px_0_hsl(var(--specular)/0.4)]",
             selected ? "" : "text-muted-foreground",
             compact ? "h-7 w-7 text-[11px]" : "h-9 w-9 text-xs"
           )}

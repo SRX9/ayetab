@@ -56,9 +56,11 @@ const config: Config = {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 4px)",
+        sm: "calc(var(--radius) - 8px)",
         xl: "calc(var(--radius) + 4px)",
+        "2xl": "calc(var(--radius) + 8px)",
+        "3xl": "calc(var(--radius) + 16px)",
       },
       fontFamily: {
         sans: [
@@ -75,15 +77,20 @@ const config: Config = {
         "out-strong": "var(--ease-out)",
         "in-out-strong": "var(--ease-in-out)",
         drawer: "var(--ease-drawer)",
+        spring: "var(--ease-spring)",
       },
       keyframes: {
         "fade-up": {
-          from: { opacity: "0", transform: "translateY(6px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+          from: { opacity: "0", transform: "translateY(8px) scale(0.99)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" },
         },
       },
       animation: {
-        "fade-up": "fade-up 280ms var(--ease-out) both",
+        "fade-up": "fade-up 360ms var(--ease-out) both",
+      },
+      backdropBlur: {
+        glass: "36px",
+        hud: "48px",
       },
     },
   },

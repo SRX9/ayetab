@@ -20,7 +20,7 @@ export function SmartPasteBanner({ pastedText, onAccept, onDismiss, className }:
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 rounded-lg border border-brand/25 bg-brand/5 px-3 py-2.5",
+        "flex items-center justify-between gap-3 rounded-[14px] border border-brand/20 bg-brand/8 px-3.5 py-2.5 backdrop-blur-md shadow-[inset_0_1px_0_hsl(var(--specular)/0.35)]",
         "animate-fade-up motion-reduce:animate-none",
         className
       )}

@@ -21,7 +21,7 @@ export function FavoriteButton({ active, onClick, className }: FavoriteButtonPro
       aria-pressed={active}
       className={cn(
         pressable(
-          "inline-flex h-7 w-7 items-center justify-center rounded-[8px] text-sm leading-none"
+          "inline-flex h-7 w-7 items-center justify-center rounded-[10px] text-sm leading-none"
         ),
         active
           ? "text-favorite"

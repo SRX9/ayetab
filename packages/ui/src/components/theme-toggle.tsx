@@ -19,7 +19,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       onClick={toggleTheme}
       aria-label={`Switch to ${next} mode`}
       className={cn(
-        "h-7 w-7 rounded-[9px] text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.06] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08]",
+        "h-8 w-8 rounded-[11px] text-muted-foreground material-chip [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.06] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.1]",
         className
       )}
       title={`Switch to ${next} mode`}

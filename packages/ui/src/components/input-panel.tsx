@@ -60,7 +60,7 @@ export function InputPanel({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+        <label className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
           {label}
         </label>
         {allowUpload && (
@@ -82,10 +82,10 @@ export function InputPanel({
         data-testid="tool-input"
         autoFocus={autoFocus}
         className={cn(
-          "w-full resize-y rounded-xl border border-border/70 bg-background/60 px-3.5 py-3 text-sm font-mono shadow-[inset_0_1px_2px_hsl(var(--shadow-color)/0.04)]",
+          "material-field w-full resize-y rounded-[14px] px-3.5 py-3 text-sm font-mono",
           "placeholder:text-muted-foreground",
           "transition-[border-color,box-shadow] duration-150 ease-out-strong",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection/40 focus-visible:border-selection/40",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection/35 focus-visible:border-selection/35",
           "motion-reduce:transition-none"
         )}
         spellCheck={false}
