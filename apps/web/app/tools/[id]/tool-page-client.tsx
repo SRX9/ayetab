@@ -64,7 +64,14 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
           )}
         >
           <ChevronLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden />
-          All Tools
+          Home
+        </Link>
+        <span className="text-muted-foreground/30">/</span>
+        <Link
+          href="/library"
+          className="truncate text-[13px] text-muted-foreground transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+        >
+          Library
         </Link>
         <span className="text-muted-foreground/30">/</span>
         <span className="flex-1 truncate text-[13px] font-medium tracking-tight">{tool.name}</span>

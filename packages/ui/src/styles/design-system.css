@@ -253,3 +253,23 @@ kbd {
     transform: translateY(0);
   }
 }
+
+@keyframes ayetab-jiggle {
+  0%,
+  100% {
+    transform: rotate(-0.4deg);
+  }
+  50% {
+    transform: rotate(0.4deg);
+  }
+}
+
+.widget-jiggle {
+  animation: ayetab-jiggle 0.35s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-jiggle {
+    animation: none;
+  }
+}

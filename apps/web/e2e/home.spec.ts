@@ -8,12 +8,12 @@ test.describe("Home & navigation", () => {
     await dismissOnboarding(page);
   });
 
-  test("loads home page with tool grid", async ({ page }) => {
+  test("loads customizable home screen", async ({ page }) => {
+    await expect(page.getByTestId("home-screen")).toBeVisible();
     await expect(page.getByRole("heading", { name: "AyeTab", exact: true })).toBeVisible();
-    await expect(page.getByText("50 tools available")).toBeVisible();
-    const main = page.locator("main");
-    await expect(main.getByRole("button", { name: "JSON Formatter" })).toBeVisible();
-    await expect(main.getByRole("button", { name: "Base64 Encode/Decode" })).toBeVisible();
+    await expect(page.getByTestId("home-pins")).toBeVisible();
+    await expect(page.getByTestId("home-quick-note")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Library" })).toBeVisible();
   });
 
   test("search bar opens command palette and navigates", async ({ page }) => {
@@ -33,13 +33,24 @@ test.describe("Home & navigation", () => {
     await expect(page).toHaveURL(/\/tools\/json-formatter/);
   });
 
-  test("favorites toggle and filter", async ({ page }) => {
+  test("edit mode can add a widget", async ({ page }) => {
+    await page.getByTestId("home-edit-toggle").click();
+    await expect(page.getByRole("button", { name: "Done" })).toBeVisible();
+    await page.getByTestId("home-add-widget").click();
+    const gallery = page.getByTestId("home-widget-gallery");
+    await expect(gallery).toBeVisible();
+    await gallery.getByRole("button", { name: /To-Do/ }).click();
+    await expect(page.getByTestId("home-todo")).toBeVisible();
+    await page.getByTestId("home-edit-toggle").click();
+  });
+
+  test("library page lists all tools", async ({ page }) => {
+    await page.getByRole("link", { name: "Library" }).click();
+    await expect(page).toHaveURL(/\/library/);
+    await expect(page.getByTestId("library-page")).toBeVisible();
+    await expect(page.getByText("50 tools available")).toBeVisible();
     const main = page.locator("main");
-    const jsonCard = main.locator(".rounded-lg.border").filter({ hasText: "JSON Formatter" }).first();
-    await jsonCard.getByRole("button", { name: "Add to favorites" }).click();
-    await page.getByRole("button", { name: "★ Favorites" }).click();
     await expect(main.getByRole("button", { name: "JSON Formatter" })).toBeVisible();
-    await expect(main.getByRole("button", { name: "Base64 Encode/Decode" })).not.toBeVisible();
   });
 
   test("theme toggle switches dark mode", async ({ page }) => {

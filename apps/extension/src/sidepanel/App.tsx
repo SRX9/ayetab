@@ -18,6 +18,7 @@ import {
   ToolCard,
   ToolListSection,
   usePreferences,
+  PreferencesProvider,
   OnboardingModal,
   useShortcutsModal,
   SettingsMenu,
@@ -242,9 +243,11 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <ShortcutsProvider>
-        <AppContent />
-      </ShortcutsProvider>
+      <PreferencesProvider>
+        <ShortcutsProvider>
+          <AppContent />
+        </ShortcutsProvider>
+      </PreferencesProvider>
     </ThemeProvider>
   );
 }

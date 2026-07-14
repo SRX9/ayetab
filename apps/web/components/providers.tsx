@@ -1,15 +1,15 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import {
   ThemeProvider,
   CommandPaletteProvider,
   ShortcutsProvider,
+  PreferencesProvider,
   usePreferences,
 } from "@ayetab/ui";
 import { TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
-import type { ReactNode } from "react";
 
 function AppChrome({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -32,7 +32,9 @@ function AppChrome({ children }: { children: ReactNode }) {
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-      <AppChrome>{children}</AppChrome>
+      <PreferencesProvider>
+        <AppChrome>{children}</AppChrome>
+      </PreferencesProvider>
     </ThemeProvider>
   );
 }

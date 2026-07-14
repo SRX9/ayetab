@@ -29,7 +29,34 @@ export { useJsonToolState } from "./hooks/use-json-tool-state";
 export { ShortcutsModal, ShortcutsProvider, useShortcutsModal, useShortcutsModalOptional } from "./components/shortcuts-modal";
 export { OnboardingModal } from "./components/onboarding-modal";
 export { SettingsMenu } from "./components/settings-menu";
+export { HomeScreen } from "./components/home/home-screen";
+export { QuickNoteWidget } from "./components/home/quick-note-widget";
+export { TodoWidget } from "./components/home/todo-widget";
+export { PinGrid } from "./components/home/pin-grid";
+export {
+  DEFAULT_HOME_LAYOUT,
+  DEFAULT_HOME_PINS,
+  WIDGET_CATALOG,
+  normalizeHomeLayout,
+  createWidget,
+  canAddWidget,
+  addWidgetToLayout,
+  removeWidgetFromLayout,
+  reorderWidgets,
+  updateWidgetSize,
+  cycleWidgetSize,
+  toggleHomePin,
+  setHomePins,
+} from "./lib/home-layout";
+export type {
+  HomeLayout,
+  HomeWidget,
+  HomeWidgetType,
+  HomeWidgetSize,
+  WidgetCatalogItem,
+} from "./lib/home-layout";
 export { useClipboard } from "./hooks/use-clipboard";
 export { useToolState } from "./hooks/use-tool-state";
 export { useKeyboardShortcut } from "./hooks/use-keyboard-shortcut";
-export { usePreferences } from "./hooks/use-preferences";
+export { usePreferences, PreferencesProvider } from "./hooks/use-preferences";
+export type { UserPreferences } from "./lib/preferences";

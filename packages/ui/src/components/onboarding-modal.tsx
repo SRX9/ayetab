@@ -27,7 +27,7 @@ export function OnboardingModal() {
           AyeTab
         </h2>
         <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
-          A local developer toolbox with a clean macOS feel — search, open, and run utilities offline.
+          Your customizable home for developer tools — pin apps, jot notes, and rearrange widgets like your phone.
         </p>
         <ul className="mt-6 flex flex-col gap-3 text-[13px]">
           <li className="flex items-center gap-3">
@@ -39,12 +39,12 @@ export function OnboardingModal() {
             </span>
           </li>
           <li className="flex items-center gap-3">
-            <kbd className="shrink-0">↑↓</kbd>
-            <span className="text-muted-foreground">Move through the list, ↵ to open</span>
+            <kbd className="shrink-0">Edit</kbd>
+            <span className="text-muted-foreground">Customize widgets, pins, and layout</span>
           </li>
           <li className="flex items-center gap-3">
             <Star className="h-4 w-4 shrink-0 text-favorite" strokeWidth={1.75} aria-hidden />
-            <span className="text-muted-foreground">Star favorites for quick access</span>
+            <span className="text-muted-foreground">Write notes and check todos right on home</span>
           </li>
         </ul>
         <Button variant="primary" size="lg" onClick={dismiss} data-testid="onboarding-dismiss" className="mt-7 w-full">
