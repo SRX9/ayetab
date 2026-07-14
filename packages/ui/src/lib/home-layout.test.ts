@@ -30,7 +30,7 @@ describe("home layout", () => {
       ],
     });
     expect(layout.widgets.find((w) => (w as { type: string }).type === "pins")).toBeUndefined();
-    expect(layout.widgets.find((w) => w.type === "search")?.size).toBe("4x2");
+    expect(layout.widgets.find((w) => w.type === "search")?.size).toBe("4x1");
     expect(layout.widgets.find((w) => w.type === "quick-note")?.size).toBe("2x2");
   });
 
@@ -52,8 +52,8 @@ describe("home layout", () => {
   });
 
   it("cycles bento sizes and toggles pins", () => {
-    expect(cycleWidgetSize("2x2")).toBe("4x2");
-    expect(cycleWidgetSize("4x2")).toBe("2x4");
+    expect(cycleWidgetSize("2x2")).toBe("4x1");
+    expect(cycleWidgetSize("4x1")).toBe("4x2");
     expect(bentoSpanClass("2x2")).toContain("col-span-2");
 
     const withPin = toggleHomePin(DEFAULT_HOME_LAYOUT, "pomodoro");

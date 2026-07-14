@@ -9,7 +9,7 @@ export type HomeWidgetType =
   | "clock";
 
 /** Bento tile sizes (columns × rows on the home grid) */
-export type BentoSize = "2x2" | "4x2" | "2x4" | "4x4";
+export type BentoSize = "2x2" | "4x2" | "2x4" | "4x4" | "4x1";
 
 /** @deprecated use BentoSize — kept for prefs migration */
 export type HomeWidgetSize = "sm" | "md" | "lg" | BentoSize;
@@ -52,7 +52,7 @@ export const WIDGET_CATALOG: WidgetCatalogItem[] = [
     name: "Search",
     description: "Jump to any tool",
     icon: "Search",
-    defaultSize: "4x2",
+    defaultSize: "4x1",
     unique: true,
   },
   {
@@ -117,7 +117,7 @@ export const DEFAULT_HOME_LAYOUT: HomeLayout = {
   dock: DEFAULT_HOME_DOCK,
   widgets: [
     { id: "home-clock", type: "clock", size: "2x2" },
-    { id: "home-search", type: "search", size: "4x2" },
+    { id: "home-search", type: "search", size: "4x1" },
     { id: "home-note", type: "quick-note", size: "2x2" },
     { id: "home-todo", type: "todo", size: "2x2" },
     { id: "home-recents", type: "recents", size: "2x2" },
@@ -125,7 +125,7 @@ export const DEFAULT_HOME_LAYOUT: HomeLayout = {
 };
 
 const VALID_TYPES = new Set<HomeWidgetType>(WIDGET_CATALOG.map((w) => w.type));
-const VALID_SIZES = new Set<BentoSize>(["2x2", "4x2", "2x4", "4x4"]);
+const VALID_SIZES = new Set<BentoSize>(["2x2", "4x2", "2x4", "4x4", "4x1"]);
 
 /** Map legacy sm/md/lg (+ removed "pins") into bento sizes */
 function migrateSize(raw: unknown, type: HomeWidgetType): BentoSize {
@@ -133,8 +133,8 @@ function migrateSize(raw: unknown, type: HomeWidgetType): BentoSize {
     return raw as BentoSize;
   }
   if (raw === "sm") return "2x2";
-  if (raw === "md") return type === "search" ? "4x2" : "2x2";
-  if (raw === "lg") return type === "search" ? "4x2" : "4x2";
+  if (raw === "md") return "2x2";
+  if (raw === "lg") return type === "search" ? "4x1" : "4x2";
   return WIDGET_CATALOG.find((c) => c.type === type)?.defaultSize ?? "2x2";
 }
 
@@ -192,7 +192,7 @@ export function normalizeHomeLayout(raw: unknown): HomeLayout {
 }
 
 export function cycleWidgetSize(size: BentoSize): BentoSize {
-  const order: BentoSize[] = ["2x2", "4x2", "2x4", "4x4"];
+  const order: BentoSize[] = ["2x2", "4x1", "4x2", "2x4", "4x4"];
   const i = order.indexOf(size);
   return order[(i + 1) % order.length]!;
 }
@@ -265,14 +265,16 @@ export function toggleHomeDock(layout: HomeLayout, toolId: string): HomeLayout {
 /** Tailwind grid placement for a bento tile */
 export function bentoSpanClass(size: BentoSize): string {
   switch (size) {
+    case "4x1":
+      return "col-span-4 row-span-1 sm:col-span-4 lg:col-span-4";
     case "2x2":
       return "col-span-2 row-span-2";
     case "4x2":
-      return "col-span-2 row-span-2 sm:col-span-4";
+      return "col-span-4 row-span-2";
     case "2x4":
       return "col-span-2 row-span-4";
     case "4x4":
-      return "col-span-2 row-span-2 sm:col-span-4 sm:row-span-4";
+      return "col-span-4 row-span-4";
     default:
       return "col-span-2 row-span-2";
   }

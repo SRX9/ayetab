@@ -307,7 +307,7 @@ export function HomeScreen({
             {pinnedTools.map((tool, index) => (
               <div
                 key={`pin-${tool.id}`}
-                className="app-icon-tile flex items-end justify-center pb-1"
+                className="app-icon-tile"
                 draggable={editing}
                 onDragStart={editing ? startDrag({ kind: "pin", index }) : undefined}
                 onDragEnd={() => setDragPayload(null)}
@@ -325,7 +325,7 @@ export function HomeScreen({
             ))}
 
             {editing && (
-              <div className="app-icon-tile flex items-end justify-center pb-1">
+              <div className="app-icon-tile">
                 <AddAppIcon onClick={() => setAddPinOpen(true)} />
               </div>
             )}
