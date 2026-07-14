@@ -32,10 +32,11 @@ export function SearchBar({
         type="button"
         onClick={palette.open}
         className={cn(
-          "group flex w-full items-center gap-3 rounded-2xl border border-border/40 bg-card/40 px-4 py-3.5 text-left backdrop-blur-xl",
+          "group flex w-full items-center gap-3 rounded-2xl border border-white/35 bg-white/35 px-4 py-3.5 text-left backdrop-blur-xl",
+          "dark:border-white/10 dark:bg-white/10",
           "transition-[transform,background-color,border-color] duration-150 ease-out-strong",
           "active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100",
-          "[@media(hover:hover)_and_(pointer:fine)]:hover:border-selection/25 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/60",
+          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/50 dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/15",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection/40",
           className
         )}

@@ -36,6 +36,7 @@ export { PinGrid } from "./components/home/pin-grid";
 export {
   DEFAULT_HOME_LAYOUT,
   DEFAULT_HOME_PINS,
+  DEFAULT_HOME_DOCK,
   WIDGET_CATALOG,
   normalizeHomeLayout,
   createWidget,
@@ -43,16 +44,22 @@ export {
   addWidgetToLayout,
   removeWidgetFromLayout,
   reorderWidgets,
+  reorderPins,
   updateWidgetSize,
   cycleWidgetSize,
   toggleHomePin,
   setHomePins,
+  setHomeDock,
+  toggleHomeDock,
+  bentoSpanClass,
+  widgetSpanClass,
 } from "./lib/home-layout";
 export type {
   HomeLayout,
   HomeWidget,
   HomeWidgetType,
   HomeWidgetSize,
+  BentoSize,
   WidgetCatalogItem,
 } from "./lib/home-layout";
 export { useClipboard } from "./hooks/use-clipboard";
