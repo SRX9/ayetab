@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import type { ToolDefinition } from "@ayetab/utils";
 import { fuzzySearchTools, CATEGORY_LABELS } from "@ayetab/utils";
-import { Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import { cn } from "../lib/utils";
 import { useKeyboardShortcut } from "../hooks/use-keyboard-shortcut";
 import { Dialog } from "./dialog";
@@ -148,7 +149,7 @@ export function CommandPalette({
     >
       <div className="overflow-hidden rounded-[20px] material-hud">
         <div className="flex items-center gap-3 border-b border-border/40 px-4">
-          <Search className="h-[18px] w-[18px] shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
+          <HugeiconsIcon icon={Search01Icon} size={18} strokeWidth={1.75} color="currentColor" className="h-[18px] w-[18px] shrink-0 text-muted-foreground" aria-hidden />
           <input
             ref={inputRef}
             value={query}

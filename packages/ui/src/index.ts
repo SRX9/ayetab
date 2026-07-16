@@ -12,6 +12,7 @@ export { CommandPalette } from "./components/command-palette";
 export { CommandPaletteProvider, useCommandPalette, useCommandPaletteOptional } from "./components/command-palette-provider";
 export { ThemeProvider, useTheme } from "./components/theme-provider";
 export { ThemeToggle } from "./components/theme-toggle";
+export { AppearanceSync } from "./components/appearance-sync";
 export { SmartPasteBanner } from "./components/smart-paste-banner";
 export { FavoriteButton } from "./components/favorite-button";
 export { ToolIcon } from "./components/tool-icon";
@@ -28,11 +29,20 @@ export { CUSTOM_TOOL_COMPONENTS, CUSTOM_TOOL_TEST_IDS } from "./lib/custom-tool-
 export { useJsonToolState } from "./hooks/use-json-tool-state";
 export { ShortcutsModal, ShortcutsProvider, useShortcutsModal, useShortcutsModalOptional } from "./components/shortcuts-modal";
 export { OnboardingModal } from "./components/onboarding-modal";
-export { SettingsMenu } from "./components/settings-menu";
+export { SettingsMenu, SettingsPanel, SettingsButton } from "./components/settings-panel";
 export { HomeScreen } from "./components/home/home-screen";
+export { HomeWallpaper } from "./components/home/home-wallpaper";
 export { QuickNoteWidget } from "./components/home/quick-note-widget";
 export { TodoWidget } from "./components/home/todo-widget";
 export { PinGrid } from "./components/home/pin-grid";
+export {
+  DEFAULT_APPEARANCE,
+  WALLPAPER_PRESETS,
+  normalizeAppearance,
+  resolveTheme,
+  fileToWallpaperDataUrl,
+} from "./lib/appearance";
+export type { AppearancePreferences, ThemeMode, WallpaperPreset } from "./lib/appearance";
 export {
   DEFAULT_HOME_LAYOUT,
   DEFAULT_HOME_PINS,

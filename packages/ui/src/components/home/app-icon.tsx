@@ -1,6 +1,7 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import type { ToolDefinition } from "@ayetab/utils";
 import { cn } from "../../lib/utils";
 import { ToolIcon } from "../tool-icon";
@@ -43,7 +44,7 @@ export function AppIcon({
           }}
           className="absolute -right-1 -top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm"
         >
-          <X className="h-3 w-3" strokeWidth={2.5} />
+          <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2.5} color="currentColor" />
         </button>
       )}
       <button
@@ -94,7 +95,7 @@ export function AddAppIcon({ onClick, size = "md" }: AddAppIconProps) {
           "dark:border-white/25"
         )}
       >
-        <Plus className="h-5 w-5" strokeWidth={1.75} />
+        <HugeiconsIcon icon={Add01Icon} size={20} strokeWidth={1.75} color="currentColor" />
       </span>
       <span className={cn("font-medium text-foreground/60", s.label)}>Add</span>
     </button>

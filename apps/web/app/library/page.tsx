@@ -3,7 +3,8 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Home, Menu, Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Home01Icon, Menu01Icon, StarIcon } from "@hugeicons/core-free-icons";
 import {
   TOOL_REGISTRY,
   type ToolCategory,
@@ -18,7 +19,7 @@ import {
   ToolListSection,
   usePreferences,
   useShortcutsModal,
-  SettingsMenu,
+  SettingsButton,
   cn,
 } from "@ayetab/ui";
 
@@ -30,7 +31,7 @@ export default function LibraryPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
-  const { prefs, toggleFavorite, isFavorite, importPrefs } = usePreferences();
+  const { prefs, toggleFavorite, isFavorite } = usePreferences();
   const { setOpen: setShortcutsOpen } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
@@ -127,14 +128,17 @@ export default function LibraryPage() {
           <h1 className="truncate text-[17px] font-semibold tracking-tight">Library</h1>
           <p className="truncate text-[11px] text-muted-foreground">All developer tools</p>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center gap-0.5">
+          <SettingsButton />
+          <ThemeToggle />
+        </div>
       </div>
 
       <Link
         href="/"
         className="flex items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-[13px] text-foreground/75 transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
       >
-        <Home className="h-4 w-4 shrink-0" strokeWidth={1.75} aria-hidden />
+        <HugeiconsIcon icon={Home01Icon} size={16} strokeWidth={1.75} color="currentColor" className="shrink-0" aria-hidden />
         Home
       </Link>
 
@@ -153,9 +157,13 @@ export default function LibraryPage() {
             : "text-foreground/75 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
         )}
       >
-        <Star
-          className={cn("h-4 w-4 shrink-0", activeCategory === "favorites" ? "fill-current" : "")}
+        <HugeiconsIcon
+          icon={StarIcon}
+          size={16}
           strokeWidth={1.75}
+          color="currentColor"
+          className="shrink-0"
+          fill={activeCategory === "favorites" ? "currentColor" : "none"}
           aria-hidden
         />
         <span className="flex-1">Favorites</span>
@@ -214,7 +222,7 @@ export default function LibraryPage() {
             ?
           </button>
         </p>
-        <SettingsMenu prefs={prefs} onImport={importPrefs} />
+        <SettingsButton />
       </div>
     </>
   );
@@ -245,7 +253,7 @@ export default function LibraryPage() {
             onClick={() => setMobileNavOpen(true)}
             aria-label="Open navigation"
           >
-            <Menu className="h-5 w-5" strokeWidth={1.75} />
+            <HugeiconsIcon icon={Menu01Icon} size={20} strokeWidth={1.75} color="currentColor" />
           </button>
           <p className="text-[15px] font-semibold tracking-tight">Library</p>
         </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { ChevronLeft, Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChevronLeftIcon, StarIcon } from "@hugeicons/core-free-icons";
 import {
   TOOL_REGISTRY,
   type ToolCategory,
@@ -21,7 +22,8 @@ import {
   PreferencesProvider,
   OnboardingModal,
   useShortcutsModal,
-  SettingsMenu,
+  SettingsButton,
+  AppearanceSync,
   ShortcutsProvider,
   cn,
 } from "@ayetab/ui";
@@ -32,7 +34,7 @@ function AppContent() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
   const [initialInput, setInitialInput] = useState("");
-  const { prefs, toggleFavorite, isFavorite, addRecent, importPrefs } = usePreferences();
+  const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
   const { setOpen: setShortcutsOpen } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
@@ -93,10 +95,11 @@ function AppContent() {
               }}
               className="inline-flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             >
-              <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden />
+              <HugeiconsIcon icon={ChevronLeftIcon} size={14} strokeWidth={1.75} color="currentColor" aria-hidden />
               Back
             </button>
             <span className="flex-1 truncate text-xs font-medium tracking-tight">{selectedTool.name}</span>
+            <SettingsButton />
             <ThemeToggle />
           </header>
           <div className={`flex-1 overflow-auto p-3 ${selectedTool.id === "excalidraw" ? "flex flex-col" : ""}`}>
@@ -134,12 +137,11 @@ function AppContent() {
             <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
             <p className="text-[10px] text-muted-foreground">Quick tools</p>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <SettingsButton compact />
+            <ThemeToggle />
+          </div>
         </header>
-
-        <div className="px-3 pb-2 pt-2">
-          <SettingsMenu prefs={prefs} onImport={importPrefs} compact />
-        </div>
 
         <div className="flex flex-1 flex-col overflow-auto">
           <div className="border-b border-border/40 px-3 pb-3">
@@ -171,9 +173,13 @@ function AppContent() {
                     : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                 )}
               >
-                <Star
-                  className={cn("h-3 w-3 shrink-0", activeCategory === "favorites" && "fill-current")}
+                <HugeiconsIcon
+                  icon={StarIcon}
+                  size={12}
                   strokeWidth={1.75}
+                  color="currentColor"
+                  className="shrink-0"
+                  fill={activeCategory === "favorites" ? "currentColor" : "none"}
                   aria-hidden
                 />
                 Fav ({prefs.favorites.length})
@@ -244,9 +250,11 @@ export default function App() {
   return (
     <ThemeProvider>
       <PreferencesProvider>
-        <ShortcutsProvider>
-          <AppContent />
-        </ShortcutsProvider>
+        <AppearanceSync>
+          <ShortcutsProvider>
+            <AppContent />
+          </ShortcutsProvider>
+        </AppearanceSync>
       </PreferencesProvider>
     </ThemeProvider>
   );

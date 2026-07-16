@@ -15,8 +15,10 @@ import {
   toggleFavorite as toggleFavoriteFn,
   addRecent as addRecentFn,
   updateHome as updateHomeFn,
+  updateAppearance as updateAppearanceFn,
   type UserPreferences,
 } from "../lib/preferences";
+import { DEFAULT_APPEARANCE, type AppearancePreferences } from "../lib/appearance";
 import { DEFAULT_HOME_LAYOUT, type HomeLayout } from "../lib/home-layout";
 
 interface PreferencesContextValue {
@@ -26,6 +28,10 @@ interface PreferencesContextValue {
   addRecent: (toolId: string) => Promise<void>;
   setHome: (home: HomeLayout) => Promise<void>;
   updateHome: (updater: (home: HomeLayout) => HomeLayout) => Promise<void>;
+  setAppearance: (appearance: AppearancePreferences) => Promise<void>;
+  updateAppearance: (
+    updater: (appearance: AppearancePreferences) => AppearancePreferences
+  ) => Promise<void>;
   importPrefs: (imported: UserPreferences) => Promise<void>;
   isFavorite: (toolId: string) => boolean;
 }
@@ -37,6 +43,7 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     favorites: [],
     recents: [],
     home: structuredClone(DEFAULT_HOME_LAYOUT),
+    appearance: { ...DEFAULT_APPEARANCE },
   });
   const [loaded, setLoaded] = useState(false);
 
@@ -80,6 +87,25 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const setAppearance = useCallback(async (appearance: AppearancePreferences) => {
+    setPrefs((current) => {
+      const next = updateAppearanceFn(current, appearance);
+      void savePreferences(next);
+      return next;
+    });
+  }, []);
+
+  const updateAppearance = useCallback(
+    async (updater: (appearance: AppearancePreferences) => AppearancePreferences) => {
+      setPrefs((current) => {
+        const next = updateAppearanceFn(current, updater(current.appearance));
+        void savePreferences(next);
+        return next;
+      });
+    },
+    []
+  );
+
   const importPrefs = useCallback(async (imported: UserPreferences) => {
     await savePreferences(imported);
     setPrefs(imported);
@@ -98,10 +124,23 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
       addRecent,
       setHome,
       updateHome,
+      setAppearance,
+      updateAppearance,
       importPrefs,
       isFavorite,
     }),
-    [prefs, loaded, toggleFavorite, addRecent, setHome, updateHome, importPrefs, isFavorite]
+    [
+      prefs,
+      loaded,
+      toggleFavorite,
+      addRecent,
+      setHome,
+      updateHome,
+      setAppearance,
+      updateAppearance,
+      importPrefs,
+      isFavorite,
+    ]
   );
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;

@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Check, Plus } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { useJsonToolState } from "../../hooks/use-json-tool-state";
 import { cn } from "../../lib/utils";
 
@@ -89,7 +90,7 @@ export function TodoWidget({ maxItems = 5 }: TodoWidgetProps) {
           aria-label="Add task"
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-selection text-selection-foreground transition-transform active:scale-95"
         >
-          <Plus className="h-4 w-4" strokeWidth={2} />
+          <HugeiconsIcon icon={Add01Icon} size={16} strokeWidth={2} color="currentColor" />
         </button>
       </form>
       {active.length === 0 ? (
@@ -111,7 +112,7 @@ export function TodoWidget({ maxItems = 5 }: TodoWidgetProps) {
                       : "border-border/70"
                   )}
                 >
-                  {item.completed && <Check className="h-3 w-3" strokeWidth={2.5} />}
+                  {item.completed && <HugeiconsIcon icon={Tick02Icon} size={12} strokeWidth={2.5} color="currentColor" />}
                 </span>
                 <span className="truncate text-[13px]">{item.text}</span>
               </button>

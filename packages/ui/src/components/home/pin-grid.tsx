@@ -1,6 +1,7 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import type { ToolDefinition } from "@ayetab/utils";
 import { cn } from "../../lib/utils";
 import { ToolIcon } from "../tool-icon";
@@ -39,7 +40,7 @@ export function PinGrid({
               onClick={() => onRemovePin(tool.id)}
               className="absolute -right-1 -top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-muted text-foreground"
             >
-              <X className="h-3 w-3" strokeWidth={2} />
+              <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} color="currentColor" />
             </button>
           )}
           <button
@@ -70,7 +71,7 @@ export function PinGrid({
           aria-label="Add app"
         >
           <span className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-dashed border-border/70 text-muted-foreground transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:border-selection/40 [@media(hover:hover)_and_(pointer:fine)]:hover:text-selection">
-            <Plus className="h-5 w-5" strokeWidth={1.75} />
+            <HugeiconsIcon icon={Add01Icon} size={20} strokeWidth={1.75} color="currentColor" />
           </span>
           <span className="text-[11px] font-medium text-muted-foreground">Add</span>
         </button>

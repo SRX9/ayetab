@@ -2,7 +2,6 @@
 
 import type { ToolCategory } from "@ayetab/utils";
 import { CATEGORY_ICONS, CATEGORY_LABELS } from "@ayetab/utils";
-import { LayoutGrid } from "lucide-react";
 import { cn } from "../lib/utils";
 import { ToolIcon } from "./tool-icon";
 
@@ -38,11 +37,7 @@ export function CategoryNav({ categories, active, onSelect, counts, className }:
                 : "text-foreground/75 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             )}
           >
-            {item.id === "all" ? (
-              <LayoutGrid className="h-4 w-4 shrink-0" strokeWidth={1.75} aria-hidden />
-            ) : (
-              <ToolIcon name={item.icon} className="h-4 w-4" />
-            )}
+            <ToolIcon name={item.icon} className="h-4 w-4" />
             <span className="min-w-0 flex-1 truncate">{item.label}</span>
             {counts?.[item.id] !== undefined && (
               <span

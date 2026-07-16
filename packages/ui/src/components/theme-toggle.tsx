@@ -1,6 +1,7 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Moon02Icon, Sun03Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "./theme-provider";
 import { Button } from "./button";
 import { cn } from "../lib/utils";
@@ -10,8 +11,8 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  const { theme, toggleTheme } = useTheme();
-  const next = theme === "dark" ? "light" : "dark";
+  const { resolvedTheme, toggleTheme } = useTheme();
+  const next = resolvedTheme === "dark" ? "light" : "dark";
 
   return (
     <Button
@@ -22,10 +23,10 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       className={cn("h-8 w-8 text-muted-foreground", className)}
       title={`Switch to ${next} mode`}
     >
-      {theme === "dark" ? (
-        <Sun className="h-4 w-4" strokeWidth={1.75} />
+      {resolvedTheme === "dark" ? (
+        <HugeiconsIcon icon={Sun03Icon} size={16} strokeWidth={1.75} color="currentColor" />
       ) : (
-        <Moon className="h-4 w-4" strokeWidth={1.75} />
+        <HugeiconsIcon icon={Moon02Icon} size={16} strokeWidth={1.75} color="currentColor" />
       )}
     </Button>
   );

@@ -6,7 +6,13 @@ import {
   getToolById,
   type ToolDefinition,
 } from "@ayetab/utils";
-import { Check, LayoutGrid, Pencil, Plus } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Add01Icon,
+  LayoutGridIcon,
+  PencilEdit02Icon,
+  Tick02Icon,
+} from "@hugeicons/core-free-icons";
 import {
   addWidgetToLayout,
   bentoSpanClass,
@@ -29,8 +35,10 @@ import { Dialog } from "../dialog";
 import { Button } from "../button";
 import { SearchBar } from "../search-bar";
 import { ThemeToggle } from "../theme-toggle";
+import { SettingsButton } from "../settings-panel";
 import { ToolIcon } from "../tool-icon";
 import { OnboardingModal } from "../onboarding-modal";
+import { HomeWallpaper } from "./home-wallpaper";
 import { HomeWidgetFrame } from "./home-widget-frame";
 import { AppIcon, AddAppIcon } from "./app-icon";
 import { QuickNoteWidget } from "./quick-note-widget";
@@ -216,7 +224,7 @@ export function HomeScreen({
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden" data-testid="home-screen">
-      <div className="home-wallpaper" aria-hidden />
+      <HomeWallpaper />
       <OnboardingModal />
 
       {/* Top chrome */}
@@ -234,10 +242,11 @@ export function HomeScreen({
             href={libraryHref}
             className="inline-flex items-center gap-1.5 rounded-full bg-white/25 px-3 py-1.5 text-[13px] font-medium text-foreground backdrop-blur-md dark:bg-white/10"
           >
-            <LayoutGrid className="h-3.5 w-3.5" strokeWidth={1.75} />
+            <HugeiconsIcon icon={LayoutGridIcon} size={14} strokeWidth={1.75} color="currentColor" />
             Library
           </a>
         )}
+        <SettingsButton className="rounded-full bg-white/25 backdrop-blur-md dark:bg-white/10" />
         <ThemeToggle className="rounded-full bg-white/25 backdrop-blur-md dark:bg-white/10" />
         <Button
           variant={editing ? "primary" : "ghost"}
@@ -251,12 +260,12 @@ export function HomeScreen({
         >
           {editing ? (
             <>
-              <Check className="h-3.5 w-3.5" strokeWidth={2} />
+              <HugeiconsIcon icon={Tick02Icon} size={14} strokeWidth={2} color="currentColor" />
               Done
             </>
           ) : (
             <>
-              <Pencil className="h-3.5 w-3.5" strokeWidth={1.75} />
+              <HugeiconsIcon icon={PencilEdit02Icon} size={14} strokeWidth={1.75} color="currentColor" />
               Edit
             </>
           )}
@@ -341,7 +350,7 @@ export function HomeScreen({
               data-testid="home-add-widget"
               className="gap-2 rounded-full border-white/40 bg-white/30 backdrop-blur-md dark:bg-white/10"
             >
-              <Plus className="h-4 w-4" strokeWidth={1.75} />
+              <HugeiconsIcon icon={Add01Icon} size={16} strokeWidth={1.75} color="currentColor" />
               Add Widget
             </Button>
           </div>
@@ -405,7 +414,7 @@ export function HomeScreen({
                     {disabled ? (
                       <span className="text-[11px] text-muted-foreground">Added</span>
                     ) : (
-                      <Plus className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
+                      <HugeiconsIcon icon={Add01Icon} size={16} strokeWidth={1.75} color="currentColor" className="text-muted-foreground" />
                     )}
                   </button>
                 </li>
@@ -449,7 +458,7 @@ export function HomeScreen({
                     <span className="block truncate text-[13px] font-medium">{tool.name}</span>
                     <span className="block truncate text-[11px] text-muted-foreground">{tool.description}</span>
                   </span>
-                  <Plus className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+                  <HugeiconsIcon icon={Add01Icon} size={16} strokeWidth={1.75} color="currentColor" className="shrink-0 text-muted-foreground" />
                 </button>
               ))
             )}

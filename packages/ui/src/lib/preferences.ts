@@ -1,14 +1,20 @@
-export interface UserPreferences {
-  favorites: string[];
-  recents: string[];
-  home: import("./home-layout").HomeLayout;
-}
-
+import {
+  DEFAULT_APPEARANCE,
+  normalizeAppearance,
+  type AppearancePreferences,
+} from "./appearance";
 import {
   DEFAULT_HOME_LAYOUT,
   normalizeHomeLayout,
   type HomeLayout,
 } from "./home-layout";
+
+export interface UserPreferences {
+  favorites: string[];
+  recents: string[];
+  home: HomeLayout;
+  appearance: AppearancePreferences;
+}
 
 const STORAGE_KEY = "ayetab-prefs";
 const ONBOARDING_KEY = "ayetab-onboarded";
@@ -18,6 +24,7 @@ const DEFAULT_PREFS: UserPreferences = {
   favorites: [],
   recents: [],
   home: structuredClone(DEFAULT_HOME_LAYOUT),
+  appearance: { ...DEFAULT_APPEARANCE },
 };
 
 export function exportPreferences(prefs: UserPreferences): string {
@@ -30,6 +37,7 @@ export function importPreferences(json: string): UserPreferences {
     favorites: Array.isArray(parsed.favorites) ? parsed.favorites : [],
     recents: Array.isArray(parsed.recents) ? parsed.recents : [],
     home: normalizeHomeLayout(parsed.home),
+    appearance: normalizeAppearance(parsed.appearance),
   };
 }
 
@@ -76,6 +84,7 @@ export async function loadPreferences(): Promise<UserPreferences> {
     favorites: Array.isArray(raw.favorites) ? raw.favorites : [],
     recents: Array.isArray(raw.recents) ? raw.recents : [],
     home: normalizeHomeLayout(raw.home),
+    appearance: normalizeAppearance(raw.appearance),
   };
 }
 
@@ -107,5 +116,12 @@ export function updateHome(prefs: UserPreferences, home: HomeLayout): UserPrefer
   return { ...prefs, home: normalizeHomeLayout(home) };
 }
 
-export { DEFAULT_HOME_LAYOUT, normalizeHomeLayout };
-export type { HomeLayout };
+export function updateAppearance(
+  prefs: UserPreferences,
+  appearance: AppearancePreferences
+): UserPreferences {
+  return { ...prefs, appearance: normalizeAppearance(appearance) };
+}
+
+export { DEFAULT_HOME_LAYOUT, normalizeHomeLayout, DEFAULT_APPEARANCE, normalizeAppearance };
+export type { HomeLayout, AppearancePreferences };

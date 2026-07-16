@@ -1,7 +1,8 @@
 "use client";
 
 import type { DragEvent, ReactNode } from "react";
-import { Minus, Maximize2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Maximize01Icon, MinusSignIcon } from "@hugeicons/core-free-icons";
 import { cn } from "../../lib/utils";
 import type { BentoSize } from "../../lib/home-layout";
 
@@ -61,7 +62,7 @@ export function HomeWidgetFrame({
               aria-label="Resize widget"
               className="flex h-7 w-7 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-md"
             >
-              <Maximize2 className="h-3.5 w-3.5" strokeWidth={2} />
+              <HugeiconsIcon icon={Maximize01Icon} size={14} strokeWidth={2} color="currentColor" />
             </button>
           )}
           {onRemove && (
@@ -74,7 +75,7 @@ export function HomeWidgetFrame({
               aria-label="Remove widget"
               className="flex h-7 w-7 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-md"
             >
-              <Minus className="h-3.5 w-3.5" strokeWidth={2.5} />
+              <HugeiconsIcon icon={MinusSignIcon} size={14} strokeWidth={2.5} color="currentColor" />
             </button>
           )}
         </div>

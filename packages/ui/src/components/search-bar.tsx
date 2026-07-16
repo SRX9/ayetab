@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react";
 import type { ToolDefinition } from "@ayetab/utils";
 import { fuzzySearchTools } from "@ayetab/utils";
-import { Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import { cn } from "../lib/utils";
 import { useCommandPaletteOptional } from "./command-palette-provider";
 
@@ -41,7 +42,14 @@ export function SearchBar({
           className
         )}
       >
-        <Search className="h-[18px] w-[18px] shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
+        <HugeiconsIcon
+          icon={Search01Icon}
+          size={18}
+          strokeWidth={1.75}
+          color="currentColor"
+          className="shrink-0 text-muted-foreground"
+          aria-hidden
+        />
         <span className="flex-1 text-[15px] text-muted-foreground tracking-tight">
           {placeholder.replace(" (⌘K)", "")}
         </span>
@@ -53,7 +61,14 @@ export function SearchBar({
   return (
     <div className={cn("relative", className)}>
       <div className="flex items-center gap-3 rounded-2xl border border-border/40 bg-card/40 px-4 py-3 backdrop-blur-xl">
-        <Search className="h-[18px] w-[18px] shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
+        <HugeiconsIcon
+          icon={Search01Icon}
+          size={18}
+          strokeWidth={1.75}
+          color="currentColor"
+          className="shrink-0 text-muted-foreground"
+          aria-hidden
+        />
         <input
           type="text"
           value={query}

@@ -1,7 +1,8 @@
 "use client";
 
 import type { ToolDefinition } from "@ayetab/utils";
-import { ChevronRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChevronRightIcon } from "@hugeicons/core-free-icons";
 import { cn } from "../../lib/utils";
 import { ToolIcon } from "../tool-icon";
 
@@ -39,7 +40,7 @@ export function ToolStrip({ tools, emptyLabel, onOpen, testId }: ToolStripProps)
               <span className="block truncate text-[13px] font-medium tracking-tight">{tool.name}</span>
               <span className="block truncate text-[11px] text-muted-foreground">{tool.description}</span>
             </span>
-            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/50" strokeWidth={1.75} />
+            <HugeiconsIcon icon={ChevronRightIcon} size={16} strokeWidth={1.75} color="currentColor" className="shrink-0 text-muted-foreground/50" />
           </button>
         </li>
       ))}

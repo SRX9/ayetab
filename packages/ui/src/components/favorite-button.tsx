@@ -1,6 +1,7 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { StarIcon } from "@hugeicons/core-free-icons";
 import { cn } from "../lib/utils";
 import { pressable } from "../lib/pressable";
 
@@ -28,13 +29,17 @@ export function FavoriteButton({ active, onClick, className }: FavoriteButtonPro
         className
       )}
     >
-      <Star
-        className={cn(
-          "h-4 w-4 transition-transform duration-120 ease-out-strong",
-          active && "scale-110 fill-current"
-        )}
-        strokeWidth={1.75}
+      <HugeiconsIcon
+        icon={StarIcon}
+        size={16}
+        strokeWidth={active ? 2 : 1.75}
+        color="currentColor"
         aria-hidden
+        className={cn(
+          "transition-transform duration-120 ease-out-strong",
+          active && "scale-110"
+        )}
+        fill={active ? "currentColor" : "none"}
       />
     </button>
   );

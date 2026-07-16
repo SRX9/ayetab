@@ -7,6 +7,7 @@ import {
   CommandPaletteProvider,
   ShortcutsProvider,
   PreferencesProvider,
+  AppearanceSync,
   usePreferences,
 } from "@ayetab/ui";
 import { TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
@@ -21,11 +22,13 @@ function AppChrome({ children }: { children: ReactNode }) {
   );
 
   return (
-    <ShortcutsProvider>
-      <CommandPaletteProvider tools={TOOL_REGISTRY} onSelect={handleSelect} recentIds={prefs.recents}>
-        {children}
-      </CommandPaletteProvider>
-    </ShortcutsProvider>
+    <AppearanceSync>
+      <ShortcutsProvider>
+        <CommandPaletteProvider tools={TOOL_REGISTRY} onSelect={handleSelect} recentIds={prefs.recents}>
+          {children}
+        </CommandPaletteProvider>
+      </ShortcutsProvider>
+    </AppearanceSync>
   );
 }
 

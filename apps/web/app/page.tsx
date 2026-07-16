@@ -3,7 +3,8 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LayoutGrid } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LayoutGridIcon } from "@hugeicons/core-free-icons";
 import { HomeScreen, cn } from "@ayetab/ui";
 import type { ToolDefinition } from "@ayetab/utils";
 
@@ -28,7 +29,7 @@ export default function HomePage() {
             "transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/40 dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/15"
           )}
         >
-          <LayoutGrid className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden />
+          <HugeiconsIcon icon={LayoutGridIcon} size={14} strokeWidth={1.75} color="currentColor" aria-hidden />
           Library
         </Link>
       }

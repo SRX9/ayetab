@@ -4,9 +4,10 @@ import { useMemo, useCallback } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChevronLeftIcon } from "@hugeicons/core-free-icons";
 import { getToolById, type ToolDefinition } from "@ayetab/utils";
-import { ToolHost, ThemeToggle, usePreferences, cn } from "@ayetab/ui";
+import { ToolHost, ThemeToggle, SettingsButton, usePreferences, cn } from "@ayetab/ui";
 
 export default function ToolPageClient({ toolId }: { toolId: string }) {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
             "dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
           )}
         >
-          <ChevronLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden />
+          <HugeiconsIcon icon={ChevronLeftIcon} size={16} strokeWidth={1.75} color="currentColor" aria-hidden />
           Home
         </Link>
         <span className="text-muted-foreground/30">/</span>
@@ -75,6 +76,7 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
         </Link>
         <span className="text-muted-foreground/30">/</span>
         <span className="flex-1 truncate text-[13px] font-medium tracking-tight">{tool.name}</span>
+        <SettingsButton />
         <ThemeToggle />
       </header>
       <main className="flex-1 overflow-auto p-4 md:p-8">

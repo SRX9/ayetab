@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Star, Command } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CommandIcon, StickyNote01Icon } from "@hugeicons/core-free-icons";
 import { isOnboarded, setOnboarded } from "../lib/preferences";
 import { Dialog } from "./dialog";
 import { Button } from "./button";
@@ -31,7 +32,14 @@ export function OnboardingModal() {
         </p>
         <ul className="mt-6 flex flex-col gap-3 text-[13px]">
           <li className="flex items-center gap-3">
-            <Command className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden />
+            <HugeiconsIcon
+              icon={CommandIcon}
+              size={16}
+              strokeWidth={1.75}
+              color="currentColor"
+              className="shrink-0 text-muted-foreground"
+              aria-hidden
+            />
             <span className="text-muted-foreground">
               <kbd className="mr-1">⌘</kbd>
               <kbd>K</kbd>
@@ -43,7 +51,14 @@ export function OnboardingModal() {
             <span className="text-muted-foreground">Customize widgets, pins, and layout</span>
           </li>
           <li className="flex items-center gap-3">
-            <Star className="h-4 w-4 shrink-0 text-favorite" strokeWidth={1.75} aria-hidden />
+            <HugeiconsIcon
+              icon={StickyNote01Icon}
+              size={16}
+              strokeWidth={1.75}
+              color="currentColor"
+              className="shrink-0 text-favorite"
+              aria-hidden
+            />
             <span className="text-muted-foreground">Write notes and check todos right on home</span>
           </li>
         </ul>
