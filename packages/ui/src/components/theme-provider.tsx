@@ -1,27 +1,14 @@
 "use client";
 
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
 import { resolveTheme, type ThemeMode } from "../lib/appearance";
-
-type ResolvedTheme = "light" | "dark";
-
-interface ThemeContextValue {
-  /** Stored preference: light, dark, or follow system */
-  theme: ThemeMode;
-  /** Effective light/dark applied to the document */
-  resolvedTheme: ResolvedTheme;
-  setTheme: (theme: ThemeMode) => void;
-  toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+import { ThemeContext } from "./theme-context";
 
 const STORAGE_KEY = "ayetab-theme";
 
@@ -68,15 +55,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
+  const value = useMemo(
+    () => ({ theme, resolvedTheme, setTheme, toggleTheme }),
+    [theme, resolvedTheme, setTheme, toggleTheme]
   );
-}
 
-export function useTheme() {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
-  return ctx;
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

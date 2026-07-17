@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ToolShell } from "../tool-shell";
 import { useJsonToolState } from "../../hooks/use-json-tool-state";
 import { CustomToolProps, LoadingState, newId, ToolActions } from "./shared";
@@ -40,7 +40,7 @@ export function KanbanTool({
     onRecent
   );
   const [drafts, setDrafts] = useState<Record<string, string>>({});
-  const [dragCardId, setDragCardId] = useState<string | null>(null);
+  const dragCardIdRef = useRef<string | null>(null);
 
   const addCard = useCallback(
     (columnId: string) => {
@@ -95,13 +95,14 @@ export function KanbanTool({
 
   const handleDrop = useCallback(
     (columnId: string) => {
+      const dragCardId = dragCardIdRef.current;
       if (!dragCardId) return;
       const fromColumn = state.columns.find((col) => col.cards.some((c) => c.id === dragCardId));
       if (!fromColumn) return;
       moveCard(dragCardId, fromColumn.id, columnId, state.columns.find((c) => c.id === columnId)?.cards.length ?? 0);
-      setDragCardId(null);
+      dragCardIdRef.current = null;
     },
-    [dragCardId, moveCard, state.columns]
+    [moveCard, state.columns]
   );
 
   const actions = (
@@ -134,8 +135,12 @@ export function KanbanTool({
                   <div
                     key={card.id}
                     draggable
-                    onDragStart={() => setDragCardId(card.id)}
-                    onDragEnd={() => setDragCardId(null)}
+                    onDragStart={() => {
+                      dragCardIdRef.current = card.id;
+                    }}
+                    onDragEnd={() => {
+                      dragCardIdRef.current = null;
+                    }}
                     className="rounded-md border border-border bg-card px-3 py-2 text-sm cursor-grab active:cursor-grabbing shadow-sm"
                   >
                     <div className="flex items-start justify-between gap-2">

@@ -32,7 +32,7 @@ export function OutputPanel({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center justify-between">
-        <label className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+        <label htmlFor="tool-output" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
           {label}
         </label>
         {value && (
@@ -70,10 +70,12 @@ export function OutputPanel({
         <CodeOutput value={value} language={result.language} rows={rows} />
       ) : (
         <textarea
+          id="tool-output"
           value={value}
           readOnly
           rows={rows}
           data-testid="tool-output-text"
+          aria-label={label}
           className="material-field w-full resize-y rounded-[14px] px-3.5 py-3 text-sm font-mono focus-visible:outline-none"
           spellCheck={false}
         />

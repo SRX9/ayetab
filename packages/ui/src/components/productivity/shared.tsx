@@ -1,24 +1,10 @@
 "use client";
 
-import type { ToolDefinition } from "@ayetab/utils";
 import { FavoriteButton } from "../favorite-button";
 import { Button } from "../button";
 
-export interface CustomToolProps {
-  tool: ToolDefinition;
-  onRecent?: (toolId: string) => void;
-  isFavorite?: boolean;
-  onToggleFavorite?: () => void;
-  compact?: boolean;
-}
-
-export function newId(): string {
-  return crypto.randomUUID();
-}
-
-export function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
-}
+export type { CustomToolProps } from "../../lib/custom-tool-props";
+export { newId, todayKey, formatDuration, formatClock } from "../../lib/productivity-format";
 
 interface ToolActionsProps {
   onClear: () => void;
@@ -49,26 +35,4 @@ export function LoadingState({ label = "Loading saved data…" }: { label?: stri
       {label}
     </div>
   );
-}
-
-export function formatDuration(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  const tenths = Math.floor((ms % 1000) / 100);
-
-  if (hours > 0) {
-    return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  }
-  if (minutes > 0) {
-    return `${minutes}:${String(seconds).padStart(2, "0")}`;
-  }
-  return `${seconds}.${tenths}`;
-}
-
-export function formatClock(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }

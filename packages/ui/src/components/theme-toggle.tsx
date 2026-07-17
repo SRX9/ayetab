@@ -2,7 +2,7 @@
 
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Moon02Icon, Sun03Icon } from "@hugeicons/core-free-icons";
-import { useTheme } from "./theme-provider";
+import { useTheme } from "../hooks/use-theme";
 import { Button } from "./button";
 import { cn } from "../lib/utils";
 

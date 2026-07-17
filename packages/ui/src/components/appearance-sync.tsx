@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { usePreferences } from "../hooks/use-preferences";
-import { useTheme } from "./theme-provider";
+import { useTheme } from "../hooks/use-theme";
 
 /**
  * Hydrates ThemeProvider from appearance prefs once loaded,

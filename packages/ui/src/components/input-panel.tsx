@@ -60,7 +60,7 @@ export function InputPanel({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center justify-between">
-        <label className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+        <label htmlFor="tool-input" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
           {label}
         </label>
         {allowUpload && (
@@ -80,6 +80,7 @@ export function InputPanel({
         placeholder={placeholder}
         rows={rows}
         data-testid="tool-input"
+        id="tool-input"
         autoFocus={autoFocus}
         className={cn(
           "material-field w-full resize-y rounded-[14px] px-3.5 py-3 text-sm font-mono",

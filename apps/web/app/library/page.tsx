@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback, useEffect, useEffectEvent, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -56,6 +56,12 @@ export default function LibraryPage() {
     return c;
   }, []);
 
+  const selectCategory = useCallback((category: ToolCategory | "all" | "favorites") => {
+    setActiveCategory(category);
+    setActiveIndex(0);
+    setMobileNavOpen(false);
+  }, []);
+
   const handleSelect = useCallback(
     (tool: ToolDefinition) => router.push(`/tools/${tool.id}`),
     [router]
@@ -67,13 +73,13 @@ export default function LibraryPage() {
   );
 
   useEffect(() => {
-    setActiveIndex(0);
-  }, [activeCategory, filteredTools.length]);
-
-  useEffect(() => {
     const active = listRef.current?.querySelector("[data-list-active='true']");
     active?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
+
+  const onSelectTool = useEffectEvent((tool: ToolDefinition) => {
+    handleSelect(tool);
+  });
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -81,7 +87,7 @@ export default function LibraryPage() {
       const tag = target?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+      if (document.querySelector("dialog[open]")) return;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
@@ -100,12 +106,12 @@ export default function LibraryPage() {
         if (!tool) return;
         e.preventDefault();
         e.stopPropagation();
-        handleSelect(tool);
+        onSelectTool(tool);
       }
     };
     window.addEventListener("keydown", onKeyDown, true);
     return () => window.removeEventListener("keydown", onKeyDown, true);
-  }, [filteredTools, activeIndex, handleSelect]);
+  }, [filteredTools, activeIndex]);
 
   const sectionTitle =
     activeCategory === "favorites"
@@ -144,10 +150,7 @@ export default function LibraryPage() {
 
       <button
         type="button"
-        onClick={() => {
-          setActiveCategory("favorites");
-          setMobileNavOpen(false);
-        }}
+        onClick={() => selectCategory("favorites")}
         className={cn(
           "flex items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-left text-[13px]",
           "transition-[transform,background-color,color] duration-120 ease-out-strong active:scale-[0.98]",
@@ -180,10 +183,7 @@ export default function LibraryPage() {
       <CategoryNav
         categories={CATEGORIES}
         active={activeCategory === "favorites" ? "all" : activeCategory}
-        onSelect={(c) => {
-          setActiveCategory(c);
-          setMobileNavOpen(false);
-        }}
+        onSelect={(c) => selectCategory(c)}
         counts={counts}
       />
 
@@ -235,8 +235,10 @@ export default function LibraryPage() {
 
       {mobileNavOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          <div
-            className="absolute inset-0 bg-black/25 backdrop-blur-[8px]"
+          <button
+            type="button"
+            aria-label="Close navigation"
+            className="absolute inset-0 border-0 bg-black/25 backdrop-blur-[8px]"
             onClick={() => setMobileNavOpen(false)}
           />
           <aside className="material-sidebar absolute inset-y-0 left-0 flex w-[240px] flex-col gap-4 px-3 py-5">

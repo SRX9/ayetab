@@ -21,7 +21,10 @@ export function ToolListSection({
   onToggleFavorite,
   compact,
 }: ToolListSectionProps) {
-  const tools = toolIds.map((id) => getToolById(id)).filter(Boolean) as ToolDefinition[];
+  const tools = toolIds.flatMap((id) => {
+    const tool = getToolById(id);
+    return tool ? [tool] : [];
+  });
   if (tools.length === 0) return null;
 
   return (

@@ -6,7 +6,7 @@ import { fuzzySearchTools } from "@ayetab/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Search01Icon } from "@hugeicons/core-free-icons";
 import { cn } from "../lib/utils";
-import { useCommandPaletteOptional } from "./command-palette-provider";
+import { useCommandPaletteOptional } from "../hooks/use-command-palette";
 
 interface SearchBarProps {
   tools: ToolDefinition[];

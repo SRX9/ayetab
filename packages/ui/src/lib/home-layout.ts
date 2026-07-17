@@ -142,6 +142,11 @@ function newWidgetId(type: HomeWidgetType): string {
   return `w-${type}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
+export function widgetTitle(type: HomeWidgetType): string | undefined {
+  if (type === "clock" || type === "search") return undefined;
+  return WIDGET_CATALOG.find((c) => c.type === type)?.name;
+}
+
 export function createWidget(type: HomeWidgetType, size?: BentoSize): HomeWidget {
   const catalog = WIDGET_CATALOG.find((w) => w.type === type);
   return {

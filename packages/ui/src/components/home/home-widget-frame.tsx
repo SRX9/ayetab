@@ -50,9 +50,9 @@ export function HomeWidgetFrame({
         className
       )}
     >
-      {editing && (
+      {editing ? (
         <div className="absolute right-2 top-2 z-10 flex items-center gap-0.5">
-          {onCycleSize && (
+          {onCycleSize ? (
             <button
               type="button"
               onClick={(e) => {
@@ -64,8 +64,8 @@ export function HomeWidgetFrame({
             >
               <HugeiconsIcon icon={Maximize01Icon} size={14} strokeWidth={2} color="currentColor" />
             </button>
-          )}
-          {onRemove && (
+          ) : null}
+          {onRemove ? (
             <button
               type="button"
               onClick={(e) => {
@@ -77,9 +77,9 @@ export function HomeWidgetFrame({
             >
               <HugeiconsIcon icon={MinusSignIcon} size={14} strokeWidth={2.5} color="currentColor" />
             </button>
-          )}
+          ) : null}
         </div>
-      )}
+      ) : null}
       {title && (
         <div className="flex shrink-0 items-center px-4 pt-3.5 pb-1">
           <h3 className="truncate text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/55">

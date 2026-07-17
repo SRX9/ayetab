@@ -52,6 +52,7 @@ export function PomodoroTool({
   const [running, setRunning] = useState(false);
   const stateRef = useRef(state);
   const phaseRef = useRef(phase);
+  const secondsLeftRef = useRef(secondsLeft);
 
   useEffect(() => {
     stateRef.current = state;
@@ -62,25 +63,39 @@ export function PomodoroTool({
   }, [phase]);
 
   useEffect(() => {
+    secondsLeftRef.current = secondsLeft;
+  }, [secondsLeft]);
+
+  useEffect(() => {
     if (!isHydrated || running) return;
-    setSecondsLeft(phaseDuration(state, phase));
+    const next = phaseDuration(state, phase);
+    secondsLeftRef.current = next;
+    setSecondsLeft(next);
   }, [isHydrated, state.workMinutes, state.breakMinutes, state.longBreakMinutes, phase, running, state]);
 
   useEffect(() => {
     if (!running) return;
     const interval = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev > 1) return prev - 1;
-        const currentState = stateRef.current;
-        const currentPhase = phaseRef.current;
-        const upcoming = nextPhase(currentState, currentPhase);
-        if (currentPhase === "work") {
-          saveState({ ...currentState, sessionsCompleted: currentState.sessionsCompleted + 1 });
-        }
-        setPhase(upcoming);
-        setRunning(false);
-        return phaseDuration(currentState, upcoming);
-      });
+      const prev = secondsLeftRef.current;
+      if (prev > 1) {
+        const next = prev - 1;
+        secondsLeftRef.current = next;
+        setSecondsLeft(next);
+        return;
+      }
+
+      const currentState = stateRef.current;
+      const currentPhase = phaseRef.current;
+      const upcoming = nextPhase(currentState, currentPhase);
+      if (currentPhase === "work") {
+        saveState({ ...currentState, sessionsCompleted: currentState.sessionsCompleted + 1 });
+      }
+      const nextSeconds = phaseDuration(currentState, upcoming);
+      phaseRef.current = upcoming;
+      secondsLeftRef.current = nextSeconds;
+      setPhase(upcoming);
+      setRunning(false);
+      setSecondsLeft(nextSeconds);
     }, 1000);
     return () => clearInterval(interval);
   }, [running, saveState]);

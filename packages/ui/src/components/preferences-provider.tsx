@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   loadPreferences,
   savePreferences,
@@ -20,23 +12,7 @@ import {
 } from "../lib/preferences";
 import { DEFAULT_APPEARANCE, type AppearancePreferences } from "../lib/appearance";
 import { DEFAULT_HOME_LAYOUT, type HomeLayout } from "../lib/home-layout";
-
-interface PreferencesContextValue {
-  prefs: UserPreferences;
-  loaded: boolean;
-  toggleFavorite: (toolId: string) => Promise<void>;
-  addRecent: (toolId: string) => Promise<void>;
-  setHome: (home: HomeLayout) => Promise<void>;
-  updateHome: (updater: (home: HomeLayout) => HomeLayout) => Promise<void>;
-  setAppearance: (appearance: AppearancePreferences) => Promise<void>;
-  updateAppearance: (
-    updater: (appearance: AppearancePreferences) => AppearancePreferences
-  ) => Promise<void>;
-  importPrefs: (imported: UserPreferences) => Promise<void>;
-  isFavorite: (toolId: string) => boolean;
-}
-
-const PreferencesContext = createContext<PreferencesContextValue | null>(null);
+import { PreferencesContext } from "./preferences-context";
 
 export function PreferencesProvider({ children }: { children: ReactNode }) {
   const [prefs, setPrefs] = useState<UserPreferences>({
@@ -144,12 +120,4 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
   );
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
-}
-
-export function usePreferences() {
-  const ctx = useContext(PreferencesContext);
-  if (!ctx) {
-    throw new Error("usePreferences must be used within PreferencesProvider");
-  }
-  return ctx;
 }

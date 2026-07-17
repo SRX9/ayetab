@@ -45,7 +45,7 @@ export function Button({
       type={type}
       className={cn(
         "inline-flex items-center justify-center font-medium select-none",
-        "transition-[transform,background-color,color,border-color,opacity] duration-150 ease-out-strong",
+        "transition-[transform,background-color,color,border-color,opacity] duration-[160ms] ease-out-strong",
         "active:scale-[0.97]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:pointer-events-none disabled:opacity-50",

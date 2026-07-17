@@ -30,6 +30,8 @@ import {
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
 
+const modals = <OnboardingModal />;
+
 function AppContent() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
@@ -72,12 +74,6 @@ function AppContent() {
   const handleToggleFavorite = useCallback(
     (tool: ToolDefinition) => toggleFavorite(tool.id),
     [toggleFavorite]
-  );
-
-  const modals = (
-    <>
-      <OnboardingModal />
-    </>
   );
 
   if (selectedTool) {
