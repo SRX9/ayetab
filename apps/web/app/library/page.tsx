@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useEffectEvent, useRef } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -77,9 +77,10 @@ export default function LibraryPage() {
     active?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
-  const onSelectTool = useEffectEvent((tool: ToolDefinition) => {
-    handleSelect(tool);
-  });
+  const handleSelectRef = useRef(handleSelect);
+  useEffect(() => {
+    handleSelectRef.current = handleSelect;
+  }, [handleSelect]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -106,7 +107,7 @@ export default function LibraryPage() {
         if (!tool) return;
         e.preventDefault();
         e.stopPropagation();
-        onSelectTool(tool);
+        handleSelectRef.current(tool);
       }
     };
     window.addEventListener("keydown", onKeyDown, true);

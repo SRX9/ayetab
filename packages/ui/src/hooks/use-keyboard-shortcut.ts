@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useEffectEvent } from "react";
+import { useEffect, useRef } from "react";
 
 export function useKeyboardShortcut(
   key: string,
   callback: () => void,
   options: { meta?: boolean; ctrl?: boolean; shift?: boolean } = { meta: true }
 ) {
-  const onShortcut = useEffectEvent(callback);
+  const callbackRef = useRef(callback);
   const meta = options.meta ?? true;
   const shift = options.shift;
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -24,7 +28,7 @@ export function useKeyboardShortcut(
 
       if (e.key.toLowerCase() === key.toLowerCase() && metaMatch && shiftMatch) {
         e.preventDefault();
-        onShortcut();
+        callbackRef.current();
       }
     };
 
