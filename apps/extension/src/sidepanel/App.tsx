@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChevronLeftIcon, StarIcon } from "@hugeicons/core-free-icons";
 import {
   TOOL_REGISTRY,
   type ToolCategory,
@@ -14,22 +16,27 @@ import {
   ThemeProvider,
   ThemeToggle,
   ToolHost,
+  ToolCard,
   ToolListSection,
   usePreferences,
+  PreferencesProvider,
   OnboardingModal,
   useShortcutsModal,
-  SettingsMenu,
+  SettingsButton,
+  AppearanceSync,
   ShortcutsProvider,
   cn,
 } from "@ayetab/ui";
 
 const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
 
+const modals = <OnboardingModal />;
+
 function AppContent() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
   const [initialInput, setInitialInput] = useState("");
-  const { prefs, toggleFavorite, isFavorite, addRecent, importPrefs } = usePreferences();
+  const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
   const { setOpen: setShortcutsOpen } = useShortcutsModal();
 
   const filteredTools = useMemo(() => {
@@ -69,34 +76,36 @@ function AppContent() {
     [toggleFavorite]
   );
 
-  const modals = (
-    <>
-      <OnboardingModal />
-    </>
-  );
-
   if (selectedTool) {
     return (
       <>
         {modals}
-        <div className="flex h-screen flex-col bg-background text-foreground">
+        <div className="flex h-screen flex-col text-foreground">
           <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
-          <header className="material-sidebar flex shrink-0 items-center gap-2 border-b-0 px-3 py-2">
+          <header className="material-sidebar flex shrink-0 items-center gap-2 border-b-0 px-3 py-2.5">
             <button
               type="button"
               onClick={() => {
                 setSelectedTool(null);
                 setInitialInput("");
               }}
-              className="rounded-lg px-2 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
+              className="inline-flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             >
-              ← Back
+              <HugeiconsIcon icon={ChevronLeftIcon} size={14} strokeWidth={1.75} color="currentColor" aria-hidden />
+              Back
             </button>
             <span className="flex-1 truncate text-xs font-medium tracking-tight">{selectedTool.name}</span>
+            <SettingsButton />
             <ThemeToggle />
           </header>
           <div className={`flex-1 overflow-auto p-3 ${selectedTool.id === "excalidraw" ? "flex flex-col" : ""}`}>
-            <div className={selectedTool.id === "excalidraw" ? "flex flex-1 flex-col" : "material-window rounded-xl p-3"}>
+            <div
+              className={
+                selectedTool.id === "excalidraw"
+                  ? "flex flex-1 flex-col"
+                  : "material-window rounded-[16px] p-3"
+              }
+            >
               <ToolHost
                 key={`${selectedTool.id}-${initialInput}`}
                 tool={selectedTool}
@@ -117,32 +126,26 @@ function AppContent() {
   return (
     <>
       {modals}
-      <div className="flex h-screen flex-col bg-background text-foreground">
+      <div className="flex h-screen flex-col text-foreground">
         <CommandPalette tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
         <header className="material-sidebar flex shrink-0 items-start justify-between gap-2 border-b-0 px-3 py-3">
-          <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-selection text-[10px] font-bold text-selection-foreground">
-              A
-            </span>
-            <div>
-              <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
-              <p className="text-[10px] text-muted-foreground">Quick tools</p>
-            </div>
+          <div>
+            <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
+            <p className="text-[10px] text-muted-foreground">Quick tools</p>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <SettingsButton compact />
+            <ThemeToggle />
+          </div>
         </header>
 
-        <div className="px-3 pb-2 pt-2">
-          <SettingsMenu prefs={prefs} onImport={importPrefs} compact />
-        </div>
-
         <div className="flex flex-1 flex-col overflow-auto">
-          <div className="border-b border-border/50 px-3 pb-3">
+          <div className="border-b border-border/40 px-3 pb-3">
             <SearchBar tools={TOOL_REGISTRY} onSelect={(t) => openTool(t)} placeholder="Search tools..." />
           </div>
 
           {prefs.favorites.length > 0 && (
-            <div className="border-b border-border/50 p-2">
+            <div className="border-b border-border/40 p-2">
               <ToolListSection
                 title="Favorites"
                 toolIds={prefs.favorites}
@@ -160,13 +163,22 @@ function AppContent() {
                 type="button"
                 onClick={() => setActiveCategory("favorites")}
                 className={cn(
-                  "rounded-[8px] px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
+                  "flex items-center gap-1.5 rounded-[10px] px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
                   activeCategory === "favorites"
-                    ? "bg-selection font-medium text-selection-foreground"
+                    ? "nav-active"
                     : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                 )}
               >
-                ★ Fav ({prefs.favorites.length})
+                <HugeiconsIcon
+                  icon={StarIcon}
+                  size={12}
+                  strokeWidth={1.75}
+                  color="currentColor"
+                  className="shrink-0"
+                  fill={activeCategory === "favorites" ? "currentColor" : "none"}
+                  aria-hidden
+                />
+                Fav ({prefs.favorites.length})
               </button>
               <CategoryNav
                 categories={CATEGORIES}
@@ -175,7 +187,7 @@ function AppContent() {
                 counts={counts}
               />
               {prefs.recents.length > 0 && (
-                <div className="mt-2 border-t border-border/50 pt-2">
+                <div className="mt-2 border-t border-border/40 pt-2">
                   <p className="mb-1 px-2 text-[9px] uppercase tracking-[0.08em] text-muted-foreground">Recent</p>
                   {prefs.recents.slice(0, 4).map((id) => {
                     const tool = TOOL_REGISTRY.find((t) => t.id === id);
@@ -185,7 +197,7 @@ function AppContent() {
                         key={id}
                         type="button"
                         onClick={() => openTool(tool)}
-                        className="w-full truncate rounded-[8px] px-2 py-1 text-left text-[10px] text-muted-foreground transition-colors duration-100 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
+                        className="w-full truncate rounded-[10px] px-2 py-1 text-left text-[10px] text-muted-foreground transition-colors duration-100 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
                       >
                         {tool.name}
                       </button>
@@ -210,37 +222,16 @@ function AppContent() {
                     ? "All Tools"
                     : CATEGORY_LABELS[activeCategory]}
               </p>
-              <div className="material-window flex flex-col rounded-xl p-1">
+              <div className="material-window flex flex-col rounded-[16px] p-1">
                 {filteredTools.map((tool) => (
-                  <div
+                  <ToolCard
                     key={tool.id}
-                    className="group flex items-center gap-1 rounded-lg px-1 transition-[background-color] duration-100 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => openTool(tool)}
-                      className="flex min-w-0 flex-1 items-center gap-2 px-1.5 py-2 text-left"
-                    >
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px] border border-border/70 bg-muted/50 text-[10px] font-semibold text-muted-foreground">
-                        {tool.name.charAt(0)}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-xs font-medium">{tool.name}</span>
-                        <span className="block truncate text-[10px] text-muted-foreground">{tool.description}</span>
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleToggleFavorite(tool)}
-                      className={cn(
-                        "mr-1 shrink-0 text-xs transition-[transform,color] duration-100 ease-out-strong active:scale-[0.97]",
-                        isFavorite(tool.id) ? "text-favorite" : "text-muted-foreground opacity-0 group-hover:opacity-100"
-                      )}
-                      aria-label={isFavorite(tool.id) ? "Remove favorite" : "Add favorite"}
-                    >
-                      {isFavorite(tool.id) ? "★" : "☆"}
-                    </button>
-                  </div>
+                    tool={tool}
+                    onClick={(t) => openTool(t)}
+                    isFavorite={isFavorite(tool.id)}
+                    onToggleFavorite={handleToggleFavorite}
+                    compact
+                  />
                 ))}
               </div>
             </div>
@@ -254,9 +245,13 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <ShortcutsProvider>
-        <AppContent />
-      </ShortcutsProvider>
+      <PreferencesProvider>
+        <AppearanceSync>
+          <ShortcutsProvider>
+            <AppContent />
+          </ShortcutsProvider>
+        </AppearanceSync>
+      </PreferencesProvider>
     </ThemeProvider>
   );
 }

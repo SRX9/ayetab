@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "../lib/utils";
 
 interface DialogProps {
@@ -27,12 +27,15 @@ export function Dialog({
   panelClassName,
   testId,
 }: DialogProps) {
-  const [mounted, setMounted] = useState(open);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [visible, setVisible] = useState(open && instant);
 
   useEffect(() => {
+    const el = dialogRef.current;
+    if (!el) return;
+
     if (open) {
-      setMounted(true);
+      if (!el.open) el.showModal();
       if (instant) {
         setVisible(true);
         return;
@@ -43,63 +46,62 @@ export function Dialog({
       return () => cancelAnimationFrame(id);
     }
 
+    setVisible(false);
     if (instant) {
-      setVisible(false);
-      setMounted(false);
+      if (el.open) el.close();
       return;
     }
-
-    setVisible(false);
-    const timer = window.setTimeout(() => setMounted(false), 180);
+    const timer = window.setTimeout(() => {
+      if (el.open) el.close();
+    }, 180);
     return () => window.clearTimeout(timer);
   }, [open, instant]);
 
-  useEffect(() => {
-    if (!mounted) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose?.();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [mounted, onClose]);
-
-  if (!mounted) return null;
-
   return (
-    <div
-      className={cn(
-        "fixed inset-0 z-50 flex justify-center",
-        placement === "center" ? "items-center" : "items-start pt-[11vh]"
-      )}
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
       aria-labelledby={labelledBy}
       aria-label={label}
+      data-testid={testId}
+      className={cn(
+        "fixed inset-0 z-50 m-0 flex h-full max-h-none w-full max-w-none justify-center border-0 bg-transparent p-0",
+        "backdrop:bg-transparent",
+        "open:flex",
+        placement === "center" ? "items-center" : "items-start pt-[10vh]",
+        !open && "pointer-events-none"
+      )}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose?.();
+      }}
     >
-      <div
+      <button
+        type="button"
+        aria-label="Close dialog"
+        tabIndex={-1}
         className={cn(
-          "fixed inset-0 bg-black/40 backdrop-blur-[6px]",
+          "fixed inset-0 cursor-default border-0 bg-black/25 backdrop-blur-[10px]",
           !instant &&
-            "transition-opacity duration-200 ease-out-strong motion-reduce:transition-none",
+            "transition-opacity duration-180 ease-out-strong motion-reduce:transition-none",
           visible ? "opacity-100" : "opacity-0"
         )}
         onClick={onClose}
       />
       <div
-        data-testid={testId}
         className={cn(
-          "relative w-full mx-4",
+          "relative z-10 mx-4 w-full",
           !instant &&
-            "transition-[opacity,transform] duration-200 ease-out-strong motion-reduce:transition-none motion-reduce:transform-none",
+            "transition-[opacity,transform] duration-220 ease-out-strong motion-reduce:transition-none motion-reduce:transform-none",
           !instant &&
             (visible
-              ? "opacity-100 scale-100 translate-y-0"
-              : "opacity-0 scale-[0.97] translate-y-1"),
+              ? "translate-y-0 scale-100 opacity-100"
+              : "translate-y-1.5 scale-[0.96] opacity-0"),
           panelClassName
         )}
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
       </div>
-    </div>
+    </dialog>
   );
 }

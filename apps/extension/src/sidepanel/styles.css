@@ -2,96 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 240 6% 97%;
-    --foreground: 240 8% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 8% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 8% 10%;
-    --primary: 240 8% 12%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 6% 93%;
-    --secondary-foreground: 240 8% 12%;
-    --muted: 240 6% 93%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 240 6% 92%;
-    --accent-foreground: 240 8% 12%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 6% 88%;
-    --input: 240 6% 88%;
-    --ring: 211 100% 50%;
-    --radius: 0.75rem;
-
-    --selection: 211 100% 50%;
-    --selection-foreground: 0 0% 100%;
-    --selection-soft: 211 100% 96%;
-
-    --brand: 211 100% 50%;
-    --brand-foreground: 0 0% 100%;
-    --favorite: 38 92% 50%;
-
-    --vibrancy: 240 10% 98%;
-    --vibrancy-border: 240 8% 86%;
-    --hairline: 240 8% 0% / 0.08;
-    --shadow-color: 240 10% 20%;
-
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-  }
-
-  .dark {
-    --background: 240 6% 8%;
-    --foreground: 240 6% 96%;
-    --card: 240 5% 12%;
-    --card-foreground: 240 6% 96%;
-    --popover: 240 5% 13%;
-    --popover-foreground: 240 6% 96%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 8% 10%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 240 6% 96%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 4% 62%;
-    --accent: 240 4% 18%;
-    --accent-foreground: 240 6% 96%;
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
-    --ring: 211 100% 55%;
-
-    --selection: 211 100% 50%;
-    --selection-foreground: 0 0% 100%;
-    --selection-soft: 211 60% 18%;
-
-    --brand: 211 100% 55%;
-    --brand-foreground: 0 0% 100%;
-    --favorite: 38 92% 55%;
-
-    --vibrancy: 240 5% 11%;
-    --vibrancy-border: 240 4% 22%;
-    --hairline: 0 0% 100% / 0.08;
-    --shadow-color: 0 0% 0%;
-  }
-}
+@import "../../../../packages/ui/src/styles/design-system.css";
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
-  html {
-    color-scheme: light;
-  }
-
-  html.dark {
-    color-scheme: dark;
-  }
-
   body {
     @apply bg-background text-foreground text-sm antialiased;
     margin: 0;
@@ -99,126 +12,18 @@
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    letter-spacing: -0.011em;
+    letter-spacing: -0.015em;
+    background-color: hsl(var(--background));
     background-image:
-      radial-gradient(ellipse 100% 60% at 50% -20%, hsl(211 80% 92% / 0.45), transparent 55%);
+      radial-gradient(ellipse 100% 70% at 50% -20%, hsl(199 80% 88% / 0.55), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(210 40% 90% / 0.35), transparent 50%),
+      linear-gradient(180deg, hsl(210 18% 95%), hsl(210 14% 93%));
   }
 
   .dark body {
     background-image:
-      radial-gradient(ellipse 100% 60% at 50% -20%, hsl(211 60% 20% / 0.3), transparent 55%);
-  }
-
-  ::selection {
-    background: hsl(var(--selection) / 0.28);
-  }
-
-  kbd {
-    @apply inline-flex items-center rounded-md border border-border/80 bg-muted/70 px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground;
-  }
-}
-
-@layer components {
-  .material-sidebar {
-    background: hsl(var(--vibrancy) / 0.78);
-    backdrop-filter: saturate(180%) blur(16px);
-    -webkit-backdrop-filter: saturate(180%) blur(16px);
-    border-right: 1px solid hsl(var(--vibrancy-border) / 0.7);
-  }
-
-  .material-hud {
-    background: hsl(var(--popover) / 0.9);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border: 1px solid hsl(var(--border) / 0.7);
-    box-shadow:
-      0 0 0 0.5px hsl(var(--hairline)),
-      0 10px 32px -8px hsl(var(--shadow-color) / 0.28);
-  }
-
-  .material-window {
-    background: hsl(var(--card) / 0.85);
-    backdrop-filter: saturate(160%) blur(12px);
-    -webkit-backdrop-filter: saturate(160%) blur(12px);
-    border: 1px solid hsl(var(--border) / 0.65);
-  }
-
-  .row-selected {
-    background: hsl(var(--selection));
-    color: hsl(var(--selection-foreground));
-  }
-
-  .row-selected .row-meta,
-  .row-selected .row-desc {
-    color: hsl(var(--selection-foreground) / 0.78);
-  }
-
-  .row-selected .row-icon {
-    background: hsl(0 0% 100% / 0.18);
-    border-color: hsl(0 0% 100% / 0.22);
-    color: hsl(var(--selection-foreground));
-  }
-
-  .row-idle {
-    @apply text-foreground;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .row-idle:hover {
-      background: hsl(var(--selection-soft));
-    }
-  }
-}
-
-@layer utilities {
-  .ease-out-strong {
-    transition-timing-function: var(--ease-out);
-  }
-
-  .ease-in-out-strong {
-    transition-timing-function: var(--ease-in-out);
-  }
-
-  .ease-drawer {
-    transition-timing-function: var(--ease-drawer);
-  }
-
-  .surface-panel {
-    @apply material-hud;
-  }
-
-  .stagger-in {
-    opacity: 0;
-    transform: translateY(4px);
-    animation: ayetab-fade-up 220ms var(--ease-out) forwards;
-  }
-
-  .stagger-in:nth-child(1) { animation-delay: 0ms; }
-  .stagger-in:nth-child(2) { animation-delay: 18ms; }
-  .stagger-in:nth-child(3) { animation-delay: 36ms; }
-  .stagger-in:nth-child(4) { animation-delay: 54ms; }
-  .stagger-in:nth-child(5) { animation-delay: 72ms; }
-  .stagger-in:nth-child(6) { animation-delay: 90ms; }
-  .stagger-in:nth-child(7) { animation-delay: 108ms; }
-  .stagger-in:nth-child(8) { animation-delay: 126ms; }
-  .stagger-in:nth-child(9) { animation-delay: 144ms; }
-  .stagger-in:nth-child(10) { animation-delay: 162ms; }
-  .stagger-in:nth-child(11) { animation-delay: 180ms; }
-  .stagger-in:nth-child(12) { animation-delay: 198ms; }
-  .stagger-in:nth-child(n+13) { animation-delay: 210ms; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .stagger-in {
-      opacity: 1;
-      transform: none;
-      animation: none;
-    }
-  }
-}
-
-@keyframes ayetab-fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+      radial-gradient(ellipse 100% 70% at 50% -20%, hsl(211 60% 24% / 0.35), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(220 30% 16% / 0.3), transparent 50%),
+      linear-gradient(180deg, hsl(220 14% 8%), hsl(220 12% 6%));
   }
 }

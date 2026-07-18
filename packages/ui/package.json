@@ -6,11 +6,14 @@
   "types": "./src/index.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
+    "test": "vitest run",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "@ayetab/utils": "workspace:*",
     "@excalidraw/excalidraw": "^0.18.1",
+    "@hugeicons/core-free-icons": "^4.2.2",
+    "@hugeicons/react": "^1.1.9",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.0"
   },
@@ -18,7 +21,8 @@
     "@ayetab/tsconfig": "workspace:*",
     "@types/react": "^19.1.8",
     "react": "^19.1.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.9"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"

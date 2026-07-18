@@ -32,7 +32,7 @@ export function OutputPanel({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+        <label htmlFor="tool-output" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
           {label}
         </label>
         {value && (
@@ -56,7 +56,7 @@ export function OutputPanel({
       {error ? (
         <div
           data-testid="tool-output-error"
-          className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2.5 text-sm text-destructive animate-fade-up motion-reduce:animate-none"
+          className="rounded-[12px] border border-destructive/35 bg-destructive/10 px-3 py-2.5 text-sm text-destructive animate-fade-up motion-reduce:animate-none backdrop-blur-sm"
         >
           {error}
         </div>
@@ -70,11 +70,13 @@ export function OutputPanel({
         <CodeOutput value={value} language={result.language} rows={rows} />
       ) : (
         <textarea
+          id="tool-output"
           value={value}
           readOnly
           rows={rows}
           data-testid="tool-output-text"
-          className="w-full resize-y rounded-xl border border-border/70 bg-muted/30 px-3.5 py-3 text-sm font-mono focus-visible:outline-none"
+          aria-label={label}
+          className="material-field w-full resize-y rounded-[14px] px-3.5 py-3 text-sm font-mono focus-visible:outline-none"
           spellCheck={false}
         />
       )}

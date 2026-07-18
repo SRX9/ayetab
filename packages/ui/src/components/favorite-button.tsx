@@ -1,5 +1,7 @@
 "use client";
 
+import { HugeiconsIcon } from "@hugeicons/react";
+import { StarIcon } from "@hugeicons/core-free-icons";
 import { cn } from "../lib/utils";
 import { pressable } from "../lib/pressable";
 
@@ -20,24 +22,25 @@ export function FavoriteButton({ active, onClick, className }: FavoriteButtonPro
       aria-label={active ? "Remove from favorites" : "Add to favorites"}
       aria-pressed={active}
       className={cn(
-        pressable(
-          "inline-flex h-7 w-7 items-center justify-center rounded-[8px] text-sm leading-none"
-        ),
+        pressable("inline-flex h-7 w-7 items-center justify-center rounded-lg"),
         active
           ? "text-favorite"
-          : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.05] [@media(hover:hover)_and_(pointer:fine)]:hover:text-favorite dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08]",
+          : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:text-favorite",
         className
       )}
     >
-      <span
+      <HugeiconsIcon
+        icon={StarIcon}
+        size={16}
+        strokeWidth={active ? 2 : 1.75}
+        color="currentColor"
+        aria-hidden
         className={cn(
-          "inline-block transition-[transform] duration-120 ease-out-strong",
+          "transition-transform duration-120 ease-out-strong",
           active && "scale-110"
         )}
-        aria-hidden
-      >
-        {active ? "★" : "☆"}
-      </span>
+        fill={active ? "currentColor" : "none"}
+      />
     </button>
   );
 }

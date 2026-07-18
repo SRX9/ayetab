@@ -11,7 +11,7 @@ import type { OrderedExcalidrawElement } from "@excalidraw/excalidraw/element/ty
 import { ToolShell } from "./tool-shell";
 import { FavoriteButton } from "./favorite-button";
 import { useToolState } from "../hooks/use-tool-state";
-import { useTheme } from "./theme-provider";
+import { useTheme } from "../hooks/use-theme";
 import "@excalidraw/excalidraw/index.css";
 
 const ExcalidrawCanvas = lazy(() =>

@@ -1,8 +1,9 @@
 "use client";
 
 import type { ToolCategory } from "@ayetab/utils";
-import { CATEGORY_LABELS } from "@ayetab/utils";
+import { CATEGORY_ICONS, CATEGORY_LABELS } from "@ayetab/utils";
 import { cn } from "../lib/utils";
+import { ToolIcon } from "./tool-icon";
 
 interface CategoryNavProps {
   categories: ToolCategory[];
@@ -13,9 +14,9 @@ interface CategoryNavProps {
 }
 
 export function CategoryNav({ categories, active, onSelect, counts, className }: CategoryNavProps) {
-  const items: Array<{ id: ToolCategory | "all"; label: string }> = [
-    { id: "all", label: "All Tools" },
-    ...categories.map((c) => ({ id: c, label: CATEGORY_LABELS[c] })),
+  const items: Array<{ id: ToolCategory | "all"; label: string; icon: string }> = [
+    { id: "all", label: "All Tools", icon: "LayoutGrid" },
+    ...categories.map((c) => ({ id: c, label: CATEGORY_LABELS[c], icon: CATEGORY_ICONS[c] })),
   ];
 
   return (
@@ -28,20 +29,21 @@ export function CategoryNav({ categories, active, onSelect, counts, className }:
             type="button"
             onClick={() => onSelect(item.id)}
             className={cn(
-              "flex items-center justify-between rounded-[9px] px-2.5 py-[7px] text-left text-[13px]",
-              "transition-[transform,background-color,color] duration-100 ease-out-strong",
+              "flex items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-left text-[13px]",
+              "transition-[transform,background-color,color] duration-120 ease-out-strong",
               "active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100",
               isActive
-                ? "bg-selection text-selection-foreground font-medium shadow-sm"
-                : "text-foreground/80 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
+                ? "nav-active"
+                : "text-foreground/75 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
             )}
           >
-            <span className="truncate">{item.label}</span>
+            <ToolIcon name={item.icon} className="h-4 w-4" />
+            <span className="min-w-0 flex-1 truncate">{item.label}</span>
             {counts?.[item.id] !== undefined && (
               <span
                 className={cn(
-                  "ml-2 text-[11px] tabular-nums",
-                  isActive ? "text-selection-foreground/75" : "text-muted-foreground"
+                  "text-[11px] tabular-nums",
+                  isActive ? "opacity-70" : "text-muted-foreground"
                 )}
               >
                 {counts[item.id]}

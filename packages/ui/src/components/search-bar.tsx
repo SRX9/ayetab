@@ -3,8 +3,10 @@
 import { useState, useMemo } from "react";
 import type { ToolDefinition } from "@ayetab/utils";
 import { fuzzySearchTools } from "@ayetab/utils";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import { cn } from "../lib/utils";
-import { useCommandPaletteOptional } from "./command-palette-provider";
+import { useCommandPaletteOptional } from "../hooks/use-command-palette";
 
 interface SearchBarProps {
   tools: ToolDefinition[];
@@ -31,24 +33,23 @@ export function SearchBar({
         type="button"
         onClick={palette.open}
         className={cn(
-          "group flex w-full items-center gap-3 rounded-2xl border border-border/60 bg-card/80 px-4 py-3.5 text-left",
-          "shadow-[0_1px_0_hsl(var(--hairline)),0_8px_24px_-12px_hsl(var(--shadow-color)/0.2)]",
-          "transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out-strong",
+          "group flex w-full items-center gap-3 rounded-2xl border border-white/35 bg-white/35 px-4 py-3.5 text-left backdrop-blur-xl",
+          "dark:border-white/10 dark:bg-white/10",
+          "transition-[transform,background-color,border-color] duration-150 ease-out-strong",
           "active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100",
-          "[@media(hover:hover)_and_(pointer:fine)]:hover:border-selection/30 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-card",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection",
+          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/50 dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/15",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection/40",
           className
         )}
       >
-        <svg
-          className="h-[18px] w-[18px] shrink-0 text-muted-foreground"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+        <HugeiconsIcon
+          icon={Search01Icon}
+          size={18}
+          strokeWidth={1.75}
+          color="currentColor"
+          className="shrink-0 text-muted-foreground"
+          aria-hidden
+        />
         <span className="flex-1 text-[15px] text-muted-foreground tracking-tight">
           {placeholder.replace(" (⌘K)", "")}
         </span>
@@ -59,16 +60,15 @@ export function SearchBar({
 
   return (
     <div className={cn("relative", className)}>
-      <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card/80 px-4 py-3 shadow-sm">
-        <svg
-          className="h-[18px] w-[18px] shrink-0 text-muted-foreground"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+      <div className="flex items-center gap-3 rounded-2xl border border-border/40 bg-card/40 px-4 py-3 backdrop-blur-xl">
+        <HugeiconsIcon
+          icon={Search01Icon}
+          size={18}
+          strokeWidth={1.75}
+          color="currentColor"
+          className="shrink-0 text-muted-foreground"
+          aria-hidden
+        />
         <input
           type="text"
           value={query}
@@ -93,7 +93,7 @@ export function SearchBar({
                 setQuery("");
                 setOpen(false);
               }}
-              className="flex w-full flex-col gap-0.5 rounded-lg px-3 py-2.5 text-left transition-colors duration-100 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft"
+              className="flex w-full flex-col gap-0.5 rounded-xl px-3 py-2.5 text-left transition-colors duration-100 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft"
             >
               <span className="text-sm font-medium">{tool.name}</span>
               <span className="text-xs text-muted-foreground">{tool.description}</span>

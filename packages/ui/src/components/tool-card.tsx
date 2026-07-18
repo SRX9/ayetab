@@ -4,6 +4,7 @@ import type { ToolDefinition } from "@ayetab/utils";
 import { CATEGORY_LABELS } from "@ayetab/utils";
 import { cn } from "../lib/utils";
 import { FavoriteButton } from "./favorite-button";
+import { ToolIcon } from "./tool-icon";
 
 interface ToolCardProps {
   tool: ToolDefinition;
@@ -12,7 +13,6 @@ interface ToolCardProps {
   onToggleFavorite?: (tool: ToolDefinition) => void;
   className?: string;
   compact?: boolean;
-  /** Raycast-style list row (default) vs denser card */
   variant?: "row" | "card";
   selected?: boolean;
   onMouseEnter?: () => void;
@@ -33,10 +33,10 @@ export function ToolCard({
     return (
       <div
         className={cn(
-          "group relative flex flex-col gap-1.5 rounded-xl border border-border/70 bg-card/70 text-left material-window",
-          "transition-[transform,background-color,box-shadow] duration-150 ease-out-strong",
+          "group relative flex flex-col gap-1.5 rounded-2xl text-left",
+          "transition-[transform,background-color] duration-150 ease-out-strong",
           "active:scale-[0.985] motion-reduce:transition-none motion-reduce:active:scale-100",
-          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection-soft/80",
+          selected ? "row-selected" : "row-idle",
           compact ? "p-2.5" : "p-3.5",
           className
         )}
@@ -45,17 +45,12 @@ export function ToolCard({
           <button
             type="button"
             onClick={() => onClick?.(tool)}
-            className="flex min-w-0 flex-1 items-start gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+            className="flex min-w-0 flex-1 items-start gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
           >
-            <span
-              className={cn(
-                "row-icon mt-0.5 flex shrink-0 items-center justify-center rounded-[9px] border border-border/80 bg-muted/60 font-semibold text-muted-foreground",
-                compact ? "h-6 w-6 text-[10px]" : "h-8 w-8 text-xs"
-              )}
-              aria-hidden
-            >
-              {tool.name.charAt(0)}
-            </span>
+            <ToolIcon
+              name={tool.icon}
+              className={cn("row-icon mt-0.5", compact ? "h-4 w-4" : "h-5 w-5", !selected && "text-muted-foreground")}
+            />
             <span className={cn("font-medium tracking-tight", compact ? "text-xs" : "text-sm")}>
               {tool.name}
             </span>
@@ -71,7 +66,7 @@ export function ToolCard({
         <button
           type="button"
           onClick={() => onClick?.(tool)}
-          className={cn("w-full text-left focus-visible:outline-none", compact ? "pl-8" : "pl-10")}
+          className={cn("w-full text-left focus-visible:outline-none", compact ? "pl-6" : "pl-7")}
         >
           <span className={cn("row-desc text-muted-foreground line-clamp-2", compact ? "text-[10px]" : "text-xs")}>
             {tool.description}
@@ -81,13 +76,12 @@ export function ToolCard({
     );
   }
 
-  /* Raycast / macOS list row — primary browsing surface */
   return (
     <div
       onMouseEnter={onMouseEnter}
       className={cn(
-        "group relative flex items-center gap-3 rounded-lg border border-transparent px-2.5",
-        "transition-[transform,background-color,color,border-color] duration-100 ease-out-strong",
+        "group relative flex items-center gap-3 rounded-xl px-2.5",
+        "transition-[transform,background-color,color] duration-100 ease-out-strong",
         "active:scale-[0.995] motion-reduce:transition-none motion-reduce:active:scale-100",
         selected ? "row-selected" : "row-idle",
         compact ? "py-1.5" : "py-2",
@@ -97,18 +91,16 @@ export function ToolCard({
       <button
         type="button"
         onClick={() => onClick?.(tool)}
-        className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+        className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
       >
-        <span
+        <ToolIcon
+          name={tool.icon}
           className={cn(
-            "row-icon flex shrink-0 items-center justify-center rounded-[9px] border border-border/70 bg-muted/50 font-semibold",
-            selected ? "" : "text-muted-foreground",
-            compact ? "h-7 w-7 text-[11px]" : "h-9 w-9 text-xs"
+            "row-icon",
+            compact ? "h-4 w-4" : "h-[18px] w-[18px]",
+            !selected && "text-muted-foreground"
           )}
-          aria-hidden
-        >
-          {tool.name.charAt(0)}
-        </span>
+        />
         <span className="min-w-0 flex-1">
           <span className={cn("block truncate font-medium tracking-tight", compact ? "text-xs" : "text-[13px]")}>
             {tool.name}
@@ -147,7 +139,7 @@ export function ToolCard({
           active={!!isFavorite}
           onClick={() => onToggleFavorite(tool)}
           className={cn(
-            "shrink-0 opacity-50 transition-opacity duration-100",
+            "shrink-0 opacity-40 transition-opacity duration-100",
             "[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100",
             "focus-visible:opacity-100",
             isFavorite && "opacity-100",

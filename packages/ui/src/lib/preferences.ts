@@ -1,13 +1,31 @@
+import {
+  DEFAULT_APPEARANCE,
+  normalizeAppearance,
+  type AppearancePreferences,
+} from "./appearance";
+import {
+  DEFAULT_HOME_LAYOUT,
+  normalizeHomeLayout,
+  type HomeLayout,
+} from "./home-layout";
+
 export interface UserPreferences {
   favorites: string[];
   recents: string[];
+  home: HomeLayout;
+  appearance: AppearancePreferences;
 }
 
 const STORAGE_KEY = "ayetab-prefs";
 const ONBOARDING_KEY = "ayetab-onboarded";
 const MAX_RECENTS = 8;
 
-const DEFAULT_PREFS: UserPreferences = { favorites: [], recents: [] };
+const DEFAULT_PREFS: UserPreferences = {
+  favorites: [],
+  recents: [],
+  home: structuredClone(DEFAULT_HOME_LAYOUT),
+  appearance: { ...DEFAULT_APPEARANCE },
+};
 
 export function exportPreferences(prefs: UserPreferences): string {
   return JSON.stringify(prefs, null, 2);
@@ -18,6 +36,8 @@ export function importPreferences(json: string): UserPreferences {
   return {
     favorites: Array.isArray(parsed.favorites) ? parsed.favorites : [],
     recents: Array.isArray(parsed.recents) ? parsed.recents : [],
+    home: normalizeHomeLayout(parsed.home),
+    appearance: normalizeAppearance(parsed.appearance),
   };
 }
 
@@ -59,7 +79,13 @@ async function storageSet(key: string, value: unknown): Promise<void> {
 }
 
 export async function loadPreferences(): Promise<UserPreferences> {
-  return storageGet(STORAGE_KEY, DEFAULT_PREFS);
+  const raw = await storageGet<Partial<UserPreferences>>(STORAGE_KEY, DEFAULT_PREFS);
+  return {
+    favorites: Array.isArray(raw.favorites) ? raw.favorites : [],
+    recents: Array.isArray(raw.recents) ? raw.recents : [],
+    home: normalizeHomeLayout(raw.home),
+    appearance: normalizeAppearance(raw.appearance),
+  };
 }
 
 export async function savePreferences(prefs: UserPreferences): Promise<void> {
@@ -85,3 +111,17 @@ export function addRecent(prefs: UserPreferences, toolId: string): UserPreferenc
   const recents = [toolId, ...prefs.recents.filter((id) => id !== toolId)].slice(0, MAX_RECENTS);
   return { ...prefs, recents };
 }
+
+export function updateHome(prefs: UserPreferences, home: HomeLayout): UserPreferences {
+  return { ...prefs, home: normalizeHomeLayout(home) };
+}
+
+export function updateAppearance(
+  prefs: UserPreferences,
+  appearance: AppearancePreferences
+): UserPreferences {
+  return { ...prefs, appearance: normalizeAppearance(appearance) };
+}
+
+export { DEFAULT_HOME_LAYOUT, normalizeHomeLayout, DEFAULT_APPEARANCE, normalizeAppearance };
+export type { HomeLayout, AppearancePreferences };
