@@ -50,7 +50,8 @@ export function ShortcutsProvider({ children }: { children: ReactNode }) {
   const show = useCallback(() => setOpen(true), []);
   const close = useCallback(() => setOpen(false), []);
 
-  useKeyboardShortcut("?", () => setOpen((o) => !o), { meta: false });
+  const toggleShortcuts = useCallback(() => setOpen((o) => !o), []);
+  useKeyboardShortcut("?", toggleShortcuts, { meta: false });
 
   const value = useMemo(
     () => ({ open, setOpen, show, close }),

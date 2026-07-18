@@ -11,9 +11,10 @@ export function useKeyboardShortcut(
   const meta = options.meta ?? true;
   const shift = options.shift;
 
+  // Keep latest callback without re-subscribing the keydown listener
   useEffect(() => {
     callbackRef.current = callback;
-  }, [callback]);
+  });
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
