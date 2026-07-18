@@ -114,7 +114,7 @@ export function CommandPalette({
   const showSuggestions = !query.trim() && recentIds.length === 0;
 
   // Instant — Raycast/Emil: never animate ⌘K
-  const togglePalette = useCallback(() => setOpen((current) => !current), [setOpen]);
+  const togglePalette = useCallback(() => setOpen(!open), [setOpen, open]);
   useKeyboardShortcut("k", togglePalette);
 
   useEffect(() => {

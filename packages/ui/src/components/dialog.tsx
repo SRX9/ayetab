@@ -64,11 +64,12 @@ export function Dialog({
       aria-label={label}
       data-testid={testId}
       className={cn(
-        "fixed inset-0 z-50 m-0 flex h-full max-h-none w-full max-w-none justify-center border-0 bg-transparent p-0",
+        // Never set display:flex unconditionally — it overrides the UA
+        // `dialog:not([open]) { display: none }` and leaves closed palettes visible.
+        "fixed inset-0 z-50 m-0 h-full max-h-none w-full max-w-none justify-center border-0 bg-transparent p-0",
         "backdrop:bg-transparent",
         "open:flex",
-        placement === "center" ? "items-center" : "items-start pt-[10vh]",
-        !open && "pointer-events-none"
+        placement === "center" ? "items-center" : "items-start pt-[10vh]"
       )}
       onCancel={(e) => {
         e.preventDefault();
