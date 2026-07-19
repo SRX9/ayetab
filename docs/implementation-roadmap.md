@@ -38,7 +38,10 @@ HTML/CSS/JS/SQL formatters, YAML↔JSON, JSON↔CSV, Text Diff, Markdown, Cron, 
 ## Phase 5: Polish & Launch ✅
 
 - [x] Chrome Web Store listing guide (`docs/STORE.md`)
+- [x] Privacy policy (`docs/PRIVACY.md`)
 - [x] Firefox extension support (`sidebar_action` + `browser_specific_settings`)
+- [x] Separate Chrome / Firefox production builds + zip packaging
+- [x] Extension omits CSP-unsafe Draw & Write (Excalidraw) tool
 - [x] Keyboard shortcuts modal (`?`)
 - [x] Export/import favorites (JSON)
 - [x] Onboarding tour (first-visit modal)
@@ -49,9 +52,10 @@ HTML/CSS/JS/SQL formatters, YAML↔JSON, JSON↔CSV, Text Diff, Markdown, Cron, 
 
 ### Remaining (manual / post-launch)
 
-- [ ] Submit to Chrome Web Store
+- [ ] Submit to Chrome Web Store (`pnpm --filter extension zip`)
 - [ ] Submit to Firefox Add-ons
-- [ ] E2E tests (Playwright)
+- [ ] Host public privacy policy URL from `docs/PRIVACY.md`
+- [ ] E2E tests (Playwright) for extension side panel
 - [ ] Lighthouse performance audit
 - [ ] WCAG 2.1 AA formal audit
 
