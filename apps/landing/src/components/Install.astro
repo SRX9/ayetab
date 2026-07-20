@@ -1,0 +1,126 @@
+---
+---
+
+<section id="install" class="section install">
+  <div class="container">
+    <p class="section-kicker reveal">Get AyeTab</p>
+    <h2 class="section-title reveal reveal-delay-1">Install in a minute. Use forever offline.</h2>
+    <p class="section-lead reveal reveal-delay-2">
+      Chrome side panel or Firefox sidebar — same liquid-glass toolkit, same local privacy model.
+    </p>
+
+    <div class="install-grid">
+      <article class="install-card glass reveal reveal-delay-1">
+        <div class="browser-mark chrome" aria-hidden="true">C</div>
+        <h3>Chrome</h3>
+        <p>Persistent side panel. Load from the Chrome Web Store, or unpack a local build while developing.</p>
+        <a class="btn btn-primary" href="https://chromewebstore.google.com/" rel="noopener" target="_blank">
+          Add to Chrome
+        </a>
+      </article>
+
+      <article class="install-card glass reveal reveal-delay-2">
+        <div class="browser-mark firefox" aria-hidden="true">F</div>
+        <h3>Firefox</h3>
+        <p>Native sidebar action with the same tool suite. Built for Firefox’s extension model.</p>
+        <a class="btn btn-primary" href="https://addons.mozilla.org/" rel="noopener" target="_blank">
+          Add to Firefox
+        </a>
+      </article>
+
+      <article class="install-card glass reveal reveal-delay-3">
+        <div class="browser-mark web" aria-hidden="true">W</div>
+        <h3>Web app</h3>
+        <p>Prefer a full tab? Open the Next.js web suite with every tool available in the browser.</p>
+        <a class="btn btn-secondary" href="https://app.ayetab.dev" rel="noopener">
+          Open AyeTab Web
+        </a>
+      </article>
+    </div>
+
+    <figure class="promo reveal">
+      <img
+        src="/images/og-extension.png"
+        alt="AyeTab extension promo showing the liquid glass sidebar and wordmark"
+        width="1200"
+        height="630"
+        loading="lazy"
+      />
+    </figure>
+  </div>
+</section>
+
+<style>
+  .install-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2.75rem;
+  }
+
+  .install-card {
+    border-radius: calc(var(--radius) - 2px);
+    padding: 1.5rem 1.35rem 1.45rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+    min-height: 100%;
+  }
+
+  .browser-mark {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+  }
+
+  .chrome {
+    background: linear-gradient(145deg, #34a853, #4285f4);
+  }
+
+  .firefox {
+    background: linear-gradient(145deg, #ff7139, #ff4f5e);
+  }
+
+  .web {
+    background: linear-gradient(145deg, #5ab0ff, #007aff);
+  }
+
+  .install-card h3 {
+    margin: 0.2rem 0 0;
+    font-size: 1.2rem;
+    letter-spacing: -0.03em;
+  }
+
+  .install-card p {
+    margin: 0;
+    flex: 1;
+    color: var(--fg-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .promo {
+    margin: 2.5rem 0 0;
+    border-radius: calc(var(--radius) + 2px);
+    overflow: hidden;
+    border: 1px solid var(--glass-edge);
+    box-shadow: 0 24px 60px hsl(var(--shadow) / 0.12);
+  }
+
+  .promo img {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 860px) {
+    .install-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

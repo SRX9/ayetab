@@ -37,6 +37,9 @@ jobs:
       - name: Build web
         run: pnpm build --filter web
 
+      - name: Build landing
+        run: pnpm build --filter landing
+
       - name: Type-check extension
         run: pnpm type-check --filter extension
 

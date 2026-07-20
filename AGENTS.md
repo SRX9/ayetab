@@ -10,6 +10,7 @@ Package manager is **pnpm** (`pnpm@9.15.4`, Node >= 20). Standard commands are i
 
 | Service | What it is | Run (dev) | Notes |
 |---------|-----------|-----------|-------|
+| `landing` (`apps/landing`) | Astro marketing site | `pnpm dev --filter landing` → http://localhost:4321 | Product discovery / install landing page (liquid-glass brand). |
 | `web` (`apps/web`) | Next.js 15 app, full tool suite | `pnpm dev --filter web` → http://localhost:3000 | Primary runnable app. Tool pages live at `/tools/<id>` (e.g. `/tools/base64`, `/tools/uuid-generator`). Wrong slugs render a "Tool not found" page by design. |
 | `extension` (`apps/extension`) | Chrome MV3 + Firefox sidebar (Vite + CRXJS) | `pnpm dev --filter extension` | Dev server builds `apps/extension/dist` to load unpacked; it does NOT type-check. Needs a browser to load — no localhost page to hit. |
 

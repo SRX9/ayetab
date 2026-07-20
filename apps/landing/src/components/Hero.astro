@@ -1,0 +1,147 @@
+---
+---
+
+<section class="hero" aria-label="AyeTab introduction">
+  <div class="hero-media" aria-hidden="true">
+    <img
+      src="/images/hero-product.jpg"
+      alt=""
+      width="1920"
+      height="1080"
+      fetchpriority="high"
+    />
+    <div class="hero-veil"></div>
+  </div>
+
+  <div class="container hero-content">
+    <p class="brand-lockup hero-animate">
+      <img src="/favicon.svg" width="44" height="44" alt="" />
+      <span>AyeTab</span>
+    </p>
+    <h1 class="hero-title hero-animate hero-delay-1">
+      Developer utilities,<br />glass-clear and local.
+    </h1>
+    <p class="hero-lead hero-animate hero-delay-2">
+      Fifty tools in your browser sidebar — format, convert, generate, and debug without sending a byte to the cloud.
+    </p>
+    <div class="hero-actions hero-animate hero-delay-3">
+      <a class="btn btn-primary" href="#install">Install extension</a>
+      <a class="btn btn-secondary" href="https://app.ayetab.dev" rel="noopener">Try web app</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: min(100svh, 920px);
+    display: grid;
+    align-items: end;
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    transform: scale(1.04);
+    animation: hero-drift 18s var(--ease-out) infinite alternate;
+  }
+
+  .hero-veil {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(232, 238, 246, 0.28) 0%, rgba(232, 238, 246, 0.12) 35%, rgba(215, 227, 242, 0.82) 78%, rgba(215, 227, 242, 0.96) 100%),
+      radial-gradient(900px 420px at 50% 18%, rgba(255, 255, 255, 0.28), transparent 60%);
+  }
+
+  .hero-content {
+    padding: 7.5rem 0 4.5rem;
+  }
+
+  .brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0 0 1.1rem;
+    font-size: clamp(1.65rem, 3.5vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+  }
+
+  .brand-lockup img {
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(0, 80, 180, 0.18);
+  }
+
+  .hero-title {
+    margin: 0;
+    max-width: 14ch;
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 1.02;
+  }
+
+  .hero-lead {
+    margin: 1.15rem 0 0;
+    max-width: 36ch;
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    line-height: 1.55;
+    color: var(--fg-muted);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .hero-animate {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: hero-in 800ms var(--ease-spring) forwards;
+  }
+
+  .hero-delay-1 { animation-delay: 90ms; }
+  .hero-delay-2 { animation-delay: 170ms; }
+  .hero-delay-3 { animation-delay: 250ms; }
+
+  @keyframes hero-in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes hero-drift {
+    from { transform: scale(1.04) translate3d(0, 0, 0); }
+    to { transform: scale(1.08) translate3d(0, -1.2%, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-media img { animation: none; }
+    .hero-animate {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-content {
+      padding-top: 6.5rem;
+      padding-bottom: 3.25rem;
+    }
+  }
+</style>

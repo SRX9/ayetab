@@ -9,6 +9,7 @@ All-in-one developer toolbox — a Chrome/Firefox extension side panel + Next.js
 ```bash
 pnpm install
 pnpm dev                    # all apps
+pnpm dev --filter landing   # http://localhost:4321 (marketing site)
 pnpm dev --filter web       # http://localhost:3000
 pnpm dev --filter extension # Vite + HMR
 pnpm test                   # unit tests
@@ -59,6 +60,7 @@ Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY
 ## Monorepo
 
 ```
+apps/landing      → Astro marketing / install landing page
 apps/web          → Next.js 15
 apps/extension    → Chrome MV3 + Firefox sidebar
 packages/utils    → executeTool() + tool implementations (43 routed + 7 custom UI)
