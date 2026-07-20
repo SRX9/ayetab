@@ -45,11 +45,12 @@ const PREVIEW_STYLES = `
 /**
  * Renders untrusted HTML/Markdown output inside a sandboxed iframe.
  * Empty sandbox blocks scripts, forms, popups, and same-origin access.
+ * A restrictive CSP additionally blocks network fetches (remote images/fonts).
  */
 export function HtmlPreview({ html, className }: HtmlPreviewProps) {
   const srcDoc = useMemo(
     () =>
-      `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><style>${PREVIEW_STYLES}</style></head><body>${html}</body></html>`,
+      `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; font-src 'none'; connect-src 'none'; media-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><style>${PREVIEW_STYLES}</style></head><body>${html}</body></html>`,
     [html]
   );
 

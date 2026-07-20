@@ -82,10 +82,11 @@ The extension uses Chrome's **Side Panel API** (Chrome 114+) — a persistent pa
 
 | Component | Technology | Responsibility |
 |-----------|-----------|----------------|
-| **Service Worker** | TypeScript | Side panel behavior, tab events, message routing |
+| **Service Worker** | TypeScript | Side panel / sidebar behavior (browser-specific entry) |
 | **Side Panel** | React + Vite | Main UI — tool navigation and execution |
-| **Content Script** | TypeScript | Optional: read page selection, inject helpers |
-| **Build** | Vite + `@crxjs/vite-plugin` | HMR, manifest-as-source-of-truth |
+| **Build** | Vite + `@crxjs/vite-plugin` | Separate Chrome + Firefox manifests → `dist/chrome`, `dist/firefox` |
+
+Production packaging: `pnpm --filter extension zip` (see `docs/STORE.md`). Draw & Write (Excalidraw) is web-only — MV3 CSP blocks its runtime constructs in the extension.
 
 ### Message Flow
 
@@ -176,11 +177,11 @@ User Input
 
 | Concern | Extension | Web |
 |---------|-----------|-----|
-| Active tool | `chrome.storage.session` | URL path `/tools/[id]` |
+| Active tool | `sessionStorage` (restored while side panel session lives) | URL path `/tools/[id]` |
 | Favorites | `chrome.storage.local` | `localStorage` |
-| Theme | `chrome.storage.local` | `localStorage` + `next-themes` |
+| Theme | `localStorage` (+ mirrored in preferences) | `localStorage` + `next-themes` |
 | Recent tools | `chrome.storage.local` | `localStorage` |
-| Tool input | React state (ephemeral) | React state (ephemeral) |
+| Tool input | IndexedDB drafts (on device) | IndexedDB drafts (on device) |
 
 ## Build & Dev
 

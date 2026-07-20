@@ -19,11 +19,18 @@ pnpm build                  # production build
 ### Load the extension
 
 ```bash
-pnpm build --filter extension
+pnpm --filter extension zip
 ```
 
-Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist`  
-Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/manifest.json`
+| Browser | Load unpacked | Store ZIP |
+|---------|---------------|-----------|
+| Chrome | `apps/extension/dist/chrome` | `apps/extension/dist/ayetab-chrome-v*.zip` |
+| Firefox | `apps/extension/dist/firefox/manifest.json` | `apps/extension/dist/ayetab-firefox-v*.zip` |
+
+Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist/chrome`  
+Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/firefox/manifest.json`
+
+Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY.md](docs/PRIVACY.md)
 
 ## Tool categories (50 tools)
 
@@ -66,3 +73,4 @@ docs/             → Analysis, architecture, store listing guide
 - [Architecture](docs/architecture.md)
 - [Implementation Roadmap](docs/implementation-roadmap.md)
 - [Store Listing Guide](docs/STORE.md)
+- [Privacy Policy](docs/PRIVACY.md)

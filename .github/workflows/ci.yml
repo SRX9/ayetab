@@ -37,5 +37,14 @@ jobs:
       - name: Build web
         run: pnpm build --filter web
 
-      - name: Build extension
+      - name: Type-check extension
+        run: pnpm type-check --filter extension
+
+      - name: Build extension (Chrome + Firefox)
         run: pnpm build --filter extension
+
+      - name: Pack extension zips
+        run: pnpm --filter extension zip:chrome && pnpm --filter extension zip:firefox
+
+      - name: Lint Firefox package
+        run: pnpm --filter extension lint:firefox

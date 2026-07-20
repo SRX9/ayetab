@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Cancel01Icon,
@@ -24,15 +24,17 @@ type SettingsSection = "appearance" | "wallpaper" | "data";
 interface SettingsPanelProps {
   open: boolean;
   onClose: () => void;
+  /** Hide wallpaper controls (extension sidebar has no home wallpaper). */
+  hideWallpaper?: boolean;
 }
 
-const SECTIONS: Array<{ id: SettingsSection; label: string; icon: typeof Settings01Icon }> = [
+const ALL_SECTIONS: Array<{ id: SettingsSection; label: string; icon: typeof Settings01Icon }> = [
   { id: "appearance", label: "Appearance", icon: PaintBoardIcon },
   { id: "wallpaper", label: "Wallpaper", icon: ImageUploadIcon },
   { id: "data", label: "Data", icon: Download04Icon },
 ];
 
-export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
+export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelProps) {
   const { prefs, updateAppearance, importPrefs } = usePreferences();
   const { theme, setTheme } = useTheme();
   const [section, setSection] = useState<SettingsSection>("appearance");
@@ -40,6 +42,14 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const wallpaperRef = useRef<HTMLInputElement>(null);
+
+  const sections = hideWallpaper
+    ? ALL_SECTIONS.filter((s) => s.id !== "wallpaper")
+    : ALL_SECTIONS;
+
+  useEffect(() => {
+    if (hideWallpaper && section === "wallpaper") setSection("appearance");
+  }, [hideWallpaper, section]);
 
   const appearance = prefs.appearance;
 
@@ -121,7 +131,9 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
             <h2 id="settings-title" className="text-[17px] font-semibold tracking-tight">
               Settings
             </h2>
-            <p className="text-[12px] text-muted-foreground">Theme, wallpaper, and preferences</p>
+            <p className="text-[12px] text-muted-foreground">
+              {hideWallpaper ? "Theme and preferences" : "Theme, wallpaper, and preferences"}
+            </p>
           </div>
           <button
             type="button"
@@ -135,7 +147,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
         <div className="flex min-h-[420px] flex-col md:flex-row">
           <nav className="flex gap-1 overflow-x-auto border-b border-white/10 p-3 md:w-48 md:flex-col md:overflow-visible md:border-b-0 md:border-r dark:border-white/10">
-            {SECTIONS.map((item) => {
+            {sections.map((item) => {
               const active = section === item.id;
               return (
                 <button
@@ -168,7 +180,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               <AppearanceSection effectiveTheme={effectiveTheme} onTheme={handleTheme} />
             )}
 
-            {section === "wallpaper" && (
+            {section === "wallpaper" && !hideWallpaper && (
               <WallpaperSection
                 appearance={appearance}
                 uploading={uploading}
@@ -197,10 +209,12 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 interface SettingsButtonProps {
   className?: string;
   compact?: boolean;
+  /** Hide wallpaper controls (extension sidebar has no home wallpaper). */
+  hideWallpaper?: boolean;
 }
 
 /** Gear button that opens the Settings panel */
-export function SettingsButton({ className, compact }: SettingsButtonProps) {
+export function SettingsButton({ className, compact, hideWallpaper }: SettingsButtonProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -216,7 +230,7 @@ export function SettingsButton({ className, compact }: SettingsButtonProps) {
       >
         <HugeiconsIcon icon={Settings01Icon} size={16} strokeWidth={1.75} color="currentColor" />
       </Button>
-      <SettingsPanel open={open} onClose={() => setOpen(false)} />
+      <SettingsPanel open={open} onClose={() => setOpen(false)} hideWallpaper={hideWallpaper} />
     </>
   );
 }
