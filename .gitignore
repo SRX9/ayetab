@@ -11,6 +11,9 @@ out/
 *.js.map
 *.d.ts.map
 
+# Astro
+apps/landing/.astro/
+
 # TypeScript emit in src (use Vite/tsc outDir only)
 apps/extension/src/**/*.js
 apps/extension/src/**/*.d.ts
