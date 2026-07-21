@@ -41,6 +41,8 @@ const logos = [
   },
 ] as const;
 
+const marqueeItems = [...logos, ...logos];
+
 function LogoCard({
   src,
   alt,
@@ -71,12 +73,10 @@ function LogoCard({
 }
 
 export function MarqueeScroller() {
-  const items = [...logos, ...logos];
-
   return (
     <div className="marquee-scroller mt-10 w-full overflow-hidden">
       <div className="marquee-track flex items-center gap-4 px-2">
-        {items.map((logo, index) => (
+        {marqueeItems.map((logo, index) => (
           <LogoCard
             key={`${logo.alt}-${index}`}
             src={logo.src}
