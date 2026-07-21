@@ -1,43 +1,43 @@
 const logos = [
   {
-    src: "https://svgl.app/library/procure.svg",
-    alt: "Procure",
-    gradient: { from: "#3B82F6", to: "#1D4ED8" },
+    src: "https://svgl.app/library/chrome.svg",
+    alt: "Chrome",
+    gradient: { from: "#34A853", to: "#4285F4" },
   },
   {
-    src: "https://svgl.app/library/shopify.svg",
-    alt: "Shopify",
+    src: "https://svgl.app/library/firefox.svg",
+    alt: "Firefox",
+    gradient: { from: "#FF7139", to: "#FF4F5E" },
+  },
+  {
+    src: "https://svgl.app/library/json.svg",
+    alt: "JSON",
     gradient: { from: "#FACC15", to: "#EAB308" },
   },
   {
-    src: "https://svgl.app/library/blender.svg",
-    alt: "Blender",
+    src: "https://svgl.app/library/typescript.svg",
+    alt: "TypeScript",
     gradient: { from: "#60A5FA", to: "#2563EB" },
   },
   {
-    src: "https://svgl.app/library/figma.svg",
-    alt: "Figma",
-    gradient: { from: "#A855F7", to: "#7C3AED" },
+    src: "https://svgl.app/library/vscode.svg",
+    alt: "VS Code",
+    gradient: { from: "#38BDF8", to: "#0284C7" },
   },
   {
-    src: "https://svgl.app/library/spotify.svg",
-    alt: "Spotify",
-    gradient: { from: "#FB7185", to: "#EF4444" },
+    src: "https://svgl.app/library/github_light.svg",
+    alt: "GitHub",
+    gradient: { from: "#64748B", to: "#0F172A" },
   },
   {
-    src: "https://svgl.app/library/lottielab.svg",
-    alt: "Lottielab",
-    gradient: { from: "#FDE047", to: "#22C55E" },
+    src: "https://svgl.app/library/nodejs.svg",
+    alt: "Node.js",
+    gradient: { from: "#4ADE80", to: "#16A34A" },
   },
   {
-    src: "https://svgl.app/library/google-cloud.svg",
-    alt: "Google Cloud",
-    gradient: { from: "#93C5FD", to: "#38BDF8" },
-  },
-  {
-    src: "https://svgl.app/library/bing.svg",
-    alt: "Bing",
-    gradient: { from: "#22D3EE", to: "#14B8A6" },
+    src: "https://svgl.app/library/react_light.svg",
+    alt: "React",
+    gradient: { from: "#67E8F9", to: "#22D3EE" },
   },
 ] as const;
 
@@ -74,7 +74,10 @@ function LogoCard({
 
 export function MarqueeScroller() {
   return (
-    <div className="marquee-scroller mt-10 w-full overflow-hidden">
+    <div
+      className="marquee-scroller mt-10 w-full overflow-hidden"
+      aria-label="Works alongside the tools you already use"
+    >
       <div className="marquee-track flex items-center gap-4 px-2">
         {marqueeItems.map((logo, index) => (
           <LogoCard
