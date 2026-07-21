@@ -1,0 +1,116 @@
+---
+const categories = [
+  {
+    name: "Format",
+    tools: "JSON · HTML · CSS · JS · XML · SQL · SCSS · Line Sort",
+  },
+  {
+    name: "Encode",
+    tools: "Base64 · Base64 Image · URL · HTML Entity · Escape",
+  },
+  {
+    name: "Convert",
+    tools: "YAML↔JSON · JSON↔CSV · Case · Color · cURL→Code · Number Base",
+  },
+  {
+    name: "Inspect",
+    tools: "JWT · Unix Time · RegExp · Diff · Markdown · Cron · Certificate",
+  },
+  {
+    name: "Generate",
+    tools: "Hash · UUID · ULID · Random · Lorem · QR · Draw",
+  },
+  {
+    name: "Productivity",
+    tools: "To-Do · Kanban · Pomodoro · Notes · Stopwatch · Habits",
+  },
+];
+---
+
+<section id="tools" class="section tools">
+  <div class="container">
+    <div class="tools-head">
+      <div>
+        <p class="section-kicker reveal">50 tools</p>
+        <h2 class="section-title reveal reveal-delay-1">A full toolbox, one sidebar.</h2>
+      </div>
+      <p class="section-lead reveal reveal-delay-2">
+        From everyday formatters to JWT debugging and habit tracking — all processing stays on your device.
+      </p>
+    </div>
+
+    <div class="category-rail">
+      {categories.map((cat, i) => (
+        <div class={`category glass reveal reveal-delay-${(i % 3) + 1}`}>
+          <h3>{cat.name}</h3>
+          <p>{cat.tools}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .tools-head {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.5rem;
+    align-items: end;
+  }
+
+  .category-rail {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2.75rem;
+  }
+
+  .category {
+    border-radius: calc(var(--radius) - 4px);
+    padding: 1.35rem 1.3rem 1.45rem;
+    transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+  }
+
+  .category:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 22px 50px hsl(var(--shadow) / 0.12);
+  }
+
+  .category h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  .category p {
+    margin: 0.55rem 0 0;
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 860px) {
+    .tools-head {
+      grid-template-columns: 1fr;
+    }
+
+    .category-rail {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .category-rail {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .category:hover {
+      transform: none;
+    }
+  }
+</style>

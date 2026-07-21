@@ -1,0 +1,76 @@
+---
+---
+
+<section id="privacy" class="section privacy">
+  <div class="container privacy-panel glass reveal">
+    <div class="privacy-copy">
+      <p class="section-kicker">Privacy by design</p>
+      <h2 class="section-title">Your data never leaves the device.</h2>
+      <p class="section-lead">
+        Every transform runs locally in the browser. No accounts, no telemetry pipelines, no “upload to process.” Export and import favorites as JSON when you want a backup.
+      </p>
+    </div>
+    <ul class="privacy-points">
+      <li>
+        <strong>Offline-capable</strong>
+        <span>Works without a network once installed.</span>
+      </li>
+      <li>
+        <strong>Local storage only</strong>
+        <span>Theme, favorites, and recents stay on your machine.</span>
+      </li>
+      <li>
+        <strong>Open about permissions</strong>
+        <span>Side panel + storage — nothing more than the utilities need.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .privacy-panel {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+    align-items: center;
+    border-radius: calc(var(--radius) + 4px);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .privacy-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .privacy-points li {
+    display: grid;
+    gap: 0.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .privacy-points li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .privacy-points strong {
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .privacy-points span {
+    color: var(--fg-muted);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 800px) {
+    .privacy-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

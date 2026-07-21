@@ -1,0 +1,115 @@
+---
+const features = [
+  {
+    title: "Command palette",
+    body: "Hit ⌘K / Ctrl+K and fuzzy-jump to any tool. Feels like Raycast for developer utilities.",
+  },
+  {
+    title: "Smart paste",
+    body: "Paste a JWT, JSON blob, Base64 string, or URL — AyeTab suggests the right tool instantly.",
+  },
+  {
+    title: "Favorites & recents",
+    body: "Star what you live in. Recents keep your last tools one tap away.",
+  },
+  {
+    title: "Rich outputs",
+    body: "Syntax highlighting, diff view, markdown and HTML previews, QR codes, and image decode.",
+  },
+  {
+    title: "Dark & light themes",
+    body: "Liquid-glass materials that adapt to your preference and persist locally.",
+  },
+  {
+    title: "Keyboard-first",
+    body: "Press ? for shortcuts. Built for muscle memory, not mouse marathons.",
+  },
+];
+---
+
+<section id="features" class="section features">
+  <div class="container">
+    <p class="section-kicker reveal">Core features</p>
+    <h2 class="section-title reveal reveal-delay-1">Everything you reach for, already open.</h2>
+    <p class="section-lead reveal reveal-delay-2">
+      A persistent browser sidebar packed with the utilities you open twenty times a day — without leaving the tab you’re in.
+    </p>
+
+    <div class="feature-list">
+      {features.map((feature, i) => (
+        <article class={`feature reveal reveal-delay-${(i % 3) + 1}`}>
+          <h3>{feature.title}</h3>
+          <p>{feature.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 3rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .feature {
+    padding: 1.65rem 1.35rem 1.65rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .feature:nth-child(3n + 2),
+  .feature:nth-child(3n + 3) {
+    padding-left: 1.35rem;
+  }
+
+  .feature:nth-child(3n + 2),
+  .feature:nth-child(3n + 3) {
+    border-left: 1px solid var(--hairline);
+  }
+
+  .feature h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  .feature p {
+    margin: 0.55rem 0 0;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 860px) {
+    .feature-list {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .feature:nth-child(3n + 2),
+    .feature:nth-child(3n + 3) {
+      border-left: none;
+      padding-left: 0;
+    }
+
+    .feature:nth-child(even) {
+      padding-left: 1.1rem;
+      border-left: 1px solid var(--hairline);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .feature-list {
+      grid-template-columns: 1fr;
+    }
+
+    .feature,
+    .feature:nth-child(even) {
+      padding-left: 0;
+      border-left: none;
+    }
+  }
+</style>
