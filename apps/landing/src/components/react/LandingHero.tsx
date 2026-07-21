@@ -1,13 +1,47 @@
 import { ChevronRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useState } from "react";
 import { MarqueeScroller } from "./MarqueeScroller";
 
 const VIDEO_SRC =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4";
 
 export function LandingHero() {
+  const reduceMotion = useReducedMotion();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  // Keep SSR / pre-hydration markup fully visible; animate only after mount.
+  const textMotion =
+    ready && !reduceMotion
+      ? {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+        }
+      : { initial: false as const, animate: { opacity: 1, y: 0 } };
+
+  const navMotion =
+    ready && !reduceMotion
+      ? {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: {
+            duration: 0.65,
+            delay: 0.35,
+            ease: [0.22, 1, 0.36, 1] as const,
+          },
+        }
+      : { initial: false as const, animate: { opacity: 1, y: 0 } };
+
   return (
-    <section className="w-full px-4 sm:px-6 pt-6 md:pt-10 pb-4" aria-label="Hero">
+    <section
+      className="w-full px-4 sm:px-6 pt-6 md:pt-10 pb-4"
+      aria-label="Hero"
+    >
       <div className="relative w-full max-w-[1400px] mx-auto rounded-[48px] bg-white border border-slate-200/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.03)] overflow-hidden h-[600px] flex flex-col">
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none">
           <video
@@ -22,9 +56,7 @@ export function LandingHero() {
 
         <motion.div
           className="relative z-20 flex-1 px-8 md:px-16 pt-12 md:pt-16 flex flex-col items-start"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          {...textMotion}
         >
           <h1 className="font-display text-[42px] md:text-[56px] font-medium tracking-tight text-[#0a1b33] leading-[1.05] max-w-[14ch]">
             Foundation of the
@@ -38,8 +70,8 @@ export function LandingHero() {
           <motion.button
             type="button"
             className="mt-8 bg-[#0a152d] text-white rounded-full px-6 py-3 text-[13px] font-semibold tracking-tight cursor-pointer"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
             transition={{ type: "spring", stiffness: 420, damping: 28 }}
           >
             Contact Us
@@ -50,13 +82,7 @@ export function LandingHero() {
           <motion.nav
             className="flex items-center bg-white/90 backdrop-blur-2xl px-1.5 py-1.5 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.08)] border border-slate-200/40"
             aria-label="Primary"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.65,
-              delay: 0.35,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            {...navMotion}
           >
             <div className="w-9 h-9 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center text-[#0a1b33] text-sm shrink-0">
               ✦
