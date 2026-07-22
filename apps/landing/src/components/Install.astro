@@ -1,126 +1,61 @@
 ---
 ---
 
-<section id="install" class="section install">
-  <div class="container">
-    <p class="section-kicker reveal">Get AyeTab</p>
-    <h2 class="section-title reveal reveal-delay-1">Install in a minute. Use forever offline.</h2>
-    <p class="section-lead reveal reveal-delay-2">
-      Chrome side panel or Firefox sidebar — same liquid-glass toolkit, same local privacy model.
-    </p>
+<section id="install" class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-20 md:py-28">
+  <p class="text-[12px] font-semibold tracking-[0.08em] uppercase text-slate-400">Get AyeTab</p>
+  <h2 class="font-display mt-3 text-[32px] md:text-[42px] font-medium tracking-tight text-[#0a1b33] max-w-[16ch] leading-[1.1]">
+    Install in a minute. Use forever offline.
+  </h2>
+  <p class="mt-4 max-w-[44ch] text-[15px] leading-relaxed text-slate-500">
+    Chrome side panel or Firefox sidebar — the same local toolkit, the same privacy model.
+  </p>
 
-    <div class="install-grid">
-      <article class="install-card glass reveal reveal-delay-1">
-        <div class="browser-mark chrome" aria-hidden="true">C</div>
-        <h3>Chrome</h3>
-        <p>Persistent side panel. Load from the Chrome Web Store, or unpack a local build while developing.</p>
-        <a class="btn btn-primary" href="https://chromewebstore.google.com/" rel="noopener" target="_blank">
-          Add to Chrome
-        </a>
-      </article>
+  <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <article class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-7 flex flex-col items-start gap-3 min-h-full">
+      <div class="w-10 h-10 rounded-2xl grid place-items-center text-white text-sm font-bold bg-[#0a152d]" aria-hidden="true">C</div>
+      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-[#0a1b33]">Chrome</h3>
+      <p class="m-0 flex-1 text-[13px] leading-relaxed text-slate-500">
+        Persistent side panel. Load from the Chrome Web Store, or unpack a local build while developing.
+      </p>
+      <a
+        class="mt-2 inline-flex items-center justify-center rounded-full bg-[#0a152d] text-white px-5 py-2.5 text-[12px] font-semibold hover:scale-[1.03] transition-transform"
+        href="https://chromewebstore.google.com/"
+        rel="noopener"
+        target="_blank"
+      >
+        Add to Chrome
+      </a>
+    </article>
 
-      <article class="install-card glass reveal reveal-delay-2">
-        <div class="browser-mark firefox" aria-hidden="true">F</div>
-        <h3>Firefox</h3>
-        <p>Native sidebar action with the same tool suite. Built for Firefox’s extension model.</p>
-        <a class="btn btn-primary" href="https://addons.mozilla.org/" rel="noopener" target="_blank">
-          Add to Firefox
-        </a>
-      </article>
+    <article class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-7 flex flex-col items-start gap-3 min-h-full">
+      <div class="w-10 h-10 rounded-2xl grid place-items-center text-white text-sm font-bold bg-[#0a152d]" aria-hidden="true">F</div>
+      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-[#0a1b33]">Firefox</h3>
+      <p class="m-0 flex-1 text-[13px] leading-relaxed text-slate-500">
+        Native sidebar action with the same tool suite. Built for Firefox’s extension model.
+      </p>
+      <a
+        class="mt-2 inline-flex items-center justify-center rounded-full bg-[#0a152d] text-white px-5 py-2.5 text-[12px] font-semibold hover:scale-[1.03] transition-transform"
+        href="https://addons.mozilla.org/"
+        rel="noopener"
+        target="_blank"
+      >
+        Add to Firefox
+      </a>
+    </article>
 
-      <article class="install-card glass reveal reveal-delay-3">
-        <div class="browser-mark web" aria-hidden="true">W</div>
-        <h3>Web app</h3>
-        <p>Prefer a full tab? Open the Next.js web suite with every tool available in the browser.</p>
-        <a class="btn btn-secondary" href="https://app.ayetab.dev" rel="noopener">
-          Open AyeTab Web
-        </a>
-      </article>
-    </div>
-
-    <figure class="promo reveal">
-      <img
-        src="/images/og-extension.png"
-        alt="AyeTab extension promo showing the liquid glass sidebar and wordmark"
-        width="1200"
-        height="630"
-        loading="lazy"
-      />
-    </figure>
+    <article class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-7 flex flex-col items-start gap-3 min-h-full">
+      <div class="w-10 h-10 rounded-2xl grid place-items-center text-[#0a1b33] text-sm font-bold bg-slate-100 border border-slate-200/70" aria-hidden="true">W</div>
+      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-[#0a1b33]">Web app</h3>
+      <p class="m-0 flex-1 text-[13px] leading-relaxed text-slate-500">
+        Prefer a full tab? Open the Next.js web suite with every tool available in the browser.
+      </p>
+      <a
+        class="mt-2 inline-flex items-center justify-center rounded-full bg-white text-[#0a1b33] px-5 py-2.5 text-[12px] font-semibold border border-slate-200/60 shadow-sm hover:border-slate-300 transition-all"
+        href="https://app.ayetab.dev"
+        rel="noopener"
+      >
+        Open AyeTab Web
+      </a>
+    </article>
   </div>
 </section>
-
-<style>
-  .install-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 2.75rem;
-  }
-
-  .install-card {
-    border-radius: calc(var(--radius) - 2px);
-    padding: 1.5rem 1.35rem 1.45rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.7rem;
-    min-height: 100%;
-  }
-
-  .browser-mark {
-    width: 2.4rem;
-    height: 2.4rem;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: #fff;
-  }
-
-  .chrome {
-    background: linear-gradient(145deg, #34a853, #4285f4);
-  }
-
-  .firefox {
-    background: linear-gradient(145deg, #ff7139, #ff4f5e);
-  }
-
-  .web {
-    background: linear-gradient(145deg, #5ab0ff, #007aff);
-  }
-
-  .install-card h3 {
-    margin: 0.2rem 0 0;
-    font-size: 1.2rem;
-    letter-spacing: -0.03em;
-  }
-
-  .install-card p {
-    margin: 0;
-    flex: 1;
-    color: var(--fg-muted);
-    font-size: 0.92rem;
-    line-height: 1.5;
-  }
-
-  .promo {
-    margin: 2.5rem 0 0;
-    border-radius: calc(var(--radius) + 2px);
-    overflow: hidden;
-    border: 1px solid var(--glass-edge);
-    box-shadow: 0 24px 60px hsl(var(--shadow) / 0.12);
-  }
-
-  .promo img {
-    width: 100%;
-    height: auto;
-  }
-
-  @media (max-width: 860px) {
-    .install-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

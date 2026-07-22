@@ -1,76 +1,30 @@
 ---
 ---
 
-<section id="privacy" class="section privacy">
-  <div class="container privacy-panel glass reveal">
-    <div class="privacy-copy">
-      <p class="section-kicker">Privacy by design</p>
-      <h2 class="section-title">Your data never leaves the device.</h2>
-      <p class="section-lead">
+<section id="privacy" class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-12 md:py-20">
+  <div class="rounded-[36px] bg-white border border-slate-200/60 shadow-[0_24px_60px_rgba(0,0,0,0.04)] px-8 py-10 md:px-12 md:py-14 grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center">
+    <div>
+      <p class="text-[12px] font-semibold tracking-[0.08em] uppercase text-slate-400">Privacy by design</p>
+      <h2 class="font-display mt-3 text-[32px] md:text-[42px] font-medium tracking-tight text-[#0a1b33] max-w-[14ch] leading-[1.1]">
+        Your data never leaves the device.
+      </h2>
+      <p class="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-slate-500">
         Every transform runs locally in the browser. No accounts, no telemetry pipelines, no “upload to process.” Export and import favorites as JSON when you want a backup.
       </p>
     </div>
-    <ul class="privacy-points">
-      <li>
-        <strong>Offline-capable</strong>
-        <span>Works without a network once installed.</span>
+    <ul class="list-none m-0 p-0 grid gap-5">
+      <li class="pb-5 border-b border-slate-200/70">
+        <strong class="block text-[15px] font-semibold tracking-tight text-[#0a1b33]">Offline-capable</strong>
+        <span class="mt-1 block text-[13px] text-slate-500 leading-relaxed">Works without a network once installed.</span>
+      </li>
+      <li class="pb-5 border-b border-slate-200/70">
+        <strong class="block text-[15px] font-semibold tracking-tight text-[#0a1b33]">Local storage only</strong>
+        <span class="mt-1 block text-[13px] text-slate-500 leading-relaxed">Theme, favorites, and recents stay on your machine.</span>
       </li>
       <li>
-        <strong>Local storage only</strong>
-        <span>Theme, favorites, and recents stay on your machine.</span>
-      </li>
-      <li>
-        <strong>Open about permissions</strong>
-        <span>Side panel + storage — nothing more than the utilities need.</span>
+        <strong class="block text-[15px] font-semibold tracking-tight text-[#0a1b33]">Open about permissions</strong>
+        <span class="mt-1 block text-[13px] text-slate-500 leading-relaxed">Side panel + storage — nothing more than the utilities need.</span>
       </li>
     </ul>
   </div>
 </section>
-
-<style>
-  .privacy-panel {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 2rem;
-    align-items: center;
-    border-radius: calc(var(--radius) + 4px);
-    padding: clamp(1.75rem, 4vw, 2.75rem);
-  }
-
-  .privacy-points {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 1rem;
-  }
-
-  .privacy-points li {
-    display: grid;
-    gap: 0.2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .privacy-points li:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  .privacy-points strong {
-    font-size: 1rem;
-    letter-spacing: -0.02em;
-  }
-
-  .privacy-points span {
-    color: var(--fg-muted);
-    font-size: 0.92rem;
-    line-height: 1.45;
-  }
-
-  @media (max-width: 800px) {
-    .privacy-panel {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

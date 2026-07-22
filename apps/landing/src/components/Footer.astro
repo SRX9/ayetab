@@ -2,60 +2,19 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <a class="brand" href="/">
-      <img src="/favicon.svg" width="24" height="24" alt="" />
+<footer class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-10 md:py-14 border-t border-slate-200/70">
+  <div class="grid gap-4">
+    <a class="inline-flex items-center gap-2 font-semibold tracking-tight text-[#0a1b33]" href="/">
+      <img src="/favicon.svg" width="24" height="24" alt="" class="rounded-lg" />
       <span>AyeTab</span>
     </a>
-    <nav aria-label="Footer">
-      <a href="#features">Features</a>
-      <a href="#tools">Tools</a>
-      <a href="#privacy">Privacy</a>
-      <a href="#install">Install</a>
-      <a href="https://github.com/SRX9/ayetab" rel="noopener" target="_blank">GitHub</a>
+    <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
+      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#features">Features</a>
+      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#tools">Tools</a>
+      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#privacy">Privacy</a>
+      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#install">Install</a>
+      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="https://github.com/SRX9/ayetab" rel="noopener" target="_blank">GitHub</a>
     </nav>
-    <p class="copy">© {year} AyeTab. Built for developers who stay local.</p>
+    <p class="m-0 text-[12px] text-slate-400">© {year} AyeTab. Built for developers who stay local.</p>
   </div>
 </footer>
-
-<style>
-  .site-footer {
-    padding: 2.5rem 0 3rem;
-    border-top: 1px solid var(--hairline);
-  }
-
-  .footer-inner {
-    display: grid;
-    gap: 1.1rem;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
-
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.85rem 1.15rem;
-  }
-
-  nav a {
-    color: var(--fg-muted);
-    font-size: 0.9rem;
-  }
-
-  nav a:hover {
-    color: var(--fg);
-  }
-
-  .copy {
-    margin: 0.4rem 0 0;
-    color: var(--fg-muted);
-    font-size: 0.85rem;
-  }
-</style>
