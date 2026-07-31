@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { TOOL_REGISTRY, getToolById } from "./registry";
 import {
-  TOOL_REGISTRY,
-  getToolById,
   getToolSeo,
   getHomeSeo,
   buildToolJsonLd,
   buildToolsItemListJsonLd,
   WEB_APP_ORIGIN,
-} from "../index";
+} from "./seo";
 
 describe("tool SEO", () => {
   it("builds unique titles and canonical URLs for every tool", () => {
