@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { WEB_APP_ORIGIN } from "@ayetab/utils";
 import { Providers } from "@/components/providers";
+import { homeMetadata } from "@/lib/seo-metadata";
 import "./globals.css";
 
 /* Geist reads close to SF Pro — clean macOS app typography */
@@ -16,9 +18,32 @@ const mono = Geist_Mono({
   display: "swap",
 });
 
+const base = homeMetadata();
+
 export const metadata: Metadata = {
-  title: "AyeTab — Developer Utilities",
-  description: "All-in-one developer toolbox. Format, convert, generate, and debug — all offline in your browser.",
+  metadataBase: new URL(WEB_APP_ORIGIN),
+  title: {
+    default: typeof base.title === "string" ? base.title : "AyeTab — Developer Utilities",
+    template: "%s | AyeTab",
+  },
+  description: base.description,
+  keywords: base.keywords,
+  applicationName: "AyeTab",
+  authors: [{ name: "AyeTab" }],
+  creator: "AyeTab",
+  openGraph: base.openGraph,
+  twitter: base.twitter,
+  alternates: { canonical: WEB_APP_ORIGIN },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

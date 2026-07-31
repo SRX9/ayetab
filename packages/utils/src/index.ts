@@ -1,6 +1,7 @@
 export * from "./types";
 export * from "./registry";
 export * from "./detector";
+export * from "./seo";
 export { executeTool } from "./executor";
 
 // Shared data/maths modules the custom tool UIs build on. These are plain

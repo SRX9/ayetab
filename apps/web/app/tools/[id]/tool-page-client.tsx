@@ -1,17 +1,30 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import Link from "next/link";
 import Script from "next/script";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getToolById, type ToolDefinition } from "@ayetab/utils";
 import { ShellContent, ToolHost, usePreferences } from "@ayetab/ui";
 
+function readInputFromLocation(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return new URLSearchParams(window.location.search).get("input") ?? "";
+  } catch {
+    return "";
+  }
+}
+
 export default function ToolPageClient({ toolId }: { toolId: string }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialInput = searchParams.get("input") ?? "";
   const { isFavorite, toggleFavorite, addRecent } = usePreferences();
+  // Avoid useSearchParams so static HTML includes the full tool shell for SEO.
+  const [initialInput, setInitialInput] = useState("");
+
+  useEffect(() => {
+    setInitialInput(readInputFromLocation());
+  }, []);
 
   const tool = useMemo(() => getToolById(toolId), [toolId]);
 

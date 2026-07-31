@@ -1,7 +1,6 @@
-import { TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
+import { TOOL_REGISTRY, WEB_APP_ORIGIN, type ToolDefinition } from "@ayetab/utils";
 
-/** Home for tools that can't run inside the extension. */
-export const WEB_APP_ORIGIN = "https://app.ayetab.dev";
+export { WEB_APP_ORIGIN };
 
 /**
  * Tools that rely on CSP-unsafe libraries. Excalidraw uses `Function`/`eval`
