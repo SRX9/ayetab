@@ -1,0 +1,98 @@
+---
+const TOOL_COUNT = 100;
+
+const sidebarGroups = [
+  { label: "Favorites", items: ["JSON Formatter", "JWT Debugger"] },
+  { label: "Format & Validate", items: ["HTML Formatter", "SQL Formatter", "XML Formatter"] },
+  { label: "Encode & Decode", items: ["Base64 Encode/Decode", "URL Encode/Decode"] },
+];
+
+const active = "JSON Formatter";
+---
+
+<section class="mx-auto w-full max-w-[1100px] px-6 pb-16 pt-16 md:pb-20 md:pt-24">
+  <h1
+    class="max-w-[18ch] text-[38px] font-semibold leading-[1.12] tracking-tight text-ink md:text-[52px]"
+  >
+    Developer utilities, offline &amp; instant
+  </h1>
+  <p class="mt-5 max-w-[52ch] text-[16px] leading-relaxed text-muted">
+    {TOOL_COUNT} tools on your new tab page and in your browser sidebar — format, convert, generate,
+    and debug without sending a byte to the cloud.
+  </p>
+
+  <div class="mt-8 flex flex-wrap items-center gap-2">
+    <a
+      class="rounded bg-ink px-4 py-2 text-[14px] font-medium text-white transition-opacity hover:opacity-90"
+      href="#install"
+    >
+      Install extension
+    </a>
+    <a
+      class="rounded border border-line px-4 py-2 text-[14px] font-medium text-ink transition-colors hover:bg-tint"
+      href="https://app.ayetab.dev"
+      rel="noopener"
+    >
+      Open the web app
+    </a>
+  </div>
+
+  <!--
+    The preview is built from the same tokens as the product rather than a
+    screenshot, so it can never drift out of date with the real interface.
+  -->
+  <figure
+    class="mt-14 overflow-hidden rounded-md border border-line"
+    role="img"
+    aria-label="AyeTab: a sidebar listing every tool beside the open tool's input and output"
+  >
+    <div class="grid grid-cols-[168px_1fr] md:grid-cols-[212px_1fr]" aria-hidden="true">
+      <div class="border-e border-line bg-tint p-2">
+        <div class="mb-2 flex items-center gap-1.5 px-1 py-1">
+          <span class="text-[12px] font-semibold text-ink">AyeTab</span>
+        </div>
+        <div class="mb-3 rounded-sm border border-line bg-white px-2 py-1 text-[11px] text-muted">
+          Search tools
+        </div>
+        {
+          sidebarGroups.map((group) => (
+            <div class="mb-3">
+              <p class="px-1 pb-1 text-[9px] font-medium tracking-[0.08em] text-muted uppercase">
+                {group.label}
+              </p>
+              {group.items.map((item) => (
+                <p
+                  class:list={[
+                    "truncate rounded-sm px-1.5 py-1 text-[11px]",
+                    item === active ? "bg-black/[0.08] font-medium text-ink" : "text-ink/80",
+                  ]}
+                >
+                  {item}
+                </p>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="bg-white p-5 md:p-8">
+        <p class="text-[15px] font-semibold text-ink md:text-[19px]">{active}</p>
+        <p class="mt-1 text-[11px] text-muted md:text-[12px]">
+          Pretty-print and validate JSON, with error positions.
+        </p>
+        <div class="mt-5 grid gap-3 md:grid-cols-2">
+          <div>
+            <p class="pb-1 text-[9px] font-medium tracking-[0.08em] text-muted uppercase">Input</p>
+            <pre
+              class="overflow-hidden rounded-sm border border-line px-2 py-2 font-mono text-[10px] leading-[1.6] text-ink md:text-[11px]">{'{"id":7,"tags":["a","b"]}'}</pre>
+          </div>
+          <div>
+            <p class="pb-1 text-[9px] font-medium tracking-[0.08em] text-muted uppercase">Output</p>
+            <pre
+              class="overflow-hidden rounded-sm border border-line px-2 py-2 font-mono text-[10px] leading-[1.6] text-ink md:text-[11px]">{'{\n  "id": 7,\n  "tags": ["a", "b"]\n}'}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </figure>
+</section>

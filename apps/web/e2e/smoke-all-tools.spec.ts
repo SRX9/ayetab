@@ -1,7 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { TOOL_REGISTRY } from "@ayetab/utils";
 import { dismissOnboarding, toolOutput, preparePage } from "./helpers";
-import { CUSTOM_UI_TOOL_IDS, CUSTOM_TOOL_TEST_IDS } from "@ayetab/ui";
+/*
+ * Deep imports, not the `@ayetab/ui` barrel: the barrel reaches
+ * `@hugeicons/core-free-icons`, whose CJS build throws "exports is not defined"
+ * under Playwright's ESM loader and takes the whole spec file down with it.
+ * Both modules below are plain data.
+ */
+import { CUSTOM_UI_TOOL_IDS } from "@ayetab/ui/src/lib/custom-tools";
+import { CUSTOM_TOOL_TEST_IDS } from "@ayetab/ui/src/lib/custom-tool-components";
 
 const TINY_PNG_B64 =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
@@ -56,8 +63,15 @@ const HTML_OUTPUT_TOOLS = new Set(["markdown-preview", "html-preview"]);
 const IMAGE_OUTPUT_TOOLS = new Set(["qr-code", "base64-image"]);
 
 test.describe("All tools smoke", () => {
-  test("registry contains 50 tools", () => {
-    expect(TOOL_REGISTRY.length).toBe(50);
+  /*
+   * Count-agnostic: the hard-coded 50 went stale as the registry grew, and this
+   * file could not load for long enough that nothing caught it. What matters is
+   * that every tool has a unique id and that the suite below covers all of them.
+   */
+  test("registry ids are unique", () => {
+    const ids = TOOL_REGISTRY.map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.length).toBeGreaterThan(0);
   });
 
   test.beforeEach(async ({ page }) => {

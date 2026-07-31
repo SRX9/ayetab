@@ -40,6 +40,8 @@ interface ToolRunnerProps {
   isFavorite?: boolean;
   onToggleFavorite?: () => void;
   compact?: boolean;
+  /** Standalone tool page: owns the `h1` and can afford a side-by-side layout. */
+  standalone?: boolean;
 }
 
 function getPlaceholder(toolId: string): string {
@@ -86,6 +88,7 @@ export function ToolRunner({
   isFavorite,
   onToggleFavorite,
   compact,
+  standalone,
 }: ToolRunnerProps) {
   const { input, setInput, output, error, result, setResult, reset, isHydrated } = useToolState(
     tool.id,
@@ -236,7 +239,12 @@ export function ToolRunner({
   );
 
   return (
-    <ToolShell title={tool.name} description={tool.description} actions={actions}>
+    <ToolShell
+      title={tool.name}
+      description={tool.description}
+      actions={actions}
+      headingLevel={standalone ? 1 : 2}
+    >
       {pastedText && onNavigate && (
         <SmartPasteBanner
           pastedText={pastedText}
@@ -247,17 +255,23 @@ export function ToolRunner({
           onDismiss={() => setPastedText(null)}
         />
       )}
-      <InputPanel
-        value={input}
-        onChange={setInput}
-        rows={rows}
-        placeholder={getPlaceholder(tool.id)}
-        onPaste={handlePaste}
-        allowUpload={tool.id !== "qr-code"}
-        autoFocus={isHydrated}
-        focusKey={tool.id}
-      />
-      <OutputPanel value={output} error={error} rows={rows} result={result} />
+      {/*
+        Side by side once there's room for it — stacked, the user scrolls between
+        an input and the output it produces.
+      */}
+      <div className={cn("grid gap-5", standalone && "xl:grid-cols-2 xl:items-start")}>
+        <InputPanel
+          value={input}
+          onChange={setInput}
+          rows={rows}
+          placeholder={getPlaceholder(tool.id)}
+          onPaste={handlePaste}
+          allowUpload={tool.id !== "qr-code"}
+          autoFocus={isHydrated}
+          focusKey={tool.id}
+        />
+        <OutputPanel value={output} error={error} rows={rows} result={result} />
+      </div>
     </ToolShell>
   );
 }

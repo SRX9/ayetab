@@ -23,11 +23,25 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       className={cn("h-8 w-8 text-muted-foreground", className)}
       title={`Switch to ${next} mode`}
     >
-      {resolvedTheme === "dark" ? (
-        <HugeiconsIcon icon={Sun03Icon} size={16} strokeWidth={1.75} color="currentColor" />
-      ) : (
-        <HugeiconsIcon icon={Moon02Icon} size={16} strokeWidth={1.75} color="currentColor" />
-      )}
+      {/* Both icons stay mounted so the swap cross-fades instead of cutting. */}
+      <span className="icon-swap h-4 w-4">
+        <HugeiconsIcon
+          icon={Sun03Icon}
+          size={16}
+          strokeWidth={1.75}
+          color="currentColor"
+          aria-hidden
+          data-state={resolvedTheme === "dark" ? "shown" : "hidden"}
+        />
+        <HugeiconsIcon
+          icon={Moon02Icon}
+          size={16}
+          strokeWidth={1.75}
+          color="currentColor"
+          aria-hidden
+          data-state={resolvedTheme === "dark" ? "hidden" : "shown"}
+        />
+      </span>
     </Button>
   );
 }

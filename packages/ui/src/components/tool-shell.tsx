@@ -9,16 +9,33 @@ interface ToolShellProps {
   children: ReactNode;
   actions?: ReactNode;
   className?: string;
+  /**
+   * `h1` when the tool owns the page (/tools/[id]), `h2` when it's embedded in a
+   * surface that already has one (sidepanel).
+   */
+  headingLevel?: 1 | 2;
 }
 
-export function ToolShell({ title, description, children, actions, className }: ToolShellProps) {
+export function ToolShell({
+  title,
+  description,
+  children,
+  actions,
+  className,
+  headingLevel = 2,
+}: ToolShellProps) {
+  const Heading = headingLevel === 1 ? "h1" : "h2";
+
   return (
-    <div className={cn("flex flex-col gap-5 animate-fade-up motion-reduce:animate-none", className)}>
-      <div className="flex items-start justify-between gap-4">
+    <div className={cn("flex flex-col gap-5", className)}>
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
         <div className="min-w-0">
-          <h2 className="text-[22px] font-semibold tracking-tight">{title}</h2>
+          <Heading className="text-title font-semibold text-balance">{title}</Heading>
           {description && (
-            <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{description}</p>
+            /* 13px across a 3xl container runs ~110 characters; cap the measure. */
+            <p className="mt-1 max-w-[60ch] text-ui leading-relaxed text-pretty text-muted-foreground">
+              {description}
+            </p>
           )}
         </div>
         {actions && (

@@ -1,30 +1,43 @@
 ---
+const guarantees = [
+  {
+    title: "Offline-capable",
+    body: "Works without a network once installed.",
+  },
+  {
+    title: "Local storage only",
+    body: "Theme, favorites, and recents stay on your machine.",
+  },
+  {
+    title: "Open about permissions",
+    body: "Side panel + storage — nothing more. Replacing the new tab needs no permission at all.",
+  },
+];
 ---
 
-<section id="privacy" class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-12 md:py-20">
-  <div class="rounded-[36px] bg-white border border-slate-200/60 shadow-[0_24px_60px_rgba(0,0,0,0.04)] px-8 py-10 md:px-12 md:py-14 grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center">
+<section id="privacy" class="border-y border-line bg-tint">
+  <div class="mx-auto grid w-full max-w-[1100px] gap-10 px-6 py-16 md:grid-cols-[1.1fr_0.9fr] md:py-24">
     <div>
-      <p class="text-[12px] font-semibold tracking-[0.08em] uppercase text-slate-400">Privacy by design</p>
-      <h2 class="font-display mt-3 text-[32px] md:text-[42px] font-medium tracking-tight text-[#0a1b33] max-w-[14ch] leading-[1.1]">
+      <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">
+        Privacy by design
+      </p>
+      <h2 class="mt-2 max-w-[16ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
         Your data never leaves the device.
       </h2>
-      <p class="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-slate-500">
-        Every transform runs locally in the browser. No accounts, no telemetry pipelines, no “upload to process.” Export and import favorites as JSON when you want a backup.
+      <p class="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-muted">
+        Every transform runs locally in the browser. No accounts, no telemetry pipelines, no “upload
+        to process.” Export and import your preferences as JSON when you want a backup.
       </p>
     </div>
-    <ul class="list-none m-0 p-0 grid gap-5">
-      <li class="pb-5 border-b border-slate-200/70">
-        <strong class="block text-[15px] font-semibold tracking-tight text-[#0a1b33]">Offline-capable</strong>
-        <span class="mt-1 block text-[13px] text-slate-500 leading-relaxed">Works without a network once installed.</span>
-      </li>
-      <li class="pb-5 border-b border-slate-200/70">
-        <strong class="block text-[15px] font-semibold tracking-tight text-[#0a1b33]">Local storage only</strong>
-        <span class="mt-1 block text-[13px] text-slate-500 leading-relaxed">Theme, favorites, and recents stay on your machine.</span>
-      </li>
-      <li>
-        <strong class="block text-[15px] font-semibold tracking-tight text-[#0a1b33]">Open about permissions</strong>
-        <span class="mt-1 block text-[13px] text-slate-500 leading-relaxed">Side panel + storage — nothing more than the utilities need.</span>
-      </li>
+    <ul class="m-0 list-none border-t border-line p-0">
+      {
+        guarantees.map((item) => (
+          <li class="border-b border-line py-4">
+            <strong class="block text-[14px] font-semibold text-ink">{item.title}</strong>
+            <span class="mt-1 block text-[13px] leading-relaxed text-muted">{item.body}</span>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </section>

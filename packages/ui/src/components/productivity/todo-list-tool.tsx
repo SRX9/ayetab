@@ -2,7 +2,10 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { ToolShell } from "../tool-shell";
+import { Button } from "../button";
 import { useJsonToolState } from "../../hooks/use-json-tool-state";
+import { cn } from "../../lib/utils";
+import { FOCUS_RING } from "../../lib/pressable";
 import { CustomToolProps, LoadingState, newId, ToolActions } from "./shared";
 
 type TodoPriority = "low" | "medium" | "high";
@@ -22,6 +25,13 @@ interface TodoState {
 }
 
 const DEFAULT_STATE: TodoState = { items: [], filter: "all" };
+
+/** Same 32px control height the design tools use, so the add row lines up. */
+const CONTROL_CLASS =
+  "h-8 min-w-0 rounded border border-border bg-background px-2 text-ui " +
+  "transition-colors duration-100 placeholder:text-muted-foreground " +
+  "focus:border-[hsl(var(--ring)/0.6)] " +
+  FOCUS_RING;
 
 const PRIORITY_STYLES: Record<TodoPriority, string> = {
   low: "bg-muted text-muted-foreground",
@@ -108,89 +118,104 @@ export function TodoListTool({
         <LoadingState />
       ) : (
         <div className="flex flex-col gap-4" data-testid="todo-list">
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <input
               type="text"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addItem()}
               placeholder="Add a new task…"
-              className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className={cn(CONTROL_CLASS, "flex-1")}
               data-testid="todo-input"
             />
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value as TodoPriority)}
-              className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+              className={cn(CONTROL_CLASS, "cursor-pointer")}
               aria-label="Priority"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
-            <button
-              type="button"
-              onClick={addItem}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-[transform,background-color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-primary/90 motion-reduce:transition-none motion-reduce:active:scale-100"
-            >
+            <Button variant="primary" size="md" onClick={addItem}>
               Add
-            </button>
+            </Button>
           </div>
 
-          <div className="flex items-center gap-2 text-xs">
-            {(["all", "active", "completed"] as TodoFilter[]).map((filter) => (
-              <button
-                key={filter}
-                type="button"
-                onClick={() => setFilter(filter)}
-                className={`rounded-md px-3 py-1.5 capitalize transition-[transform,background-color,color] duration-150 ease-out-strong active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 ${
-                  state.filter === filter
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent"
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
-            <span className="ml-auto tabular-nums text-muted-foreground">{activeCount} active</span>
+          <div role="radiogroup" aria-label="Filter tasks" className="flex items-center gap-1">
+            {(["all", "active", "completed"] as TodoFilter[]).map((filter) => {
+              const active = state.filter === filter;
+              return (
+                <button
+                  key={filter}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setFilter(filter)}
+                  className={cn(
+                    "rounded border px-2 py-1 text-caption font-medium capitalize transition-colors duration-100",
+                    FOCUS_RING,
+                    active
+                      ? "border-ring bg-selection-soft text-foreground"
+                      : "border-border text-muted-foreground hover:bg-[hsl(var(--hover-fill))] hover:text-foreground"
+                  )}
+                >
+                  {filter}
+                </button>
+              );
+            })}
+            <span className="ms-auto text-caption tabular-nums text-muted-foreground">
+              {activeCount} active
+            </span>
           </div>
 
-          <ul className="flex min-h-[12rem] flex-col gap-2">
+          <ul className="flex min-h-[12rem] flex-col gap-1.5">
             {visibleItems.length === 0 ? (
-              <li className="py-8 text-center text-sm text-muted-foreground">
+              <li className="py-8 text-center text-ui text-muted-foreground">
                 No tasks yet. Add one above.
               </li>
             ) : (
               visibleItems.map((item) => (
                 <li
                   key={item.id}
-                  className="flex items-center gap-3 rounded-lg border border-border bg-card/80 px-3 py-2 transition-[border-color,background-color] duration-150 ease-out-strong"
+                  className="flex items-center gap-2 rounded border border-border bg-card px-2 py-1.5 transition-colors duration-100"
                 >
-                  <input
-                    type="checkbox"
-                    checked={item.completed}
-                    onChange={() => toggleItem(item.id)}
-                    className="h-4 w-4 rounded border-border"
-                    aria-label={`Mark "${item.text}" as ${item.completed ? "incomplete" : "complete"}`}
-                  />
+                  {/* The box stays 16px; the label carries it to a 24px target. */}
+                  <label className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center">
+                    <input
+                      type="checkbox"
+                      checked={item.completed}
+                      onChange={() => toggleItem(item.id)}
+                      className={cn(
+                        "h-4 w-4 cursor-pointer rounded-sm border-border accent-[hsl(var(--selection))]",
+                        FOCUS_RING
+                      )}
+                      aria-label={`Mark "${item.text}" as ${item.completed ? "incomplete" : "complete"}`}
+                    />
+                  </label>
                   <span
-                    className={`flex-1 text-sm ${item.completed ? "line-through text-muted-foreground" : ""}`}
+                    className={cn(
+                      "flex-1 text-ui",
+                      item.completed && "text-muted-foreground line-through"
+                    )}
                   >
                     {item.text}
                   </span>
                   <span
-                    className={`rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wide ${PRIORITY_STYLES[item.priority]}`}
+                    className={`rounded-md px-2 py-0.5 text-label uppercase ${PRIORITY_STYLES[item.priority]}`}
                   >
                     {item.priority}
                   </span>
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => deleteItem(item.id)}
-                    className="text-xs text-muted-foreground transition-[transform,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:text-destructive motion-reduce:transition-none"
+                    className="hover:text-destructive"
                     aria-label={`Delete "${item.text}"`}
                   >
                     Delete
-                  </button>
+                  </Button>
                 </li>
               ))
             )}

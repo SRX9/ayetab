@@ -2,38 +2,28 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ChevronLeftIcon, StarIcon } from "@hugeicons/core-free-icons";
+import { ChevronLeftIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import {
-  TOOL_REGISTRY,
-  type ToolCategory,
-  type ToolDefinition,
+  ALL_CATEGORIES,
   CATEGORY_LABELS,
+  fuzzySearchTools,
+  type ToolDefinition,
 } from "@ayetab/utils";
 import {
-  SearchBar,
-  CategoryNav,
+  AppearanceSync,
   CommandPalette,
+  FadeScroller,
+  OnboardingModal,
+  PreferencesProvider,
+  SettingsButton,
+  ShortcutsProvider,
   ThemeProvider,
   ThemeToggle,
-  ToolHost,
   ToolCard,
-  ToolListSection,
+  ToolHost,
   usePreferences,
-  PreferencesProvider,
-  OnboardingModal,
-  useShortcutsModal,
-  SettingsButton,
-  AppearanceSync,
-  ShortcutsProvider,
-  cn,
 } from "@ayetab/ui";
-
-/** Tools that rely on CSP-unsafe libraries (e.g. Excalidraw) — web app only. */
-const EXTENSION_EXCLUDED_TOOL_IDS = new Set(["excalidraw"]);
-
-const EXTENSION_TOOLS = TOOL_REGISTRY.filter((t) => !EXTENSION_EXCLUDED_TOOL_IDS.has(t.id));
-
-const CATEGORIES: ToolCategory[] = ["format", "convert", "inspect", "generate", "encode", "productivity"];
+import { EXTENSION_TOOLS, openWebOnlyTool } from "../lib/extension-tools";
 
 const SESSION_TOOL_KEY = "ayetab-active-tool";
 
@@ -64,12 +54,11 @@ function writeSessionTool(tool: ToolDefinition | null, input: string) {
 }
 
 function AppContent() {
-  const [activeCategory, setActiveCategory] = useState<ToolCategory | "all" | "favorites">("all");
+  const [query, setQuery] = useState("");
   const [selectedTool, setSelectedTool] = useState<ToolDefinition | null>(null);
   const [initialInput, setInitialInput] = useState("");
   const [sessionRestored, setSessionRestored] = useState(false);
   const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
-  const { setOpen: setShortcutsOpen } = useShortcutsModal();
 
   useEffect(() => {
     const saved = readSessionTool();
@@ -88,30 +77,45 @@ function AppContent() {
     writeSessionTool(selectedTool, initialInput);
   }, [selectedTool, initialInput, sessionRestored]);
 
-  const filteredTools = useMemo(() => {
-    if (activeCategory === "favorites") {
-      return EXTENSION_TOOLS.filter((t) => prefs.favorites.includes(t.id));
-    }
-    if (activeCategory === "all") return EXTENSION_TOOLS;
-    return EXTENSION_TOOLS.filter((t) => t.category === activeCategory);
-  }, [activeCategory, prefs.favorites]);
+  const favoriteTools = useMemo(
+    () => prefs.favorites.flatMap((id) => EXTENSION_TOOLS.filter((t) => t.id === id)),
+    [prefs.favorites]
+  );
 
-  const counts = useMemo(() => {
-    const c: Record<ToolCategory | "all", number> = {
-      all: EXTENSION_TOOLS.length,
-      format: 0,
-      convert: 0,
-      inspect: 0,
-      generate: 0,
-      encode: 0,
-      productivity: 0,
-    };
-    for (const t of EXTENSION_TOOLS) c[t.category]++;
-    return c;
-  }, []);
+  /**
+   * Same grouped list as the new tab's sidebar. The panel is too narrow for two
+   * panes, so the list and the tool take turns instead of sitting side by side.
+   */
+  const groups = useMemo(() => {
+    const trimmed = query.trim();
+    if (trimmed) {
+      return [
+        {
+          id: "results",
+          label: "Results",
+          tools: fuzzySearchTools(trimmed, EXTENSION_TOOLS).map((r) => r.tool),
+        },
+      ];
+    }
+
+    const out: Array<{ id: string; label: string; tools: ToolDefinition[] }> = [];
+    if (favoriteTools.length > 0) {
+      out.push({ id: "favorites", label: "Favorites", tools: favoriteTools });
+    }
+    for (const category of ALL_CATEGORIES) {
+      const list = EXTENSION_TOOLS.filter((t) => t.category === category);
+      if (list.length > 0) {
+        out.push({ id: category, label: CATEGORY_LABELS[category], tools: list });
+      }
+    }
+    return out;
+  }, [query, favoriteTools]);
+
+  const resultCount = groups.reduce((n, g) => n + g.tools.length, 0);
 
   const openTool = useCallback((tool: ToolDefinition, input = "") => {
-    if (EXTENSION_EXCLUDED_TOOL_IDS.has(tool.id)) return;
+    // Reachable via recents synced from the new tab / web app.
+    if (openWebOnlyTool(tool, input)) return;
     setSelectedTool(tool);
     setInitialInput(input);
   }, []);
@@ -131,36 +135,44 @@ function AppContent() {
       <>
         {modals}
         <div className="flex h-screen flex-col text-foreground">
-          <CommandPalette tools={EXTENSION_TOOLS} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
-          <header className="material-sidebar flex shrink-0 items-center gap-2 border-b-0 px-3 py-2.5">
+          <CommandPalette
+            tools={EXTENSION_TOOLS}
+            onSelect={(t) => openTool(t)}
+            recentIds={prefs.recents}
+          />
+          <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
             <button
               type="button"
               onClick={() => {
                 setSelectedTool(null);
                 setInitialInput("");
               }}
-              className="inline-flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-xs text-muted-foreground transition-[transform,color,background-color] duration-100 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
+              className="inline-flex items-center gap-0.5 rounded px-1.5 py-1 text-caption text-muted-foreground transition-colors hover:bg-[hsl(var(--hover-fill))] hover:text-foreground"
             >
-              <HugeiconsIcon icon={ChevronLeftIcon} size={14} strokeWidth={1.75} color="currentColor" aria-hidden />
+              <HugeiconsIcon
+                icon={ChevronLeftIcon}
+                size={14}
+                strokeWidth={1.75}
+                color="currentColor"
+                aria-hidden
+              />
               Back
             </button>
-            <span className="flex-1 truncate text-xs font-medium tracking-tight">{selectedTool.name}</span>
-            <SettingsButton hideWallpaper />
+            <span className="flex-1 truncate text-caption font-medium">{selectedTool.name}</span>
+            <SettingsButton />
             <ThemeToggle />
           </header>
           <div className="flex-1 overflow-auto p-3">
-            <div className="material-window rounded-[16px] p-3">
-              <ToolHost
-                key={`${selectedTool.id}-${initialInput}`}
-                tool={selectedTool}
-                initialInput={initialInput}
-                onNavigate={handleNavigate}
-                onRecent={addRecent}
-                isFavorite={isFavorite(selectedTool.id)}
-                onToggleFavorite={() => toggleFavorite(selectedTool.id)}
-                compact
-              />
-            </div>
+            <ToolHost
+              key={`${selectedTool.id}-${initialInput}`}
+              tool={selectedTool}
+              initialInput={initialInput}
+              onNavigate={handleNavigate}
+              onRecent={addRecent}
+              isFavorite={isFavorite(selectedTool.id)}
+              onToggleFavorite={() => toggleFavorite(selectedTool.id)}
+              compact
+            />
           </div>
         </div>
       </>
@@ -171,116 +183,70 @@ function AppContent() {
     <>
       {modals}
       <div className="flex h-screen flex-col text-foreground">
-        <CommandPalette tools={EXTENSION_TOOLS} onSelect={(t) => openTool(t)} recentIds={prefs.recents} />
-        <header className="material-sidebar flex shrink-0 items-start justify-between gap-2 border-b-0 px-3 py-3">
-          <div>
-            <h1 className="text-sm font-semibold tracking-tight">AyeTab</h1>
-            <p className="text-[10px] text-muted-foreground">Quick tools · offline</p>
-          </div>
-          <div className="flex items-center gap-1">
-            <SettingsButton compact hideWallpaper />
-            <ThemeToggle />
-          </div>
+        <CommandPalette
+          tools={EXTENSION_TOOLS}
+          onSelect={(t) => openTool(t)}
+          recentIds={prefs.recents}
+        />
+        <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
+          <h1 className="flex-1 truncate ps-1 text-ui font-semibold">AyeTab</h1>
+          <SettingsButton />
+          <ThemeToggle />
         </header>
 
-        <div className="flex flex-1 flex-col overflow-auto">
-          <div className="border-b border-border/40 px-3 pb-3">
-            <SearchBar tools={EXTENSION_TOOLS} onSelect={(t) => openTool(t)} placeholder="Search tools..." />
-          </div>
-
-          {prefs.favorites.length > 0 && (
-            <div className="border-b border-border/40 p-2">
-              <ToolListSection
-                title="Favorites"
-                toolIds={prefs.favorites.filter((id) => !EXTENSION_EXCLUDED_TOOL_IDS.has(id))}
-                onSelect={(t) => openTool(t)}
-                isFavorite={isFavorite}
-                onToggleFavorite={handleToggleFavorite}
-                compact
-              />
-            </div>
-          )}
-
-          <div className="flex flex-1 overflow-hidden">
-            <nav className="material-sidebar flex w-[7.5rem] shrink-0 flex-col gap-1 overflow-auto border-r-0 p-2">
-              <button
-                type="button"
-                onClick={() => setActiveCategory("favorites")}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-[10px] px-2 py-1.5 text-left text-xs transition-[transform,background-color,color] duration-100 ease-out-strong active:scale-[0.98]",
-                  activeCategory === "favorites"
-                    ? "nav-active"
-                    : "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
-                )}
-              >
-                <HugeiconsIcon
-                  icon={StarIcon}
-                  size={12}
-                  strokeWidth={1.75}
-                  color="currentColor"
-                  className="shrink-0"
-                  fill={activeCategory === "favorites" ? "currentColor" : "none"}
-                  aria-hidden
-                />
-                Fav ({prefs.favorites.filter((id) => !EXTENSION_EXCLUDED_TOOL_IDS.has(id)).length})
-              </button>
-              <CategoryNav
-                categories={CATEGORIES}
-                active={activeCategory === "favorites" ? "all" : activeCategory}
-                onSelect={(c) => setActiveCategory(c)}
-                counts={counts}
-              />
-              {prefs.recents.length > 0 && (
-                <div className="mt-2 border-t border-border/40 pt-2">
-                  <p className="mb-1 px-2 text-[9px] uppercase tracking-[0.08em] text-muted-foreground">Recent</p>
-                  {prefs.recents.slice(0, 4).map((id) => {
-                    const tool = EXTENSION_TOOLS.find((t) => t.id === id);
-                    if (!tool) return null;
-                    return (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => openTool(tool)}
-                        className="w-full truncate rounded-[10px] px-2 py-1 text-left text-[10px] text-muted-foreground transition-colors duration-100 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
-                      >
-                        {tool.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => setShortcutsOpen(true)}
-                className="mt-auto px-2 py-1 text-left text-[10px] text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
-              >
-                Shortcuts ?
-              </button>
-            </nav>
-
-            <div className="flex-1 overflow-auto p-2">
-              <p className="mb-1.5 px-2 text-[10px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
-                {activeCategory === "favorites"
-                  ? "Favorites"
-                  : activeCategory === "all"
-                    ? "All Tools"
-                    : CATEGORY_LABELS[activeCategory]}
-              </p>
-              <div className="material-window flex flex-col rounded-[16px] p-1">
-                {filteredTools.map((tool) => (
-                  <ToolCard
-                    key={tool.id}
-                    tool={tool}
-                    onClick={(t) => openTool(t)}
-                    isFavorite={isFavorite(tool.id)}
-                    onToggleFavorite={handleToggleFavorite}
-                    compact
-                  />
-                ))}
-              </div>
-            </div>
+        <div className="shrink-0 px-2 py-2">
+          <div className="field flex items-center gap-2 px-2 py-1.5">
+            <HugeiconsIcon
+              icon={Search01Icon}
+              size={14}
+              strokeWidth={1.75}
+              color="currentColor"
+              className="shrink-0 text-muted-foreground"
+              aria-hidden
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search tools"
+              aria-label="Search tools"
+              className="w-full min-w-0 bg-transparent text-ui outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden"
+            />
           </div>
         </div>
+
+        <FadeScroller
+          as="nav"
+          aria-label="Tools"
+          className="flex-1"
+          scrollerClassName="px-1.5 pb-2"
+          edgeHeight="1.75rem"
+        >
+          {resultCount === 0 ? (
+            <p className="px-2 py-6 text-caption text-muted-foreground">No tools match “{query}”.</p>
+          ) : (
+            groups.map((group) => (
+              <div key={group.id} className="mb-2 last:mb-0">
+                <h2 className="px-2 pb-0.5 pt-1 text-label font-medium uppercase text-muted-foreground">
+                  {group.label}
+                </h2>
+                <ul>
+                  {group.tools.map((tool) => (
+                    <li key={`${group.id}-${tool.id}`}>
+                      <ToolCard
+                        tool={tool}
+                        onClick={(t) => openTool(t)}
+                        isFavorite={isFavorite(tool.id)}
+                        onToggleFavorite={handleToggleFavorite}
+                        compact
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          )}
+        </FadeScroller>
       </div>
     </>
   );

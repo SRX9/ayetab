@@ -2,6 +2,8 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
+  /** `hover:` only fires on real pointers, so taps don't leave rows stuck lit. */
+  future: { hoverOnlyWhenSupported: true },
   content: [
     "./src/**/*.{ts,tsx,html}",
     "../../packages/ui/src/**/*.{ts,tsx}",
@@ -52,14 +54,36 @@ const config: Config = {
           foreground: "hsl(var(--selection-foreground))",
           soft: "hsl(var(--selection-soft))",
         },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar))",
+          border: "hsl(var(--sidebar-border))",
+        },
       },
+      /** Keep in sync with apps/web/tailwind.config.ts — packages/ui uses these. */
+      fontSize: {
+        kbd: ["0.625rem", { lineHeight: "1", letterSpacing: "0" }],
+        label: ["0.6875rem", { lineHeight: "1.3", letterSpacing: "0.08em" }],
+        caption: ["0.75rem", { lineHeight: "1.45" }],
+        ui: ["0.8125rem", { lineHeight: "1.4" }],
+        "ui-md": ["0.875rem", { lineHeight: "1.45" }],
+        "ui-lg": ["0.9375rem", { lineHeight: "1.5" }],
+        subtitle: ["1.0625rem", { lineHeight: "1.35", letterSpacing: "-0.01em" }],
+        title: ["1.375rem", { lineHeight: "1.2", letterSpacing: "-0.02em" }],
+        display: ["1.875rem", { lineHeight: "1.1", letterSpacing: "-0.025em" }],
+        "display-lg": ["2.125rem", { lineHeight: "1.08", letterSpacing: "-0.03em" }],
+      },
+      /**
+       * Flat scale. Corners are a rounding of the edge, not a shape — the top
+       * step is 8px so no surface ever reads as a floating pill.
+       */
       borderRadius: {
+        sm: "2px",
+        DEFAULT: "3px",
+        md: "4px",
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 4px)",
-        sm: "calc(var(--radius) - 8px)",
-        xl: "calc(var(--radius) + 4px)",
-        "2xl": "calc(var(--radius) + 8px)",
-        "3xl": "calc(var(--radius) + 16px)",
+        xl: "6px",
+        "2xl": "8px",
+        "3xl": "8px",
       },
       fontFamily: {
         sans: [
@@ -70,21 +94,6 @@ const config: Config = {
           "sans-serif",
         ],
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
-      },
-      transitionTimingFunction: {
-        "out-strong": "var(--ease-out)",
-        "in-out-strong": "var(--ease-in-out)",
-        drawer: "var(--ease-drawer)",
-        spring: "var(--ease-spring)",
-      },
-      keyframes: {
-        "fade-up": {
-          from: { opacity: "0", transform: "translateY(8px) scale(0.99)" },
-          to: { opacity: "1", transform: "translateY(0) scale(1)" },
-        },
-      },
-      animation: {
-        "fade-up": "fade-up 360ms var(--ease-out) both",
       },
     },
   },

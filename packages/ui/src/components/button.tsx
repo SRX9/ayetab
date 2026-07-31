@@ -2,6 +2,7 @@
 
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "../lib/utils";
+import { FOCUS_RING } from "../lib/pressable";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "outline" | "destructive";
 type ButtonSize = "sm" | "md" | "lg" | "icon";
@@ -13,23 +14,18 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    "bg-selection text-selection-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-selection/90",
-  secondary:
-    "bg-secondary/80 text-secondary-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary",
-  ghost:
-    "text-muted-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.05] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.08] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
-  outline:
-    "border border-border/55 bg-card/35 text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent/70",
-  destructive:
-    "bg-destructive text-destructive-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:bg-destructive/90",
+  primary: "bg-selection text-selection-foreground hover:bg-selection/90",
+  secondary: "bg-secondary text-secondary-foreground hover:bg-accent",
+  ghost: "text-muted-foreground hover:bg-[hsl(var(--hover-fill))] hover:text-foreground",
+  outline: "border border-border bg-background text-foreground hover:bg-[hsl(var(--hover-fill))]",
+  destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-7 px-2.5 text-xs rounded-[10px] gap-1.5",
-  md: "h-9 px-3.5 text-sm rounded-[12px] gap-2",
-  lg: "h-11 px-5 text-[15px] rounded-[14px] gap-2",
-  icon: "h-8 w-8 rounded-[11px]",
+  sm: "h-7 rounded px-2 text-caption gap-1.5",
+  md: "h-8 rounded px-3 text-ui gap-1.5",
+  lg: "h-9 rounded px-4 text-ui-md gap-2",
+  icon: "h-7 w-7 rounded",
 };
 
 export function Button({
@@ -44,12 +40,9 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex items-center justify-center font-medium select-none",
-        "transition-[transform,background-color,color,border-color,opacity] duration-[160ms] ease-out-strong",
-        "active:scale-[0.97]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "inline-flex select-none items-center justify-center font-medium transition-colors duration-100",
+        FOCUS_RING,
         "disabled:pointer-events-none disabled:opacity-50",
-        "motion-reduce:transition-none motion-reduce:active:scale-100",
         variantClasses[variant],
         sizeClasses[size],
         className

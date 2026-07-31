@@ -12,18 +12,5 @@
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    letter-spacing: -0.015em;
-    background-color: hsl(var(--background));
-    background-image:
-      radial-gradient(ellipse 100% 70% at 50% -20%, hsl(199 80% 88% / 0.55), transparent 55%),
-      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(210 40% 90% / 0.35), transparent 50%),
-      linear-gradient(180deg, hsl(210 18% 95%), hsl(210 14% 93%));
-  }
-
-  .dark body {
-    background-image:
-      radial-gradient(ellipse 100% 70% at 50% -20%, hsl(211 60% 24% / 0.35), transparent 55%),
-      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(220 30% 16% / 0.3), transparent 50%),
-      linear-gradient(180deg, hsl(220 14% 8%), hsl(220 12% 6%));
   }
 }

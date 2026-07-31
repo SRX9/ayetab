@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Cancel01Icon,
   Download04Icon,
-  ImageUploadIcon,
   PaintBoardIcon,
   Settings01Icon,
 } from "@hugeicons/core-free-icons";
-import { fileToWallpaperDataUrl, type ThemeMode } from "../lib/appearance";
+import { type ThemeMode } from "../lib/appearance";
 import type { UserPreferences } from "../lib/preferences";
 import { exportPreferences, importPreferences } from "../lib/preferences";
 import { usePreferences } from "../hooks/use-preferences";
@@ -17,73 +16,30 @@ import { useTheme } from "../hooks/use-theme";
 import { cn } from "../lib/utils";
 import { Dialog } from "./dialog";
 import { Button } from "./button";
-import { AppearanceSection, DataSection, WallpaperSection } from "./settings-sections";
+import { AppearanceSection, DataSection } from "./settings-sections";
 
-type SettingsSection = "appearance" | "wallpaper" | "data";
+type SettingsSection = "appearance" | "data";
 
 interface SettingsPanelProps {
   open: boolean;
   onClose: () => void;
-  /** Hide wallpaper controls (extension sidebar has no home wallpaper). */
-  hideWallpaper?: boolean;
 }
 
-const ALL_SECTIONS: Array<{ id: SettingsSection; label: string; icon: typeof Settings01Icon }> = [
+const SECTIONS: Array<{ id: SettingsSection; label: string; icon: typeof Settings01Icon }> = [
   { id: "appearance", label: "Appearance", icon: PaintBoardIcon },
-  { id: "wallpaper", label: "Wallpaper", icon: ImageUploadIcon },
   { id: "data", label: "Data", icon: Download04Icon },
 ];
 
-export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelProps) {
+export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const { prefs, updateAppearance, importPrefs } = usePreferences();
   const { theme, setTheme } = useTheme();
   const [section, setSection] = useState<SettingsSection>("appearance");
   const [error, setError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const wallpaperRef = useRef<HTMLInputElement>(null);
-
-  const sections = hideWallpaper
-    ? ALL_SECTIONS.filter((s) => s.id !== "wallpaper")
-    : ALL_SECTIONS;
-
-  useEffect(() => {
-    if (hideWallpaper && section === "wallpaper") setSection("appearance");
-  }, [hideWallpaper, section]);
-
-  const appearance = prefs.appearance;
 
   const handleTheme = (mode: ThemeMode) => {
     setTheme(mode);
     void updateAppearance((a) => ({ ...a, theme: mode }));
-  };
-
-  const handleWallpaper = (id: string) => {
-    void updateAppearance((a) => ({
-      ...a,
-      wallpaperId: id,
-    }));
-  };
-
-  const handleCustomUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
-    setUploading(true);
-    setError(null);
-    try {
-      const dataUrl = await fileToWallpaperDataUrl(file);
-      await updateAppearance((a) => ({
-        ...a,
-        wallpaperId: "custom",
-        customWallpaper: dataUrl,
-      }));
-      setSection("wallpaper");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not use that image");
-    } finally {
-      setUploading(false);
-    }
   };
 
   const handleExport = () => {
@@ -115,39 +71,32 @@ export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelPro
     e.target.value = "";
   };
 
-  const effectiveTheme = theme;
-
   return (
     <Dialog
       open={open}
       onClose={onClose}
       labelledBy="settings-title"
-      panelClassName="max-w-[720px]"
+      panelClassName="max-w-[600px]"
       testId="settings-panel"
     >
-      <div className="overflow-hidden rounded-[22px] material-hud shadow-2xl">
-        <div className="flex items-center justify-between border-b border-white/15 px-5 py-3.5 dark:border-white/10">
-          <div>
-            <h2 id="settings-title" className="text-[17px] font-semibold tracking-tight">
-              Settings
-            </h2>
-            <p className="text-[12px] text-muted-foreground">
-              {hideWallpaper ? "Theme and preferences" : "Theme, wallpaper, and preferences"}
-            </p>
-          </div>
+      <div className="menu-surface overflow-hidden">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 id="settings-title" className="text-subtitle font-semibold">
+            Settings
+          </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close settings"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-muted-foreground transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/10 dark:bg-white/10 dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/15"
+            className="flex h-7 w-7 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-[hsl(var(--hover-fill))] hover:text-foreground"
           >
-            <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} color="currentColor" />
+            <HugeiconsIcon icon={Cancel01Icon} size={15} strokeWidth={2} color="currentColor" />
           </button>
         </div>
 
-        <div className="flex min-h-[420px] flex-col md:flex-row">
-          <nav className="flex gap-1 overflow-x-auto border-b border-white/10 p-3 md:w-48 md:flex-col md:overflow-visible md:border-b-0 md:border-r dark:border-white/10">
-            {sections.map((item) => {
+        <div className="flex min-h-[280px] flex-col md:flex-row">
+          <nav className="flex gap-1 overflow-x-auto border-b border-border p-2 md:w-44 md:flex-col md:overflow-visible md:border-b-0 md:border-e">
+            {SECTIONS.map((item) => {
               const active = section === item.id;
               return (
                 <button
@@ -155,19 +104,16 @@ export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelPro
                   type="button"
                   onClick={() => setSection(item.id)}
                   className={cn(
-                    "flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px]",
-                    "transition-colors",
-                    active
-                      ? "bg-black/8 font-medium text-foreground dark:bg-white/12"
-                      : "text-foreground/70 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
+                    "flex shrink-0 items-center gap-2 rounded px-2 py-1 text-left text-ui transition-colors",
+                    active ? "nav-active" : "row-idle"
                   )}
                 >
                   <HugeiconsIcon
                     icon={item.icon}
-                    size={16}
+                    size={15}
                     strokeWidth={1.75}
                     color="currentColor"
-                    className="shrink-0"
+                    className={cn("shrink-0", !active && "text-muted-foreground")}
                   />
                   {item.label}
                 </button>
@@ -177,17 +123,7 @@ export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelPro
 
           <div className="min-w-0 flex-1 p-5">
             {section === "appearance" && (
-              <AppearanceSection effectiveTheme={effectiveTheme} onTheme={handleTheme} />
-            )}
-
-            {section === "wallpaper" && !hideWallpaper && (
-              <WallpaperSection
-                appearance={appearance}
-                uploading={uploading}
-                wallpaperRef={wallpaperRef}
-                onWallpaper={handleWallpaper}
-                onCustomUpload={handleCustomUpload}
-              />
+              <AppearanceSection effectiveTheme={theme} onTheme={handleTheme} />
             )}
 
             {section === "data" && (
@@ -195,7 +131,7 @@ export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelPro
             )}
 
             {error && (
-              <p className="mt-4 text-[12px] text-destructive" role="alert">
+              <p className="mt-4 text-caption text-destructive" role="alert">
                 {error}
               </p>
             )}
@@ -208,34 +144,31 @@ export function SettingsPanel({ open, onClose, hideWallpaper }: SettingsPanelPro
 
 interface SettingsButtonProps {
   className?: string;
-  compact?: boolean;
-  /** Hide wallpaper controls (extension sidebar has no home wallpaper). */
-  hideWallpaper?: boolean;
 }
 
 /** Gear button that opens the Settings panel */
-export function SettingsButton({ className, compact, hideWallpaper }: SettingsButtonProps) {
+export function SettingsButton({ className }: SettingsButtonProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <Button
         variant="ghost"
-        size={compact ? "icon" : "icon"}
+        size="icon"
         onClick={() => setOpen(true)}
         aria-label="Open settings"
         title="Settings"
         data-testid="settings-button"
-        className={cn("h-8 w-8 text-muted-foreground", className)}
+        className={cn("shrink-0", className)}
       >
-        <HugeiconsIcon icon={Settings01Icon} size={16} strokeWidth={1.75} color="currentColor" />
+        <HugeiconsIcon icon={Settings01Icon} size={15} strokeWidth={1.75} color="currentColor" />
       </Button>
-      <SettingsPanel open={open} onClose={() => setOpen(false)} hideWallpaper={hideWallpaper} />
+      <SettingsPanel open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
 
-/** Legacy compact export/import controls — kept for extension sidebar */
+/** Legacy compact export/import controls — kept for the extension side panel */
 export function SettingsMenu({
   prefs,
   onImport,
@@ -285,7 +218,7 @@ export function SettingsMenu({
           variant="outline"
           size="sm"
           onClick={handleExport}
-          className={cn(compact && "h-6 px-1.5 text-[10px]")}
+          className={cn(compact && "h-6 px-1.5 text-kbd")}
         >
           Export
         </Button>
@@ -293,13 +226,13 @@ export function SettingsMenu({
           variant="outline"
           size="sm"
           onClick={() => fileRef.current?.click()}
-          className={cn(compact && "h-6 px-1.5 text-[10px]")}
+          className={cn(compact && "h-6 px-1.5 text-kbd")}
         >
           Import
         </Button>
       </div>
       {error && (
-        <p className="text-[10px] text-destructive" role="alert">
+        <p className="text-kbd text-destructive" role="alert">
           {error}
         </p>
       )}

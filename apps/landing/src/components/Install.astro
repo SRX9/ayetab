@@ -1,61 +1,60 @@
 ---
+const targets = [
+  {
+    name: "Chrome",
+    body: "New tab page plus a persistent side panel. Install from the Chrome Web Store, or unpack a local build while developing.",
+    cta: "Add to Chrome",
+    href: "https://chromewebstore.google.com/",
+    primary: true,
+  },
+  {
+    name: "Firefox",
+    body: "New tab page plus a native sidebar action, with the same tool suite. Built for Firefox’s extension model.",
+    cta: "Add to Firefox",
+    href: "https://addons.mozilla.org/",
+    primary: true,
+  },
+  {
+    name: "Web app",
+    body: "Prefer a full tab? Open the web suite with every tool available in the browser.",
+    cta: "Open AyeTab Web",
+    href: "https://app.ayetab.dev",
+    primary: false,
+  },
+];
 ---
 
-<section id="install" class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-20 md:py-28">
-  <p class="text-[12px] font-semibold tracking-[0.08em] uppercase text-slate-400">Get AyeTab</p>
-  <h2 class="font-display mt-3 text-[32px] md:text-[42px] font-medium tracking-tight text-[#0a1b33] max-w-[16ch] leading-[1.1]">
+<section id="install" class="mx-auto w-full max-w-[1100px] px-6 py-16 md:py-24">
+  <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">Get AyeTab</p>
+  <h2 class="mt-2 max-w-[18ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
     Install in a minute. Use forever offline.
   </h2>
-  <p class="mt-4 max-w-[44ch] text-[15px] leading-relaxed text-slate-500">
-    Chrome side panel or Firefox sidebar — the same local toolkit, the same privacy model.
+  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+    Chrome or Firefox — the same new tab page, the same local toolkit, the same privacy model.
+    Installing replaces your new tab; disable or remove AyeTab to put the default back.
   </p>
 
-  <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-    <article class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-7 flex flex-col items-start gap-3 min-h-full">
-      <div class="w-10 h-10 rounded-2xl grid place-items-center text-white text-sm font-bold bg-[#0a152d]" aria-hidden="true">C</div>
-      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-[#0a1b33]">Chrome</h3>
-      <p class="m-0 flex-1 text-[13px] leading-relaxed text-slate-500">
-        Persistent side panel. Load from the Chrome Web Store, or unpack a local build while developing.
-      </p>
-      <a
-        class="mt-2 inline-flex items-center justify-center rounded-full bg-[#0a152d] text-white px-5 py-2.5 text-[12px] font-semibold hover:scale-[1.03] transition-transform"
-        href="https://chromewebstore.google.com/"
-        rel="noopener"
-        target="_blank"
-      >
-        Add to Chrome
-      </a>
-    </article>
-
-    <article class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-7 flex flex-col items-start gap-3 min-h-full">
-      <div class="w-10 h-10 rounded-2xl grid place-items-center text-white text-sm font-bold bg-[#0a152d]" aria-hidden="true">F</div>
-      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-[#0a1b33]">Firefox</h3>
-      <p class="m-0 flex-1 text-[13px] leading-relaxed text-slate-500">
-        Native sidebar action with the same tool suite. Built for Firefox’s extension model.
-      </p>
-      <a
-        class="mt-2 inline-flex items-center justify-center rounded-full bg-[#0a152d] text-white px-5 py-2.5 text-[12px] font-semibold hover:scale-[1.03] transition-transform"
-        href="https://addons.mozilla.org/"
-        rel="noopener"
-        target="_blank"
-      >
-        Add to Firefox
-      </a>
-    </article>
-
-    <article class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-7 flex flex-col items-start gap-3 min-h-full">
-      <div class="w-10 h-10 rounded-2xl grid place-items-center text-[#0a1b33] text-sm font-bold bg-slate-100 border border-slate-200/70" aria-hidden="true">W</div>
-      <h3 class="mt-1 text-[18px] font-semibold tracking-tight text-[#0a1b33]">Web app</h3>
-      <p class="m-0 flex-1 text-[13px] leading-relaxed text-slate-500">
-        Prefer a full tab? Open the Next.js web suite with every tool available in the browser.
-      </p>
-      <a
-        class="mt-2 inline-flex items-center justify-center rounded-full bg-white text-[#0a1b33] px-5 py-2.5 text-[12px] font-semibold border border-slate-200/60 shadow-sm hover:border-slate-300 transition-all"
-        href="https://app.ayetab.dev"
-        rel="noopener"
-      >
-        Open AyeTab Web
-      </a>
-    </article>
+  <div class="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+    {
+      targets.map((target) => (
+        <article class="flex min-h-full flex-col items-start gap-3 rounded-md border border-line p-5">
+          <h3 class="text-[16px] font-semibold text-ink">{target.name}</h3>
+          <p class="m-0 flex-1 text-[13px] leading-relaxed text-muted">{target.body}</p>
+          <a
+            class:list={[
+              "mt-1 rounded px-3.5 py-2 text-[13px] font-medium transition-colors",
+              target.primary
+                ? "bg-ink text-white hover:opacity-90"
+                : "border border-line text-ink hover:bg-tint",
+            ]}
+            href={target.href}
+            rel="noopener"
+            target={target.primary ? "_blank" : undefined}
+          >
+            {target.cta}
+          </a>
+        </article>
+      ))
+    }
   </div>
 </section>

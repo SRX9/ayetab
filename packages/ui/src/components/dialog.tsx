@@ -81,9 +81,8 @@ export function Dialog({
         aria-label="Close dialog"
         tabIndex={-1}
         className={cn(
-          "fixed inset-0 cursor-default border-0 bg-black/25 backdrop-blur-[10px]",
-          !instant &&
-            "transition-opacity duration-180 ease-out-strong motion-reduce:transition-none",
+          "fixed inset-0 cursor-default border-0 bg-black/30",
+          !instant && "transition-opacity duration-150 motion-reduce:transition-none",
           visible ? "opacity-100" : "opacity-0"
         )}
         onClick={onClose}
@@ -91,12 +90,8 @@ export function Dialog({
       <div
         className={cn(
           "relative z-10 mx-4 w-full",
-          !instant &&
-            "transition-[opacity,transform] duration-220 ease-out-strong motion-reduce:transition-none motion-reduce:transform-none",
-          !instant &&
-            (visible
-              ? "translate-y-0 scale-100 opacity-100"
-              : "translate-y-1.5 scale-[0.96] opacity-0"),
+          !instant && "transition-opacity duration-150 motion-reduce:transition-none",
+          !instant && (visible ? "opacity-100" : "opacity-0"),
           panelClassName
         )}
         onClick={(e) => e.stopPropagation()}

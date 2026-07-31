@@ -1,6 +1,10 @@
 ---
 const features = [
   {
+    title: "Your new tab",
+    body: "AyeTab takes over the new tab page — the full tool list on the left, the tool you picked on the right.",
+  },
+  {
     title: "Command palette",
     body: "Hit ⌘K / Ctrl+K and fuzzy-jump to any tool. Feels like Raycast for developer utilities.",
   },
@@ -10,7 +14,7 @@ const features = [
   },
   {
     title: "Favorites & recents",
-    body: "Star what you live in. Recents keep your last tools one tap away.",
+    body: "Star what you live in and it pins to the top of the list.",
   },
   {
     title: "Rich outputs",
@@ -18,7 +22,7 @@ const features = [
   },
   {
     title: "Dark & light themes",
-    body: "Clean materials that adapt to your preference and persist locally.",
+    body: "One flat, quiet interface in either mode. Your choice persists locally.",
   },
   {
     title: "Keyboard-first",
@@ -27,21 +31,24 @@ const features = [
 ];
 ---
 
-<section id="features" class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-20 md:py-28">
-  <p class="text-[12px] font-semibold tracking-[0.08em] uppercase text-slate-400">Core features</p>
-  <h2 class="font-display mt-3 text-[32px] md:text-[42px] font-medium tracking-tight text-[#0a1b33] max-w-[16ch] leading-[1.1]">
+<section id="features" class="mx-auto w-full max-w-[1100px] px-6 py-16 md:py-24">
+  <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">Core features</p>
+  <h2 class="mt-2 max-w-[18ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
     Everything you reach for, already open.
   </h2>
-  <p class="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-slate-500">
-    A persistent browser sidebar packed with the utilities you open twenty times a day — without leaving the tab you’re in.
+  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+    The utilities you open twenty times a day, waiting on every new tab — and in a side panel when
+    you’d rather not leave the page you’re on.
   </p>
 
-  <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-0 border-t border-slate-200/70">
-    {features.map((feature) => (
-      <article class="py-7 border-b border-slate-200/70">
-        <h3 class="text-[17px] font-semibold tracking-tight text-[#0a1b33]">{feature.title}</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-slate-500">{feature.body}</p>
-      </article>
-    ))}
+  <div class="mt-10 grid grid-cols-1 gap-x-10 border-t border-line sm:grid-cols-2 lg:grid-cols-3">
+    {
+      features.map((feature) => (
+        <article class="border-b border-line py-6">
+          <h3 class="text-[15px] font-semibold text-ink">{feature.title}</h3>
+          <p class="mt-1.5 text-[14px] leading-relaxed text-muted">{feature.body}</p>
+        </article>
+      ))
+    }
   </div>
 </section>

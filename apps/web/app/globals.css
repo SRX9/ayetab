@@ -8,36 +8,5 @@
   body {
     @apply bg-background text-foreground antialiased;
     min-height: 100vh;
-    letter-spacing: -0.015em;
-    /* Atmospheric desktop wallpaper — soft sky mesh that bleeds through glass */
-    background-color: hsl(var(--background));
-    background-image:
-      radial-gradient(ellipse 90% 70% at 15% -10%, hsl(199 85% 88% / 0.7), transparent 55%),
-      radial-gradient(ellipse 70% 55% at 95% 5%, hsl(210 60% 90% / 0.55), transparent 50%),
-      radial-gradient(ellipse 55% 45% at 70% 95%, hsl(195 50% 92% / 0.45), transparent 55%),
-      radial-gradient(ellipse 40% 35% at 5% 80%, hsl(220 30% 90% / 0.4), transparent 50%),
-      linear-gradient(165deg, hsl(210 22% 96%) 0%, hsl(210 16% 93%) 50%, hsl(215 18% 94%) 100%);
-    background-attachment: fixed;
-  }
-
-  .dark body {
-    background-image:
-      radial-gradient(ellipse 90% 70% at 15% -10%, hsl(211 70% 28% / 0.35), transparent 55%),
-      radial-gradient(ellipse 70% 55% at 95% 5%, hsl(220 40% 22% / 0.3), transparent 50%),
-      radial-gradient(ellipse 55% 45% at 70% 95%, hsl(200 35% 18% / 0.25), transparent 55%),
-      radial-gradient(ellipse 40% 35% at 5% 80%, hsl(230 25% 16% / 0.3), transparent 50%),
-      linear-gradient(165deg, hsl(220 14% 8%) 0%, hsl(220 12% 6%) 100%);
-  }
-}
-
-@layer utilities {
-  .animate-shell-in {
-    animation: ayetab-shell-in 420ms var(--ease-out) both;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .animate-shell-in {
-      animation: none;
-    }
   }
 }

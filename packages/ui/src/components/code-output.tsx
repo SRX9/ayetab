@@ -52,10 +52,19 @@ export function CodeOutput({ value, language, className, rows = 8 }: CodeOutputP
     <pre
       data-testid="tool-output-code"
       className={cn(
-        "w-full overflow-auto rounded-md border border-input bg-muted/50 px-3 py-2 text-sm font-mono",
+        // Same surface as the plain-text output it replaces, so switching tools
+        // doesn't swap the material under the panel.
+        "field w-full overflow-auto px-3 py-2.5 font-mono text-base/[1.5] sm:text-sm/[1.5]",
         className
       )}
-      style={{ minHeight: `${rows * 1.5}rem`, maxHeight: `${rows * 1.75}rem` }}
+      /*
+       * Same leading (1.5em), padding (1.25rem) and border (2px) as the input
+       * textarea, so side by side the two panels share a bottom edge.
+       */
+      style={{
+        minHeight: `calc(${rows} * 1.5em + 1.25rem + 2px)`,
+        maxHeight: `calc(${rows} * 2.5em + 1.25rem + 2px)`,
+      }}
     >
       <code dangerouslySetInnerHTML={{ __html: html }} />
     </pre>

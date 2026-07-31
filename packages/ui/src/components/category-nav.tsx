@@ -3,6 +3,7 @@
 import type { ToolCategory } from "@ayetab/utils";
 import { CATEGORY_ICONS, CATEGORY_LABELS } from "@ayetab/utils";
 import { cn } from "../lib/utils";
+import { FOCUS_RING } from "../lib/pressable";
 import { ToolIcon } from "./tool-icon";
 
 interface CategoryNavProps {
@@ -15,7 +16,7 @@ interface CategoryNavProps {
 
 export function CategoryNav({ categories, active, onSelect, counts, className }: CategoryNavProps) {
   const items: Array<{ id: ToolCategory | "all"; label: string; icon: string }> = [
-    { id: "all", label: "All Tools", icon: "LayoutGrid" },
+    { id: "all", label: "All tools", icon: "LayoutGrid" },
     ...categories.map((c) => ({ id: c, label: CATEGORY_LABELS[c], icon: CATEGORY_ICONS[c] })),
   ];
 
@@ -28,24 +29,21 @@ export function CategoryNav({ categories, active, onSelect, counts, className }:
             key={item.id}
             type="button"
             onClick={() => onSelect(item.id)}
+            aria-current={isActive ? "true" : undefined}
             className={cn(
-              "flex items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-left text-[13px]",
-              "transition-[transform,background-color,color] duration-120 ease-out-strong",
-              "active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100",
-              isActive
-                ? "nav-active"
-                : "text-foreground/75 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-black/[0.04] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-white/[0.06]"
+              "flex items-center gap-2 rounded px-2 py-1 text-start text-ui transition-colors duration-100",
+              FOCUS_RING,
+              isActive ? "nav-active" : "row-idle"
             )}
           >
-            <ToolIcon name={item.icon} className="h-4 w-4" />
-            <span className="min-w-0 flex-1 truncate">{item.label}</span>
+            <ToolIcon
+              name={item.icon}
+              className={cn("h-4 w-4 shrink-0", !isActive && "text-muted-foreground")}
+            />
+            {/* Wraps instead of clipping: translated category names run 30–40% longer. */}
+            <span className="min-w-0 flex-1 text-pretty">{item.label}</span>
             {counts?.[item.id] !== undefined && (
-              <span
-                className={cn(
-                  "text-[11px] tabular-nums",
-                  isActive ? "opacity-70" : "text-muted-foreground"
-                )}
-              >
+              <span className="text-caption tabular-nums text-muted-foreground">
                 {counts[item.id]}
               </span>
             )}

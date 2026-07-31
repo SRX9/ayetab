@@ -6,6 +6,15 @@ export async function preparePage(page: Page) {
   });
 }
 
+/**
+ * Rows are server-rendered, so Playwright will happily click one before React
+ * has attached its handler — the click then does nothing and the assertion
+ * times out. The shell sets `data-hydrated` on mount; wait for it first.
+ */
+export async function waitForHydration(page: Page) {
+  await expect(page.getByTestId("app-shell")).toHaveAttribute("data-hydrated", "true");
+}
+
 export async function dismissOnboarding(page: Page) {
   const dismiss = page.getByTestId("onboarding-dismiss");
   if (await dismiss.isVisible().catch(() => false)) {

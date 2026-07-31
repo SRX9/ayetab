@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 
@@ -20,7 +20,7 @@ interface InputPanelProps {
 export function InputPanel({
   value,
   onChange,
-  placeholder = "Paste or type your input here...",
+  placeholder = "Paste or type your input here…",
   label = "Input",
   className,
   rows = 8,
@@ -31,6 +31,13 @@ export function InputPanel({
 }: InputPanelProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  /*
+   * The id used to be the literal "tool-input". Surfaces that mount more than
+   * one tool (newtab widgets, sidepanel) produced duplicate ids, so every label
+   * pointed at whichever textarea rendered first.
+   */
+  const uid = useId();
+  const inputId = `tool-input-${uid}`;
 
   useEffect(() => {
     if (!autoFocus) return;
@@ -59,8 +66,8 @@ export function InputPanel({
 
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <div className="flex items-center justify-between">
-        <label htmlFor="tool-input" className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+      <div className="flex items-center justify-between gap-3">
+        <label htmlFor={inputId} className="text-label font-medium uppercase text-muted-foreground">
           {label}
         </label>
         {allowUpload && (
@@ -80,14 +87,15 @@ export function InputPanel({
         placeholder={placeholder}
         rows={rows}
         data-testid="tool-input"
-        id="tool-input"
+        id={inputId}
         autoFocus={autoFocus}
         className={cn(
-          "material-field w-full resize-y rounded-[14px] px-3.5 py-3 text-sm font-mono",
+          // text-base below sm: anything under 16px makes iOS Safari zoom on focus.
+          // size/leading shorthand: a bare `leading-*` loses to the responsive
+          // `sm:text-sm`, which re-sets line-height later in the cascade.
+          "field w-full resize-y px-3 py-2.5 font-mono text-base/[1.5] sm:text-sm/[1.5]",
           "placeholder:text-muted-foreground",
-          "transition-[border-color,box-shadow] duration-150 ease-out-strong",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-selection/35 focus-visible:border-selection/35",
-          "motion-reduce:transition-none"
+          "transition-colors duration-100 focus-visible:border-ring/60 focus-visible:outline-none"
         )}
         spellCheck={false}
       />

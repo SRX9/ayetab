@@ -20,15 +20,14 @@ export function SmartPasteBanner({ pastedText, onAccept, onDismiss, className }:
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 rounded-xl border border-brand/20 bg-brand/8 px-3.5 py-2.5",
-        "animate-fade-up motion-reduce:animate-none",
+        "flex items-center justify-between gap-3 rounded border border-border bg-muted px-3 py-2",
         className
       )}
     >
-      <p className="text-xs leading-relaxed">
+      <p className="text-caption leading-relaxed">
         <span className="text-muted-foreground">Detected </span>
         <span className="font-medium">{detection.tool.name}</span>
-        <span className="ml-1 text-muted-foreground">({detection.confidence})</span>
+        <span className="ms-1 text-muted-foreground">({detection.confidence})</span>
       </p>
       <div className="flex shrink-0 gap-1.5">
         <Button variant="primary" size="sm" onClick={() => onAccept(detection.tool, pastedText)}>

@@ -1,6 +1,7 @@
-# DevUtils Sidebar — Documentation
+# AyeTab — Documentation
 
-A Chrome extension + web companion for everyday developer utilities, inspired by [DevUtils](https://devutils.com).
+A browser extension (new tab page + side panel) and web companion for everyday developer utilities,
+inspired by [DevUtils](https://devutils.com).
 
 ## Documents
 
@@ -10,15 +11,21 @@ A Chrome extension + web companion for everyday developer utilities, inspired by
 | [Utilities Catalog](./utilities-catalog.md) | Full catalog of 47+ utilities with categories, inputs/outputs, and priority tiers |
 | [Architecture](./architecture.md) | Monorepo structure, Chrome extension design, and shared package strategy |
 | [Implementation Roadmap](./implementation-roadmap.md) | Phased build plan from scaffold to full utility suite |
+| [New Tab Plan](./newtab-plan.md) | Making AyeTab the default new tab page — tasks, pitfalls, production checklist |
 
 ## Project Vision
 
 Build a **privacy-first, offline-capable** developer toolbox that:
 
-- Lives in a **Chrome Side Panel** accessible on every page
+- Replaces the **new tab page** with the full tool list beside the tool you picked
+- Lives in a **side panel** for use without leaving the page you're on
 - Mirrors the utility breadth of DevUtils (formatters, converters, generators, debuggers)
 - Shares core logic between the **extension** and a **Next.js web app**
 - Never sends user data to external servers — all processing runs locally in the browser
+
+The two extension surfaces serve different jobs: the new tab is a destination you open dozens of
+times a day; the side panel is a companion for in-context work. Both render the same
+`@ayetab/ui` components against the same `chrome.storage.local` preferences.
 
 ## Monorepo Layout
 
@@ -26,7 +33,12 @@ Build a **privacy-first, offline-capable** developer toolbox that:
 ayetab/
 ├── apps/
 │   ├── web/          # Next.js web app (full utility suite in browser)
-│   └── extension/    # Chrome MV3 extension with React side panel
+│   ├── landing/      # Astro marketing site
+│   └── extension/    # MV3 extension — new tab override + side panel
+│       └── src/
+│           ├── newtab/     # New tab page: hash-routed home / library / tool
+│           ├── sidepanel/  # Side panel: state-driven navigation
+│           └── lib/        # Shared across both surfaces
 ├── packages/
 │   ├── utils/        # Pure utility functions (base64, json, hash, etc.)
 │   ├── ui/           # Shared React components (tool shells, inputs, outputs)

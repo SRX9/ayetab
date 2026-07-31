@@ -3,6 +3,7 @@
 import type { ToolDefinition } from "@ayetab/utils";
 import { CATEGORY_LABELS } from "@ayetab/utils";
 import { cn } from "../lib/utils";
+import { FOCUS_RING } from "../lib/pressable";
 import { FavoriteButton } from "./favorite-button";
 import { ToolIcon } from "./tool-icon";
 
@@ -16,6 +17,11 @@ interface ToolCardProps {
   variant?: "row" | "card";
   selected?: boolean;
   onMouseEnter?: () => void;
+  /**
+   * When the parent owns arrow-key navigation, only the active row stays in the
+   * tab order so Tab exits the list instead of walking all 41 rows.
+   */
+  roving?: boolean;
 }
 
 export function ToolCard({
@@ -28,50 +34,61 @@ export function ToolCard({
   variant = "row",
   selected = false,
   onMouseEnter,
+  roving = false,
 }: ToolCardProps) {
+  const tabIndex = roving ? (selected ? 0 : -1) : undefined;
+
   if (variant === "card") {
     return (
       <div
         className={cn(
-          "group relative flex flex-col gap-1.5 rounded-2xl text-left",
-          "transition-[transform,background-color] duration-150 ease-out-strong",
-          "active:scale-[0.985] motion-reduce:transition-none motion-reduce:active:scale-100",
+          "group relative flex flex-col gap-1.5 rounded text-start transition-colors duration-100",
           selected ? "row-selected" : "row-idle",
-          compact ? "p-2.5" : "p-3.5",
+          compact ? "p-2" : "p-2.5",
           className
         )}
       >
         <div className="flex items-start justify-between gap-2">
+          {/*
+            One button per destination. The title and description used to be two
+            separate buttons pointing at the same tool, doubling the tab stops.
+          */}
           <button
             type="button"
             onClick={() => onClick?.(tool)}
-            className="flex min-w-0 flex-1 items-start gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
+            tabIndex={tabIndex}
+            className={cn("flex min-w-0 flex-1 flex-col gap-1 rounded text-start", FOCUS_RING)}
           >
-            <ToolIcon
-              name={tool.icon}
-              className={cn("row-icon mt-0.5", compact ? "h-4 w-4" : "h-5 w-5", !selected && "text-muted-foreground")}
-            />
-            <span className={cn("font-medium tracking-tight", compact ? "text-xs" : "text-sm")}>
-              {tool.name}
+            <span className="flex items-start gap-2">
+              <ToolIcon
+                name={tool.icon}
+                className={cn(
+                  "mt-0.5 shrink-0",
+                  compact ? "h-4 w-4" : "h-[18px] w-[18px]",
+                  !selected && "text-muted-foreground"
+                )}
+              />
+              <span className={cn("font-medium", compact ? "text-caption" : "text-ui-md")}>
+                {tool.name}
+              </span>
+            </span>
+            <span
+              className={cn(
+                "line-clamp-2 text-pretty text-muted-foreground",
+                compact ? "ps-6 text-kbd" : "ps-6 text-caption"
+              )}
+            >
+              {tool.description}
             </span>
           </button>
           {onToggleFavorite && (
             <FavoriteButton
               active={!!isFavorite}
               onClick={() => onToggleFavorite(tool)}
-              className="shrink-0 opacity-60 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"
+              className="shrink-0 opacity-60 group-hover:opacity-100"
             />
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => onClick?.(tool)}
-          className={cn("w-full text-left focus-visible:outline-none", compact ? "pl-6" : "pl-7")}
-        >
-          <span className={cn("row-desc text-muted-foreground line-clamp-2", compact ? "text-[10px]" : "text-xs")}>
-            {tool.description}
-          </span>
-        </button>
       </div>
     );
   }
@@ -80,70 +97,56 @@ export function ToolCard({
     <div
       onMouseEnter={onMouseEnter}
       className={cn(
-        "group relative flex items-center gap-3 rounded-xl px-2.5",
-        "transition-[transform,background-color,color] duration-100 ease-out-strong",
-        "active:scale-[0.995] motion-reduce:transition-none motion-reduce:active:scale-100",
+        "group relative flex items-center gap-2.5 rounded px-2 transition-colors duration-100",
         selected ? "row-selected" : "row-idle",
-        compact ? "py-1.5" : "py-2",
+        compact ? "py-1" : "py-1.5",
         className
       )}
     >
       <button
         type="button"
         onClick={() => onClick?.(tool)}
-        className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
+        tabIndex={tabIndex}
+        data-row-button
+        className={cn("flex min-w-0 flex-1 items-center gap-2.5 rounded text-start", FOCUS_RING)}
       >
         <ToolIcon
           name={tool.icon}
           className={cn(
-            "row-icon",
-            compact ? "h-4 w-4" : "h-[18px] w-[18px]",
+            "shrink-0",
+            compact ? "h-4 w-4" : "h-[17px] w-[17px]",
             !selected && "text-muted-foreground"
           )}
         />
         <span className="min-w-0 flex-1">
-          <span className={cn("block truncate font-medium tracking-tight", compact ? "text-xs" : "text-[13px]")}>
+          <span className={cn("block truncate font-medium", compact ? "text-ui" : "text-ui-md")}>
             {tool.name}
           </span>
+          {/* Truncated copy needs a way back — the title attribute is the cheapest one. */}
           <span
+            title={tool.description}
             className={cn(
-              "row-desc mt-0.5 block truncate",
-              selected ? "" : "text-muted-foreground",
-              compact ? "text-[10px]" : "text-xs"
+              "mt-0.5 block truncate text-muted-foreground",
+              compact ? "text-kbd" : "text-caption"
             )}
           >
             {tool.description}
           </span>
         </span>
         {!compact && (
-          <span
-            className={cn(
-              "row-meta hidden shrink-0 text-[11px] sm:inline",
-              selected ? "" : "text-muted-foreground/80"
-            )}
-          >
+          <span className="hidden shrink-0 whitespace-nowrap text-caption text-muted-foreground sm:inline">
             {CATEGORY_LABELS[tool.category]}
           </span>
         )}
-        <kbd
-          className={cn(
-            "row-meta hidden shrink-0 sm:inline-flex",
-            selected && "border-white/25 bg-white/15 text-white"
-          )}
-        >
-          ↵
-        </kbd>
       </button>
       {onToggleFavorite && (
         <FavoriteButton
           active={!!isFavorite}
           onClick={() => onToggleFavorite(tool)}
           className={cn(
-            "shrink-0 opacity-40 transition-opacity duration-100",
-            "[@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100",
-            "focus-visible:opacity-100",
-            isFavorite && "opacity-100",
-            selected && "text-white opacity-90 [@media(hover:hover)_and_(pointer:fine)]:hover:text-white"
+            "shrink-0 opacity-0 transition-opacity duration-100",
+            "group-hover:opacity-100 focus-visible:opacity-100",
+            isFavorite && "opacity-100"
           )}
         />
       )}

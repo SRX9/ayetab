@@ -1,20 +1,37 @@
 ---
 const year = new Date().getFullYear();
+
+const links = [
+  { href: "#features", label: "Features" },
+  { href: "#tools", label: "Tools" },
+  { href: "#privacy", label: "Privacy" },
+  { href: "#install", label: "Install" },
+];
 ---
 
-<footer class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-10 md:py-14 border-t border-slate-200/70">
-  <div class="grid gap-4">
-    <a class="inline-flex items-center gap-2 font-semibold tracking-tight text-[#0a1b33]" href="/">
-      <img src="/favicon.svg" width="24" height="24" alt="" class="rounded-lg" />
-      <span>AyeTab</span>
+<footer class="border-t border-line">
+  <div class="mx-auto grid w-full max-w-[1100px] gap-4 px-6 py-10">
+    <a class="inline-flex items-center gap-2 font-semibold text-ink" href="/">
+      <img src="/favicon.svg" width="22" height="22" alt="" class="rounded-sm" />
+      <span class="text-[15px]">AyeTab</span>
     </a>
     <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
-      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#features">Features</a>
-      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#tools">Tools</a>
-      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#privacy">Privacy</a>
-      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="#install">Install</a>
-      <a class="text-[13px] text-slate-500 hover:text-[#0a1b33] transition-colors" href="https://github.com/SRX9/ayetab" rel="noopener" target="_blank">GitHub</a>
+      {
+        links.map((link) => (
+          <a class="text-[13px] text-muted transition-colors hover:text-ink" href={link.href}>
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        class="text-[13px] text-muted transition-colors hover:text-ink"
+        href="https://github.com/SRX9/ayetab"
+        rel="noopener"
+        target="_blank">GitHub</a
+      >
     </nav>
-    <p class="m-0 text-[12px] text-slate-400">© {year} AyeTab. Built for developers who stay local.</p>
+    <p class="m-0 text-[12px] text-muted">
+      © {year} AyeTab. Built for developers who stay local.
+    </p>
   </div>
 </footer>

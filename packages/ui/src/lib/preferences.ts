@@ -3,16 +3,10 @@ import {
   normalizeAppearance,
   type AppearancePreferences,
 } from "./appearance";
-import {
-  DEFAULT_HOME_LAYOUT,
-  normalizeHomeLayout,
-  type HomeLayout,
-} from "./home-layout";
 
 export interface UserPreferences {
   favorites: string[];
   recents: string[];
-  home: HomeLayout;
   appearance: AppearancePreferences;
 }
 
@@ -23,7 +17,6 @@ const MAX_RECENTS = 8;
 const DEFAULT_PREFS: UserPreferences = {
   favorites: [],
   recents: [],
-  home: structuredClone(DEFAULT_HOME_LAYOUT),
   appearance: { ...DEFAULT_APPEARANCE },
 };
 
@@ -31,24 +24,47 @@ export function exportPreferences(prefs: UserPreferences): string {
   return JSON.stringify(prefs, null, 2);
 }
 
-export function importPreferences(json: string): UserPreferences {
-  const parsed = JSON.parse(json) as Partial<UserPreferences>;
+/**
+ * Coerce any stored/imported shape into a complete, valid preferences object.
+ * Building a fresh object also drops fields from older versions (the home
+ * layout, wallpaper choice) rather than carrying them forward forever.
+ */
+export function normalizePreferences(raw: unknown): UserPreferences {
+  const parsed = (raw ?? {}) as Partial<UserPreferences>;
   return {
     favorites: Array.isArray(parsed.favorites) ? parsed.favorites : [],
     recents: Array.isArray(parsed.recents) ? parsed.recents : [],
-    home: normalizeHomeLayout(parsed.home),
     appearance: normalizeAppearance(parsed.appearance),
   };
 }
 
+export function importPreferences(json: string): UserPreferences {
+  return normalizePreferences(JSON.parse(json));
+}
+
+type StorageChange = { oldValue?: unknown; newValue?: unknown };
+type ChangeListener = (changes: Record<string, StorageChange>, areaName: string) => void;
+
 type ChromeStorage = {
-  get: (keys: string[], cb: (result: Record<string, string | UserPreferences | boolean>) => void) => void;
-  set: (items: Record<string, UserPreferences | boolean>, cb?: () => void) => void;
+  get: (keys: string[], cb: (result: Record<string, unknown>) => void) => void;
+  set: (items: Record<string, unknown>, cb?: () => void) => void;
 };
 
+type ChromeStorageRoot = {
+  local?: ChromeStorage;
+  onChanged?: {
+    addListener: (cb: ChangeListener) => void;
+    removeListener: (cb: ChangeListener) => void;
+  };
+};
+
+function getChromeStorageRoot(): ChromeStorageRoot | null {
+  const g = globalThis as unknown as { chrome?: { storage?: ChromeStorageRoot } };
+  return g.chrome?.storage ?? null;
+}
+
 function getChromeStorage(): ChromeStorage | null {
-  const g = globalThis as unknown as { chrome?: { storage?: { local?: ChromeStorage } } };
-  return g.chrome?.storage?.local ?? null;
+  return getChromeStorageRoot()?.local ?? null;
 }
 
 async function storageGet<T>(key: string, fallback: T): Promise<T> {
@@ -79,17 +95,67 @@ async function storageSet(key: string, value: unknown): Promise<void> {
 }
 
 export async function loadPreferences(): Promise<UserPreferences> {
-  const raw = await storageGet<Partial<UserPreferences>>(STORAGE_KEY, DEFAULT_PREFS);
-  return {
-    favorites: Array.isArray(raw.favorites) ? raw.favorites : [],
-    recents: Array.isArray(raw.recents) ? raw.recents : [],
-    home: normalizeHomeLayout(raw.home),
-    appearance: normalizeAppearance(raw.appearance),
-  };
+  return normalizePreferences(await storageGet<Partial<UserPreferences>>(STORAGE_KEY, DEFAULT_PREFS));
 }
 
 export async function savePreferences(prefs: UserPreferences): Promise<void> {
-  return storageSet(STORAGE_KEY, prefs);
+  return enqueueWrite(() => storageSet(STORAGE_KEY, prefs));
+}
+
+/**
+ * Serializes writes within this context so two read-merge-write cycles can't
+ * interleave. Cross-context races stay possible but shrink to the storage
+ * round-trip, which `subscribePreferences` then reconciles.
+ */
+let writeChain: Promise<unknown> = Promise.resolve();
+
+function enqueueWrite<T>(op: () => Promise<T>): Promise<T> {
+  const run = writeChain.then(op, op);
+  writeChain = run.catch(() => undefined);
+  return run;
+}
+
+/**
+ * Merge a subset of preferences into whatever is currently stored.
+ *
+ * Multiple contexts (new tab pages, the side panel) each hold their own
+ * in-memory snapshot. Writing the whole object from a stale snapshot silently
+ * discards fields another context changed; patching only the field that
+ * actually changed keeps those edits intact.
+ */
+export async function savePreferencesPatch(
+  patch: Partial<UserPreferences>
+): Promise<UserPreferences> {
+  return enqueueWrite(async () => {
+    const stored = await storageGet<Partial<UserPreferences>>(STORAGE_KEY, DEFAULT_PREFS);
+    const merged = normalizePreferences({ ...stored, ...patch });
+    await storageSet(STORAGE_KEY, merged);
+    return merged;
+  });
+}
+
+/** Notifies when another context (or browser sync) rewrites the stored preferences. */
+export function subscribePreferences(onChange: (prefs: UserPreferences) => void): () => void {
+  const events = getChromeStorageRoot()?.onChanged;
+  if (events) {
+    const listener: ChangeListener = (changes, areaName) => {
+      if (areaName !== "local") return;
+      const change = changes[STORAGE_KEY];
+      if (!change) return;
+      onChange(normalizePreferences(change.newValue));
+    };
+    events.addListener(listener);
+    return () => events.removeListener(listener);
+  }
+
+  if (typeof window === "undefined") return () => {};
+  const listener = (e: StorageEvent) => {
+    // key === null means storage.clear() — re-read rather than guess.
+    if (e.key !== null && e.key !== STORAGE_KEY) return;
+    void loadPreferences().then(onChange);
+  };
+  window.addEventListener("storage", listener);
+  return () => window.removeEventListener("storage", listener);
 }
 
 export async function isOnboarded(): Promise<boolean> {
@@ -112,10 +178,6 @@ export function addRecent(prefs: UserPreferences, toolId: string): UserPreferenc
   return { ...prefs, recents };
 }
 
-export function updateHome(prefs: UserPreferences, home: HomeLayout): UserPreferences {
-  return { ...prefs, home: normalizeHomeLayout(home) };
-}
-
 export function updateAppearance(
   prefs: UserPreferences,
   appearance: AppearancePreferences
@@ -123,5 +185,5 @@ export function updateAppearance(
   return { ...prefs, appearance: normalizeAppearance(appearance) };
 }
 
-export { DEFAULT_HOME_LAYOUT, normalizeHomeLayout, DEFAULT_APPEARANCE, normalizeAppearance };
-export type { HomeLayout, AppearancePreferences };
+export { DEFAULT_APPEARANCE, normalizeAppearance };
+export type { AppearancePreferences };

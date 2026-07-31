@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "AyeTab — Developer Utilities",
   "short_name": "AyeTab",
-  "description": "All-in-one offline developer toolbox in your browser sidebar. Format, convert, generate, and debug — your data never leaves the device.",
-  "version": "1.0.0",
+  "description": "Replaces your new tab with an offline developer toolbox — format, convert, generate, debug. Also in the sidebar. Data stays local.",
+  "version": "1.1.0",
   "minimum_chrome_version": "114",
   "offline_enabled": true,
   "permissions": ["sidePanel", "storage"],
@@ -13,6 +13,9 @@
   },
   "side_panel": {
     "default_path": "src/sidepanel/index.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "src/newtab/index.html"
   },
   "action": {
     "default_title": "Open AyeTab",

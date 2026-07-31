@@ -1,6 +1,6 @@
 # Privacy Policy — AyeTab
 
-**Last updated:** 2026-07-19
+**Last updated:** 2026-07-25
 
 AyeTab is an offline-first developer toolbox (browser extension and optional web app). This policy describes what happens to data when you use AyeTab.
 
@@ -20,16 +20,25 @@ AyeTab may store the following locally (never uploaded by AyeTab to a server we 
 | Theme preference | Local storage | Dark / light mode |
 | Onboarding flag | Local storage | Show welcome once |
 | Tool drafts / productivity notes | IndexedDB on your device | Restore your last input |
-| Optional home wallpaper (web app only) | Local storage | Personalize the web home screen |
 
 You can clear this data anytime via the browser’s site / extension storage controls, or by removing the extension.
+
+## New tab page
+
+AyeTab replaces your browser’s new tab page with its own tool list. That page runs entirely from
+files bundled inside the extension — it makes no network requests, and it does **not** read the URLs
+or contents of your other tabs. Replacing the new tab requires no browser permission, so this adds
+nothing to the permission list below.
+
+To restore your browser’s default new tab page, disable or remove AyeTab from your browser’s
+extensions page.
 
 ## Permissions
 
 | Permission | Why |
 |------------|-----|
 | `sidePanel` (Chrome) | Show the AyeTab sidebar |
-| `storage` | Save favorites, recents, and settings on device |
+| `storage` | Save favorites, recents, home layout, and settings on device |
 
 AyeTab does **not** request host permissions, browsing-history access, or clipboard permissions.
 
@@ -44,6 +53,8 @@ The separate **web app** may load its own static assets from the host you visit;
 ## Draw & Write (web app)
 
 The Draw & Write (Excalidraw) tool is available on the **web app** only. It is omitted from the extension build because Excalidraw relies on constructs incompatible with Manifest V3’s Content Security Policy.
+
+The extension lists it and links out to `https://app.ayetab.dev/tools/excalidraw`, which opens in a normal browser tab. Following that link is the only point at which AyeTab sends you to a network resource, and it happens only when you click it.
 
 ## Children
 

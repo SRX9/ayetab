@@ -1,51 +1,47 @@
 ---
+const TOOL_COUNT = 100;
+const EXTENSION_TOOL_COUNT = 99;
+
 const categories = [
-  {
-    name: "Format",
-    tools: "JSON · HTML · CSS · JS · XML · SQL · SCSS · Line Sort",
-  },
-  {
-    name: "Encode",
-    tools: "Base64 · Base64 Image · URL · HTML Entity · Escape",
-  },
-  {
-    name: "Convert",
-    tools: "YAML↔JSON · JSON↔CSV · Case · Color · cURL→Code · Number Base",
-  },
-  {
-    name: "Inspect",
-    tools: "JWT · Unix Time · RegExp · Diff · Markdown · Cron · Certificate",
-  },
-  {
-    name: "Generate",
-    tools: "Hash · UUID · ULID · Random · Lorem · QR · Draw",
-  },
-  {
-    name: "Productivity",
-    tools: "To-Do · Kanban · Pomodoro · Notes · Stopwatch · Habits",
-  },
+  { name: "Format & Validate", tools: "JSON · HTML · CSS · JS · XML · SQL · SCSS · LESS · ERB" },
+  { name: "Encode & Decode", tools: "Base64 · Base64 Image · URL · HTML Entity · Backslash Escape" },
+  { name: "Data Converter", tools: "YAML↔JSON · JSON↔CSV · Query String↔JSON · cURL→Code · JSON→Code" },
+  { name: "Inspect & Debug", tools: "JWT · Unix Time · RegExp · Diff · Markdown · Cron · Certificate" },
+  { name: "Generators", tools: "Hash · UUID · ULID · Random String · Lorem · QR Code" },
+  { name: "Colour", tools: "Converter · Contrast · Palettes · Gradients · Blend · Eyedropper" },
+  { name: "Images & Assets", tools: "Resize · Crop · Compress · SVG→CSS · Favicons · Sprite sheets" },
+  { name: "Typography & Text", tools: "Case · Line Sort · Word Count · Ciphers · Shavian · Font tools" },
+  { name: "Productivity", tools: "To-Do · Kanban · Pomodoro · Notes · Stopwatch · Habits" },
 ];
 ---
 
-<section id="tools" class="mx-auto w-full max-w-[1400px] px-6 md:px-10 py-20 md:py-28">
-  <div class="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-end">
-    <div>
-      <p class="text-[12px] font-semibold tracking-[0.08em] uppercase text-slate-400">50 tools</p>
-      <h2 class="font-display mt-3 text-[32px] md:text-[42px] font-medium tracking-tight text-[#0a1b33] max-w-[14ch] leading-[1.1]">
-        A full toolbox, one sidebar.
-      </h2>
-    </div>
-    <p class="max-w-[40ch] text-[15px] leading-relaxed text-slate-500 md:justify-self-end">
-      From everyday formatters to JWT debugging and habit tracking — all processing stays on your device.
-    </p>
+<section id="tools" class="mx-auto w-full max-w-[1100px] px-6 py-16 md:py-24">
+  <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">{TOOL_COUNT} tools</p>
+  <h2 class="mt-2 max-w-[16ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
+    A full toolbox, one new tab.
+  </h2>
+  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+    From everyday formatters to JWT debugging and habit tracking — all processing stays on your
+    device.
+  </p>
+
+  <div class="mt-10 grid grid-cols-1 gap-x-10 border-t border-line sm:grid-cols-2 lg:grid-cols-3">
+    {
+      categories.map((cat) => (
+        <div class="border-b border-line py-6">
+          <h3 class="text-[15px] font-semibold text-ink">{cat.name}</h3>
+          <p class="mt-1.5 text-[13px] leading-relaxed text-muted">{cat.tools}</p>
+        </div>
+      ))
+    }
   </div>
 
-  <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {categories.map((cat) => (
-      <div class="rounded-[28px] bg-white border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.03)] px-6 py-6 transition-transform duration-200 hover:-translate-y-0.5">
-        <h3 class="text-[16px] font-semibold tracking-tight text-[#0a1b33]">{cat.name}</h3>
-        <p class="mt-2 text-[13px] leading-relaxed text-slate-500">{cat.tools}</p>
-      </div>
-    ))}
-  </div>
+  <p class="mt-6 max-w-[70ch] text-[13px] leading-relaxed text-muted">
+    Draw &amp; Write runs in the <a
+      href="https://app.ayetab.dev"
+      class="text-accent underline underline-offset-2">web app</a
+    > — browser extension security rules block the library it needs, so the extension ships {
+      EXTENSION_TOOL_COUNT
+    } of the {TOOL_COUNT} and links out to the rest.
+  </p>
 </section>

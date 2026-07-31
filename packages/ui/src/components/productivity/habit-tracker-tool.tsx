@@ -168,10 +168,10 @@ export function HabitTrackerTool({
                       <button
                         type="button"
                         onClick={() => toggleToday(habit.id)}
-                        className={`flex h-6 w-6 items-center justify-center rounded-md border-2 text-xs transition-[transform,background-color,border-color,color] duration-150 ease-out-strong active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 ${
+                        className={`flex h-6 w-6 items-center justify-center rounded-md border-2 text-xs transition-colors duration-150 motion-reduce:transition-none ${
                           doneToday
                             ? "border-brand bg-brand text-brand-foreground"
-                            : "border-border [@media(hover:hover)_and_(pointer:fine)]:hover:border-brand"
+                            : "border-border hover:border-brand"
                         }`}
                         aria-label={`Mark "${habit.name}" for today`}
                       >
@@ -182,7 +182,7 @@ export function HabitTrackerTool({
                       <button
                         type="button"
                         onClick={() => deleteHabit(habit.id)}
-                        className="text-xs text-muted-foreground transition-[transform,color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:text-destructive motion-reduce:transition-none"
+                        className="text-xs text-muted-foreground transition-colors duration-150 hover:text-destructive motion-reduce:transition-none"
                         aria-label={`Delete habit "${habit.name}"`}
                       >
                         Delete
@@ -196,7 +196,7 @@ export function HabitTrackerTool({
                           <div
                             key={day}
                             title={day}
-                            className={`h-6 flex-1 rounded-sm transition-[background-color,border-color] duration-150 ease-out-strong ${
+                            className={`h-6 flex-1 rounded-sm transition-[background-color,border-color] duration-150 ${
                               done
                                 ? "bg-brand"
                                 : isToday

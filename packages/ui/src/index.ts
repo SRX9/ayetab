@@ -1,5 +1,8 @@
 export { cn } from "./lib/utils";
 export { pressable } from "./lib/pressable";
+export { AppShell, ShellContent } from "./components/app-shell";
+export { FadeScroller } from "./components/fade-scroller";
+export { ToolIndex } from "./components/tool-index";
 export { Button } from "./components/button";
 export { Dialog } from "./components/dialog";
 export { InputPanel } from "./components/input-panel";
@@ -33,51 +36,20 @@ export { ShortcutsModal, ShortcutsProvider } from "./components/shortcuts-modal"
 export { useShortcutsModal, useShortcutsModalOptional } from "./hooks/use-shortcuts-modal";
 export { OnboardingModal } from "./components/onboarding-modal";
 export { SettingsMenu, SettingsPanel, SettingsButton } from "./components/settings-panel";
-export { HomeScreen } from "./components/home/home-screen";
-export { HomeWallpaper } from "./components/home/home-wallpaper";
-export { QuickNoteWidget } from "./components/home/quick-note-widget";
-export { TodoWidget } from "./components/home/todo-widget";
-export { PinGrid } from "./components/home/pin-grid";
-export {
-  DEFAULT_APPEARANCE,
-  WALLPAPER_PRESETS,
-  normalizeAppearance,
-  resolveTheme,
-  fileToWallpaperDataUrl,
-} from "./lib/appearance";
-export type { AppearancePreferences, ThemeMode, WallpaperPreset } from "./lib/appearance";
-export {
-  DEFAULT_HOME_LAYOUT,
-  DEFAULT_HOME_PINS,
-  DEFAULT_HOME_DOCK,
-  WIDGET_CATALOG,
-  normalizeHomeLayout,
-  createWidget,
-  canAddWidget,
-  addWidgetToLayout,
-  removeWidgetFromLayout,
-  reorderWidgets,
-  reorderPins,
-  updateWidgetSize,
-  cycleWidgetSize,
-  toggleHomePin,
-  setHomePins,
-  setHomeDock,
-  toggleHomeDock,
-  bentoSpanClass,
-  widgetSpanClass,
-} from "./lib/home-layout";
-export type {
-  HomeLayout,
-  HomeWidget,
-  HomeWidgetType,
-  HomeWidgetSize,
-  BentoSize,
-  WidgetCatalogItem,
-} from "./lib/home-layout";
+export { DEFAULT_APPEARANCE, normalizeAppearance, resolveTheme } from "./lib/appearance";
+export type { AppearancePreferences, ThemeMode } from "./lib/appearance";
 export { useClipboard } from "./hooks/use-clipboard";
 export { useToolState } from "./hooks/use-tool-state";
 export { useKeyboardShortcut } from "./hooks/use-keyboard-shortcut";
 export { PreferencesProvider } from "./components/preferences-provider";
 export { usePreferences } from "./hooks/use-preferences";
+export {
+  loadPreferences,
+  savePreferences,
+  savePreferencesPatch,
+  subscribePreferences,
+  normalizePreferences,
+  exportPreferences,
+  importPreferences,
+} from "./lib/preferences";
 export type { UserPreferences } from "./lib/preferences";

@@ -1,0 +1,19 @@
+@import "../../../../packages/ui/src/styles/design-system.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * The new tab owns a full page. The shell fills the viewport and manages its
+   * own scrolling, so the body only has to not flash white in dark mode.
+   */
+  body {
+    @apply bg-background text-foreground antialiased;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+}

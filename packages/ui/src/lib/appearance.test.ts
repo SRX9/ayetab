@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  DEFAULT_APPEARANCE,
-  normalizeAppearance,
-  resolveTheme,
-} from "./appearance";
+import { DEFAULT_APPEARANCE, normalizeAppearance, resolveTheme } from "./appearance";
 
 describe("normalizeAppearance", () => {
   it("returns defaults for empty input", () => {
@@ -11,34 +7,20 @@ describe("normalizeAppearance", () => {
     expect(normalizeAppearance(undefined)).toEqual(DEFAULT_APPEARANCE);
   });
 
-  it("accepts valid theme and wallpaper ids", () => {
-    expect(
-      normalizeAppearance({ theme: "dark", wallpaperId: "mesa", customWallpaper: null })
-    ).toEqual({
-      theme: "dark",
-      wallpaperId: "mesa",
-      customWallpaper: null,
-    });
+  it("accepts a valid theme", () => {
+    expect(normalizeAppearance({ theme: "dark" })).toEqual({ theme: "dark" });
+    expect(normalizeAppearance({ theme: "light" })).toEqual({ theme: "light" });
   });
 
-  it("falls back from custom without an image", () => {
-    const result = normalizeAppearance({
-      theme: "light",
-      wallpaperId: "custom",
-      customWallpaper: null,
-    });
-    expect(result.wallpaperId).toBe(DEFAULT_APPEARANCE.wallpaperId);
+  it("falls back to the default for an unknown theme", () => {
+    expect(normalizeAppearance({ theme: "sepia" } as never)).toEqual(DEFAULT_APPEARANCE);
   });
 
-  it("keeps a custom data URL wallpaper", () => {
-    const data = "data:image/jpeg;base64,abc";
+  /** Preferences saved before the wallpaper feature was removed. */
+  it("drops fields from older stored shapes", () => {
     expect(
-      normalizeAppearance({ theme: "system", wallpaperId: "custom", customWallpaper: data })
-    ).toEqual({
-      theme: "system",
-      wallpaperId: "custom",
-      customWallpaper: data,
-    });
+      normalizeAppearance({ theme: "dark", wallpaperId: "mesa", customWallpaper: null } as never)
+    ).toEqual({ theme: "dark" });
   });
 });
 

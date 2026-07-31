@@ -124,14 +124,14 @@ export function ExcalidrawTool({
         type="button"
         onClick={handleExport}
         disabled={!input.trim()}
-        className="rounded-md border border-border px-2 py-1 text-xs transition-[transform,background-color] duration-150 ease-out-strong active:scale-[0.97] disabled:opacity-50 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent motion-reduce:transition-none motion-reduce:active:scale-100"
+        className="rounded-md border border-border px-2 py-1 text-xs transition-colors duration-150 disabled:opacity-50 hover:bg-accent motion-reduce:transition-none"
       >
         Export
       </button>
       <button
         type="button"
         onClick={handleClear}
-        className="rounded-md border border-border px-2 py-1 text-xs transition-[transform,background-color] duration-150 ease-out-strong active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent motion-reduce:transition-none motion-reduce:active:scale-100"
+        className="rounded-md border border-border px-2 py-1 text-xs transition-colors duration-150 hover:bg-accent motion-reduce:transition-none"
       >
         Clear
       </button>

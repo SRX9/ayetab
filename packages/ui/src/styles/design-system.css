@@ -1,90 +1,108 @@
 /**
- * AyeTab — Apple macOS / iOS 26 liquid-glass design system
+ * AyeTab — flat document design system.
+ * Notion-like: a tinted sidebar, a plain content pane, hairline rules, and
+ * almost no chrome. No blur, no glass, no elevation stacking.
  * Shared by web + extension. Plain CSS (no @layer / @apply).
  */
 
 :root {
-  --background: 210 18% 96%;
-  --foreground: 220 18% 10%;
+  --background: 0 0% 100%;
+  --foreground: 45 8% 20%;
   --card: 0 0% 100%;
-  --card-foreground: 220 18% 10%;
+  --card-foreground: 45 8% 20%;
   --popover: 0 0% 100%;
-  --popover-foreground: 220 18% 10%;
-  --primary: 220 16% 14%;
+  --popover-foreground: 45 8% 20%;
+  --primary: 45 8% 20%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 14% 92%;
-  --secondary-foreground: 220 16% 14%;
-  --muted: 210 12% 92%;
-  --muted-foreground: 215 10% 42%;
-  --accent: 210 14% 90%;
-  --accent-foreground: 220 16% 14%;
-  --destructive: 4 78% 52%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 214 14% 86%;
-  --input: 214 14% 86%;
-  --ring: 211 100% 50%;
-  --radius: 1rem;
+  --secondary: 60 6% 95%;
+  --secondary-foreground: 45 8% 20%;
+  --muted: 60 8% 96%;
+  --muted-foreground: 45 3% 46%;
+  --accent: 60 6% 94%;
+  --accent-foreground: 45 8% 20%;
+  --destructive: 2 62% 52%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 60 4% 91%;
+  --input: 60 4% 91%;
+  --ring: 210 77% 51%;
+  --radius: 0.1875rem;
 
-  --selection: 211 100% 50%;
+  /* The sidebar is the only tinted surface; content stays paper-white. */
+  --sidebar: 60 11% 96%;
+  --sidebar-border: 48 6% 89%;
+
+  /* Row states are translucent ink, so they read the same on either surface. */
+  --hover-fill: 45 8% 20% / 0.055;
+  --active-fill: 45 8% 20% / 0.08;
+
+  /* Notion stone (#a4a097) resting, steel (#787671) under the pointer. */
+  --scrollbar-thumb: 42 6% 61%;
+  --scrollbar-thumb-strong: 40 5% 47%;
+
+  /*
+   * Switch / slider trough. The hairline token is far too faint to carry a
+   * control's off state — steel lightened to 55% clears 3:1 against the page
+   * while still reading as "not on".
+   */
+  --control-track: 40 5% 55%;
+  --control-track-strong: 40 5% 45%;
+
+  --selection: 210 77% 51%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 211 100% 96%;
+  --selection-soft: 210 60% 96%;
 
-  --brand: 211 100% 50%;
+  --brand: 210 77% 51%;
   --brand-foreground: 0 0% 100%;
   --favorite: 38 92% 50%;
 
-  --vibrancy: 210 20% 98%;
-  --vibrancy-border: 214 16% 82%;
-  --hairline: 220 16% 8% / 0.06;
-  --shadow-color: 220 24% 18%;
-  --glass-tint: 210 40% 98%;
-  --glass-highlight: 0 0% 100%;
-  --glass-edge: 220 16% 8%;
-  --specular: 0 0% 100%;
-
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Menus and dialogs lift off the page — the one place a shadow is earned. */
+  --elevation-menu: 0 0 0 1px hsl(45 8% 20% / 0.06), 0 3px 6px hsl(45 8% 20% / 0.06),
+    0 9px 24px hsl(45 8% 20% / 0.09);
 }
 
 .dark {
-  --background: 220 14% 7%;
-  --foreground: 210 16% 96%;
-  --card: 220 12% 11%;
-  --card-foreground: 210 16% 96%;
-  --popover: 220 12% 12%;
-  --popover-foreground: 210 16% 96%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 220 16% 10%;
-  --secondary: 220 10% 16%;
-  --secondary-foreground: 210 16% 96%;
-  --muted: 220 10% 16%;
-  --muted-foreground: 215 10% 62%;
-  --accent: 220 10% 18%;
-  --accent-foreground: 210 16% 96%;
-  --destructive: 4 62% 48%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 220 10% 20%;
-  --input: 220 10% 20%;
-  --ring: 211 100% 56%;
+  --background: 0 0% 10%;
+  --foreground: 0 0% 88%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 88%;
+  --popover: 0 0% 15%;
+  --popover-foreground: 0 0% 88%;
+  --primary: 0 0% 88%;
+  --primary-foreground: 0 0% 10%;
+  --secondary: 0 0% 16%;
+  --secondary-foreground: 0 0% 88%;
+  --muted: 0 0% 16%;
+  --muted-foreground: 45 3% 60%;
+  --accent: 0 0% 18%;
+  --accent-foreground: 0 0% 88%;
+  --destructive: 2 58% 54%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 18%;
+  --input: 0 0% 18%;
+  --ring: 210 77% 56%;
 
-  --selection: 211 100% 52%;
+  --sidebar: 0 0% 13%;
+  --sidebar-border: 0 0% 18%;
+
+  --hover-fill: 0 0% 100% / 0.055;
+  --active-fill: 0 0% 100% / 0.09;
+
+  --scrollbar-thumb: 0 0% 40%;
+  --scrollbar-thumb-strong: 0 0% 55%;
+
+  --control-track: 0 0% 44%;
+  --control-track-strong: 0 0% 56%;
+
+  --selection: 210 77% 56%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 211 55% 18%;
+  --selection-soft: 210 40% 22%;
 
-  --brand: 211 100% 56%;
-  --brand-foreground: 0 0% 100%;
+  --brand: 210 77% 60%;
+  --brand-foreground: 0 0% 10%;
   --favorite: 38 92% 56%;
 
-  --vibrancy: 220 12% 10%;
-  --vibrancy-border: 220 10% 22%;
-  --hairline: 0 0% 100% / 0.08;
-  --shadow-color: 0 0% 0%;
-  --glass-tint: 220 14% 14%;
-  --glass-highlight: 0 0% 100%;
-  --glass-edge: 0 0% 100%;
-  --specular: 0 0% 100%;
+  --elevation-menu: 0 0 0 1px hsl(0 0% 100% / 0.08), 0 3px 6px hsl(0 0% 0% / 0.3),
+    0 9px 24px hsl(0 0% 0% / 0.4);
 }
 
 * {
@@ -93,6 +111,7 @@
 
 html {
   color-scheme: light;
+  font-synthesis: none;
 }
 
 html.dark {
@@ -100,16 +119,16 @@ html.dark {
 }
 
 ::selection {
-  background: hsl(var(--selection) / 0.28);
+  background: hsl(var(--selection) / 0.25);
 }
 
 kbd {
   display: inline-flex;
   align-items: center;
-  border-radius: 0.375rem;
-  border: 1px solid hsl(var(--border) / 0.65);
-  background: hsl(var(--muted) / 0.55);
-  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--muted));
+  padding: 0.0625rem 0.3125rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   font-weight: 500;
@@ -117,54 +136,134 @@ kbd {
   color: hsl(var(--muted-foreground));
 }
 
-/* Sidebar vibrancy */
-.material-sidebar {
-  background: hsl(var(--vibrancy) / 0.62);
-  backdrop-filter: saturate(180%) blur(36px);
-  -webkit-backdrop-filter: saturate(180%) blur(36px);
-  border-right: 1px solid hsl(var(--vibrancy-border) / 0.45);
+/* The list rail. Tinted, separated by a hairline — never a shadow. */
+.app-sidebar {
+  background: hsl(var(--sidebar));
+  border-inline-end: 1px solid hsl(var(--sidebar-border));
+  /* Scroll edges dissolve into the rail, not into the content pane's white. */
+  --fade-surface: var(--sidebar);
 }
 
-/* Floating HUD / command palette / modals */
-.material-hud,
-.surface-panel {
-  background: hsl(var(--popover) / 0.72);
-  backdrop-filter: saturate(190%) blur(40px);
-  -webkit-backdrop-filter: saturate(190%) blur(40px);
-  border: 1px solid hsl(var(--border) / 0.4);
+/* Menus, dialogs, command palette — the only floating surfaces. */
+.menu-surface {
+  background: hsl(var(--popover));
+  border-radius: 6px;
+  box-shadow: var(--elevation-menu);
 }
 
-/* Content grouped list surface */
-.material-window {
-  background: hsl(var(--card) / 0.58);
-  backdrop-filter: saturate(170%) blur(28px);
-  -webkit-backdrop-filter: saturate(170%) blur(28px);
-  border: 1px solid hsl(var(--border) / 0.35);
+/* A bordered block inside the content pane (code output, previews, tables). */
+.panel {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
 }
 
-/* Inset glass field */
-.material-field {
-  background: hsl(var(--background) / 0.5);
-  border: 1px solid hsl(var(--border) / 0.5);
+/* Text inputs and textareas. */
+.field {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 4px;
 }
 
-.material-chip {
-  background: hsl(var(--muted) / 0.4);
-  border: 1px solid hsl(var(--border) / 0.4);
+.field:focus-within {
+  border-color: hsl(var(--ring) / 0.6);
 }
 
-.row-selected {
+.chip {
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+}
+
+/* ---------------------------------------------------------------------------
+ * Range slider
+ * `appearance: none` hands us the whole control, so both halves of the track
+ * and the thumb are drawn here — otherwise each engine invents its own. The
+ * filled half is painted with a gradient stopped at `--range-fill`, which the
+ * component keeps in sync with the value, so the slider reads its own position.
+ * ------------------------------------------------------------------------ */
+.range-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range-input::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    hsl(var(--selection)) 0 var(--range-fill, 0%),
+    hsl(var(--control-track) / 0.4) var(--range-fill, 0%) 100%
+  );
+}
+
+.range-input::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: hsl(var(--control-track) / 0.4);
+}
+
+.range-input::-moz-range-progress {
+  height: 4px;
+  border-radius: 9999px;
   background: hsl(var(--selection));
-  color: hsl(var(--selection-foreground));
 }
 
-.row-selected .row-meta,
-.row-selected .row-desc {
-  color: hsl(var(--selection-foreground) / 0.78);
+/* The knob is the only round, raised thing in the system — it has to look grabbable. */
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  margin-top: -5px;
+  height: 14px;
+  width: 14px;
+  border-radius: 9999px;
+  background: hsl(var(--selection));
+  border: 2px solid hsl(var(--background));
+  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.25);
+  transition: transform 100ms ease;
 }
 
-.row-selected .row-icon {
-  color: hsl(var(--selection-foreground));
+.range-input::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 9999px;
+  background: hsl(var(--selection));
+  border: 2px solid hsl(var(--background));
+  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.25);
+  transition: transform 100ms ease;
+}
+
+.range-input:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+.range-input:active::-moz-range-thumb {
+  transform: scale(1.15);
+}
+
+.range-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .range-input::-webkit-slider-thumb,
+  .range-input::-moz-range-thumb {
+    transition: none;
+  }
+}
+
+/*
+ * Row states. Selection is a neutral fill, not a blue bar: in a list this dense
+ * a saturated row pulls the eye away from the content pane it controls.
+ */
+.row-selected {
+  background: hsl(var(--active-fill));
+  color: hsl(var(--foreground));
+  font-weight: 500;
 }
 
 .row-idle {
@@ -173,342 +272,197 @@ kbd {
 
 @media (hover: hover) and (pointer: fine) {
   .row-idle:hover {
-    background: hsl(var(--selection-soft) / 0.9);
+    background: hsl(var(--hover-fill));
   }
-}
-
-.dark .row-idle:hover {
-  background: hsl(var(--selection-soft));
 }
 
 .nav-active {
-  background: hsl(var(--selection) / 0.12);
-  color: hsl(var(--selection));
-  font-weight: 600;
+  background: hsl(var(--active-fill));
+  color: hsl(var(--foreground));
+  font-weight: 500;
 }
 
-.dark .nav-active {
-  background: hsl(var(--selection) / 0.2);
-  color: hsl(211 100% 72%);
+/* ---------------------------------------------------------------------------
+ * Scroll surfaces
+ * A scrollbar is chrome, and chrome in a 240px rail is noise. The gutter is
+ * always reserved — nothing reflows when the bar turns up — but stays
+ * transparent until the surface actually moves, then fades back out.
+ * ------------------------------------------------------------------------ */
+.fade-scroller-frame {
+  position: relative;
+  min-height: 0;
 }
 
-.ease-out-strong {
-  transition-timing-function: var(--ease-out);
+.fade-scroller {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 180ms ease;
 }
 
-.ease-in-out-strong {
-  transition-timing-function: var(--ease-in-out);
+.fade-scroller[data-scrolling="true"] {
+  scrollbar-color: hsl(var(--scrollbar-thumb)) transparent;
 }
 
-.ease-drawer {
-  transition-timing-function: var(--ease-drawer);
+/* Safari has no scrollbar-width; Chromium ignores these once it is set. */
+.fade-scroller::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-.ease-spring {
-  transition-timing-function: var(--ease-spring);
+.fade-scroller::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.stagger-in {
-  opacity: 0;
-  transform: translateY(4px);
-  animation: ayetab-fade-up 280ms var(--ease-out) forwards;
+.fade-scroller::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  transition: background-color 180ms ease;
 }
 
-.stagger-in:nth-child(1) { animation-delay: 0ms; }
-.stagger-in:nth-child(2) { animation-delay: 18ms; }
-.stagger-in:nth-child(3) { animation-delay: 36ms; }
-.stagger-in:nth-child(4) { animation-delay: 54ms; }
-.stagger-in:nth-child(5) { animation-delay: 72ms; }
-.stagger-in:nth-child(6) { animation-delay: 90ms; }
-.stagger-in:nth-child(7) { animation-delay: 108ms; }
-.stagger-in:nth-child(8) { animation-delay: 126ms; }
-.stagger-in:nth-child(9) { animation-delay: 144ms; }
-.stagger-in:nth-child(10) { animation-delay: 162ms; }
-.stagger-in:nth-child(11) { animation-delay: 180ms; }
-.stagger-in:nth-child(12) { animation-delay: 198ms; }
-.stagger-in:nth-child(n+13) { animation-delay: 210ms; }
-
-@media (prefers-reduced-motion: reduce) {
-  .stagger-in,
-  .animate-fade-up {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
+.fade-scroller[data-scrolling="true"]::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--scrollbar-thumb));
 }
 
-@keyframes ayetab-fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.fade-scroller[data-scrolling="true"]::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--scrollbar-thumb-strong));
 }
 
-@keyframes ayetab-shell-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes ayetab-jiggle {
-  0%,
-  100% {
-    transform: rotate(-0.5deg) scale(1);
-  }
-  50% {
-    transform: rotate(0.5deg) scale(1);
-  }
-}
-
-.widget-jiggle {
-  animation: ayetab-jiggle 0.28s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .widget-jiggle {
-    animation: none;
-    transform: none;
-  }
-}
-
-/* SpringBoard wallpaper material */
-.home-wallpaper {
-  background-color: #1a2a3a;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.home-wallpaper-fixed {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+/*
+ * Edge bands. Shown only while there is content past that edge, so a list that
+ * fits its pane carries no decoration at all.
+ */
+.fade-scroller-edge {
+  position: absolute;
+  inset-inline: 0;
+  height: var(--fade-scroller-edge-height, 2.25rem);
+  z-index: 1;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease, visibility 180ms ease;
 }
 
-/* Horizon — default soft sky */
-.home-wallpaper[data-wallpaper="horizon"],
-.home-wallpaper:not([data-wallpaper]) {
-  background-color: #1a2a3a;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(120, 180, 255, 0.45), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 20%, rgba(90, 140, 220, 0.35), transparent 50%),
-    radial-gradient(ellipse 60% 50% at 50% 90%, rgba(40, 90, 160, 0.4), transparent 55%),
-    radial-gradient(ellipse 40% 30% at 70% 60%, rgba(180, 210, 255, 0.2), transparent 50%),
-    linear-gradient(165deg, #2a4a6a 0%, #1a3048 40%, #0f2030 100%);
+.fade-scroller-edge[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
 }
 
-html:not(.dark) .home-wallpaper[data-wallpaper="horizon"],
-html:not(.dark) .home-wallpaper:not([data-wallpaper]) {
-  background-color: #c8d8ea;
-  background-image:
-    radial-gradient(ellipse 90% 70% at 15% 0%, rgba(255, 255, 255, 0.7), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 85% 15%, rgba(160, 200, 255, 0.55), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 40% 100%, rgba(120, 170, 230, 0.4), transparent 50%),
-    radial-gradient(ellipse 50% 40% at 70% 50%, rgba(200, 220, 255, 0.35), transparent 50%),
-    linear-gradient(180deg, #dce8f5 0%, #b8cce0 45%, #9bb4d0 100%);
+.fade-scroller-edge[data-side="top"] {
+  top: 0;
+  --fade-scroller-direction: to bottom;
 }
 
-.dark .home-wallpaper[data-wallpaper="horizon"],
-.dark .home-wallpaper:not([data-wallpaper]) {
-  background-image:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(60, 100, 180, 0.4), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 20%, rgba(40, 70, 140, 0.3), transparent 50%),
-    radial-gradient(ellipse 60% 50% at 50% 90%, rgba(20, 50, 100, 0.45), transparent 55%),
-    linear-gradient(165deg, #0c1520 0%, #060b12 50%, #04080e 100%);
+.fade-scroller-edge[data-side="bottom"] {
+  bottom: 0;
+  --fade-scroller-direction: to top;
 }
 
-/* Ocean */
-.home-wallpaper[data-wallpaper="ocean"] {
-  background-color: #0a2540;
-  background-image:
-    radial-gradient(ellipse 70% 50% at 10% 20%, rgba(40, 160, 220, 0.45), transparent 55%),
-    radial-gradient(ellipse 60% 45% at 90% 80%, rgba(20, 80, 160, 0.5), transparent 50%),
-    linear-gradient(160deg, #0d3b66 0%, #061828 55%, #020b14 100%);
+/* The tint, painted over the blur: rows dissolve into the surface behind them. */
+.fade-scroller-edge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--fade-scroller-direction),
+    hsl(var(--fade-surface, var(--background))) 0%,
+    hsl(var(--fade-surface, var(--background)) / 0.55) 45%,
+    hsl(var(--fade-surface, var(--background)) / 0) 100%
+  );
 }
 
-html:not(.dark) .home-wallpaper[data-wallpaper="ocean"] {
-  background-color: #7eb6d9;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(255, 255, 255, 0.55), transparent 50%),
-    radial-gradient(ellipse 70% 50% at 80% 100%, rgba(30, 120, 180, 0.45), transparent 55%),
-    linear-gradient(180deg, #a8d4f0 0%, #5a9ec4 50%, #2e6f9a 100%);
+/*
+ * Progressive blur: four stacked bands, each blurring what the ones beneath it
+ * already produced. Blur ramps up toward the edge instead of switching on at a
+ * seam, which is the whole difference between this and a single blurred strip.
+ */
+.fade-scroller-edge > span {
+  position: absolute;
+  inset: 0;
+  display: block;
 }
 
-/* Mesa */
-.home-wallpaper[data-wallpaper="mesa"] {
-  background-color: #3a1c12;
-  background-image:
-    radial-gradient(ellipse 70% 45% at 80% 10%, rgba(255, 140, 80, 0.4), transparent 55%),
-    radial-gradient(ellipse 60% 50% at 20% 90%, rgba(180, 60, 40, 0.35), transparent 50%),
-    linear-gradient(165deg, #6b3020 0%, #2a140e 50%, #120808 100%);
+.fade-scroller-edge > span:nth-child(1) {
+  backdrop-filter: blur(0.6px);
+  -webkit-backdrop-filter: blur(0.6px);
+  mask-image: linear-gradient(var(--fade-scroller-direction), #000 0%, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    var(--fade-scroller-direction),
+    #000 0%,
+    #000 70%,
+    transparent 100%
+  );
 }
 
-html:not(.dark) .home-wallpaper[data-wallpaper="mesa"] {
-  background-color: #e8b896;
-  background-image:
-    radial-gradient(ellipse 80% 55% at 90% 0%, rgba(255, 200, 140, 0.7), transparent 50%),
-    radial-gradient(ellipse 70% 50% at 10% 100%, rgba(200, 90, 50, 0.4), transparent 55%),
-    linear-gradient(180deg, #f0c9a0 0%, #d4895a 55%, #a85a38 100%);
+.fade-scroller-edge > span:nth-child(2) {
+  backdrop-filter: blur(1.2px);
+  -webkit-backdrop-filter: blur(1.2px);
+  mask-image: linear-gradient(var(--fade-scroller-direction), #000 0%, #000 45%, transparent 75%);
+  -webkit-mask-image: linear-gradient(
+    var(--fade-scroller-direction),
+    #000 0%,
+    #000 45%,
+    transparent 75%
+  );
 }
 
-/* Aurora */
-.home-wallpaper[data-wallpaper="aurora"] {
-  background-color: #0a1628;
-  background-image:
-    radial-gradient(ellipse 50% 40% at 30% 30%, rgba(60, 220, 180, 0.35), transparent 60%),
-    radial-gradient(ellipse 45% 35% at 70% 50%, rgba(100, 80, 255, 0.3), transparent 55%),
-    radial-gradient(ellipse 40% 30% at 50% 80%, rgba(40, 180, 120, 0.25), transparent 50%),
-    linear-gradient(165deg, #0e1a30 0%, #060c18 100%);
+.fade-scroller-edge > span:nth-child(3) {
+  backdrop-filter: blur(2.4px);
+  -webkit-backdrop-filter: blur(2.4px);
+  mask-image: linear-gradient(var(--fade-scroller-direction), #000 0%, #000 25%, transparent 55%);
+  -webkit-mask-image: linear-gradient(
+    var(--fade-scroller-direction),
+    #000 0%,
+    #000 25%,
+    transparent 55%
+  );
 }
 
-html:not(.dark) .home-wallpaper[data-wallpaper="aurora"] {
-  background-color: #b8d4e8;
-  background-image:
-    radial-gradient(ellipse 55% 45% at 25% 25%, rgba(80, 220, 190, 0.45), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 75% 55%, rgba(140, 120, 255, 0.35), transparent 55%),
-    linear-gradient(180deg, #d4e8f5 0%, #9ab8d0 100%);
+.fade-scroller-edge > span:nth-child(4) {
+  backdrop-filter: blur(4.8px);
+  -webkit-backdrop-filter: blur(4.8px);
+  mask-image: linear-gradient(var(--fade-scroller-direction), #000 0%, #000 10%, transparent 32%);
+  -webkit-mask-image: linear-gradient(
+    var(--fade-scroller-direction),
+    #000 0%,
+    #000 10%,
+    transparent 32%
+  );
 }
 
-/* Graphite */
-.home-wallpaper[data-wallpaper="graphite"] {
-  background-color: #1c1c1e;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(80, 80, 90, 0.35), transparent 55%),
-    linear-gradient(180deg, #2c2c2e 0%, #121214 100%);
+@media (prefers-reduced-motion: reduce) {
+  .fade-scroller,
+  .fade-scroller-edge {
+    transition: none;
+  }
 }
 
-html:not(.dark) .home-wallpaper[data-wallpaper="graphite"] {
-  background-color: #d4d4d8;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 255, 255, 0.6), transparent 55%),
-    linear-gradient(180deg, #e8e8ec 0%, #b0b0b8 100%);
-}
-
-/* Mint */
-.home-wallpaper[data-wallpaper="mint"] {
-  background-color: #0c2420;
-  background-image:
-    radial-gradient(ellipse 70% 50% at 20% 15%, rgba(80, 220, 180, 0.35), transparent 55%),
-    radial-gradient(ellipse 60% 45% at 85% 85%, rgba(40, 140, 120, 0.3), transparent 50%),
-    linear-gradient(165deg, #143832 0%, #081816 100%);
-}
-
-html:not(.dark) .home-wallpaper[data-wallpaper="mint"] {
-  background-color: #b8e0d4;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 15% 0%, rgba(255, 255, 255, 0.65), transparent 50%),
-    radial-gradient(ellipse 70% 50% at 90% 100%, rgba(60, 180, 140, 0.4), transparent 55%),
-    linear-gradient(180deg, #d4f0e8 0%, #88c8b4 100%);
-}
-
-/* Ember */
-.home-wallpaper[data-wallpaper="ember"] {
-  background-color: #2a1018;
-  background-image:
-    radial-gradient(ellipse 65% 50% at 70% 20%, rgba(255, 80, 60, 0.4), transparent 55%),
-    radial-gradient(ellipse 55% 40% at 20% 80%, rgba(180, 40, 80, 0.3), transparent 50%),
-    linear-gradient(165deg, #4a1828 0%, #140810 100%);
-}
-
-html:not(.dark) .home-wallpaper[data-wallpaper="ember"] {
-  background-color: #f0b8a8;
-  background-image:
-    radial-gradient(ellipse 75% 55% at 80% 10%, rgba(255, 180, 120, 0.7), transparent 50%),
-    radial-gradient(ellipse 60% 45% at 10% 90%, rgba(220, 80, 100, 0.35), transparent 55%),
-    linear-gradient(180deg, #f8d0c0 0%, #e08070 100%);
-}
-
-/* Fog */
-.home-wallpaper[data-wallpaper="fog"] {
-  background-color: #1a1e24;
-  background-image:
-    radial-gradient(ellipse 90% 70% at 40% 30%, rgba(140, 160, 180, 0.25), transparent 55%),
-    linear-gradient(165deg, #2a3038 0%, #101418 100%);
-}
-
-html:not(.dark) .home-wallpaper[data-wallpaper="fog"] {
-  background-color: #c8d0d8;
-  background-image:
-    radial-gradient(ellipse 90% 70% at 50% 20%, rgba(255, 255, 255, 0.75), transparent 55%),
-    linear-gradient(180deg, #e4eaf0 0%, #a8b4c0 100%);
-}
-
-/* Custom photo — image set via inline style */
-.home-wallpaper[data-wallpaper="custom"] {
-  background-color: #111;
-}
-
-/* Bento glass tile — iOS widget material */
-.bento-tile {
-  background: hsl(0 0% 100% / 0.55);
-  backdrop-filter: saturate(180%) blur(40px);
-  -webkit-backdrop-filter: saturate(180%) blur(40px);
-  border: 1px solid hsl(0 0% 100% / 0.45);
-  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.5);
-}
-
-.dark .bento-tile {
-  background: hsl(220 16% 14% / 0.55);
-  border-color: hsl(0 0% 100% / 0.1);
-  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.12);
-}
-
-/* Floating dock */
-.home-dock {
-  background: hsl(0 0% 100% / 0.35);
-  backdrop-filter: saturate(200%) blur(48px);
-  -webkit-backdrop-filter: saturate(200%) blur(48px);
-  border: 1px solid hsl(0 0% 100% / 0.4);
-}
-
-.dark .home-dock {
-  background: hsl(220 14% 12% / 0.5);
-  border-color: hsl(0 0% 100% / 0.12);
-}
-
-/* SpringBoard auto bento grid — fixed cell size like iPad */
-.home-bento-grid {
+/* Icon state cross-fade — opacity only, no scale or blur. */
+.icon-swap {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-auto-rows: 5.5rem;
-  grid-auto-flow: dense;
-  gap: 0.85rem;
-  align-content: start;
+  place-items: center;
 }
 
-@media (min-width: 640px) {
-  .home-bento-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: 5.75rem;
-    gap: 1rem;
+.icon-swap > * {
+  grid-area: 1 / 1;
+  transition: opacity 150ms ease;
+}
+
+.icon-swap > [data-state="hidden"] {
+  opacity: 0;
+}
+
+.icon-swap > [data-state="shown"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-swap > * {
+    transition: none;
   }
-}
-
-@media (min-width: 1024px) {
-  .home-bento-grid {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    grid-auto-rows: 6rem;
-    gap: 1.15rem;
-  }
-}
-
-@media (min-width: 1400px) {
-  .home-bento-grid {
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-    grid-auto-rows: 6.25rem;
-  }
-}
-
-.app-icon-tile {
-  grid-column: span 1;
-  grid-row: span 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

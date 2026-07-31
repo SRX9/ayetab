@@ -198,6 +198,37 @@ export async function executeTool(
       const { convertHtmlEntities } = await import("./tools/html-entity");
       return convertHtmlEntities(input);
     }
+    case "svg-optimiser": {
+      const { optimiseSvg } = await import("./tools/svg-optimise");
+      return optimiseSvg(input, {
+        precision: (options?.precision as number) ?? 2,
+        removeDimensions: (options?.removeDimensions as boolean) ?? false,
+      });
+    }
+    case "word-counter": {
+      const { countWords } = await import("./tools/word-count");
+      return countWords(input);
+    }
+    case "shavian-transliterator": {
+      const { toShavian } = await import("./tools/shavian");
+      return toShavian(input, { namingDots: (options?.namingDots as boolean) ?? true });
+    }
+    case "cipher-decoder": {
+      const { runCipher } = await import("./tools/ciphers");
+      return runCipher(
+        input,
+        (options?.cipher as import("./tools/ciphers").CipherKind) ?? "auto",
+        (options?.key as string) ?? "",
+        (options?.mode as "decode" | "encode") ?? "decode"
+      );
+    }
+    case "doc-converter": {
+      const { convertDocument, detectDocFormat } = await import("./tools/doc-convert");
+      type Fmt = import("./tools/doc-convert").DocFormat;
+      const from = (options?.from as Fmt) ?? detectDocFormat(input);
+      const to = (options?.to as Fmt) ?? "markdown";
+      return convertDocument(input, from, to);
+    }
     default:
       return { output: "", error: `Tool "${toolId}" is not yet implemented.` };
   }
