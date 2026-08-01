@@ -129,7 +129,7 @@ export function AppShell({
   const sidebar = (
     <>
       <div className="flex items-center gap-1.5 px-3 pt-3">
-        <BrandMark className="h-5 w-5 shrink-0" title={title} />
+        <BrandMark className="h-6 w-6" title={title} size={24} />
         <span className="min-w-0 flex-1 truncate text-ui-md font-semibold">{title}</span>
         <SettingsButton />
         <ThemeToggle />
@@ -288,7 +288,7 @@ export function AppShell({
           >
             <HugeiconsIcon icon={Menu01Icon} size={18} strokeWidth={1.75} color="currentColor" />
           </button>
-          <BrandMark className="h-5 w-5 shrink-0" title={title} />
+          <BrandMark className="h-6 w-6" title={title} size={24} />
           <span className="truncate text-ui-md font-medium">{title}</span>
         </div>
 

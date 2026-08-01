@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { BrandMark } from "@ayetab/ui";
 
 const SEEN_KEY = "ayetab-newtab-notice-seen";
 
@@ -71,6 +72,7 @@ export function FirstRunNotice() {
       data-testid="newtab-first-run-notice"
       className="flex items-start gap-3 border-b border-border bg-muted px-6 py-3 md:px-12"
     >
+      <BrandMark className="mt-0.5 h-6 w-6" size={24} />
       <p className="flex-1 text-caption leading-relaxed text-muted-foreground">
         AyeTab is now your new tab page. Everything runs on your device — nothing is sent anywhere.
         To go back to the browser default, remove or disable AyeTab from your extensions page.

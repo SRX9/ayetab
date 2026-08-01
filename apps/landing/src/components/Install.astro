@@ -28,8 +28,11 @@ const targets = [
 ---
 
 <section id="install" class="mx-auto w-full max-w-[1080px] px-6 py-16 md:py-24">
-  <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">Get AyeTab</p>
-  <h2 class="mt-2 max-w-[18ch] text-[30px] font-bold leading-[1.12] tracking-[-0.03em] text-ink md:text-[40px]">
+  <div class="flex items-center gap-3">
+    <img src="/images/logo-icon.png" width="40" height="40" alt="" class="h-10 w-10" />
+    <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">Get AyeTab</p>
+  </div>
+  <h2 class="mt-3 max-w-[18ch] text-[30px] font-bold leading-[1.12] tracking-[-0.03em] text-ink md:text-[40px]">
     Install in a minute. Use forever offline.
   </h2>
   <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted md:text-[16px]">
@@ -41,7 +44,10 @@ const targets = [
     {
       targets.map((target) => (
         <article class="flex min-h-full flex-col items-start gap-3 border-t border-line/80 pt-6">
-          <h3 class="text-[17px] font-semibold text-ink">{target.name}</h3>
+          <div class="flex items-center gap-2.5">
+            <img src="/images/logo-icon.png" width="24" height="24" alt="" class="h-6 w-6" />
+            <h3 class="text-[17px] font-semibold text-ink">{target.name}</h3>
+          </div>
           <p class="m-0 flex-1 text-[13px] leading-relaxed text-muted">{target.body}</p>
           {target.note ? (
             <p class="m-0 text-[11px] font-medium tracking-wide text-muted uppercase">{target.note}</p>

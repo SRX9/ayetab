@@ -190,7 +190,7 @@ function AppContent() {
           recentIds={prefs.recents}
         />
         <header className="flex shrink-0 items-center gap-1.5 border-b border-border px-2 py-1.5">
-          <BrandMark className="h-5 w-5 shrink-0" />
+          <BrandMark className="h-6 w-6" size={24} />
           <h1 className="flex-1 truncate text-ui font-semibold">AyeTab</h1>
           <SettingsButton />
           <ThemeToggle />
