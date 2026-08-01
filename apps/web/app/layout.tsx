@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "AyeTab — 100 developer tools. Offline. Instant.",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     title: "AyeTab — Developer Utilities",
     description:
       "All-in-one developer toolbox. Format, convert, generate, and debug — 100 tools, all offline in your browser.",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
   manifest: "/site.webmanifest",
 };

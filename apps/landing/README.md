@@ -32,8 +32,8 @@ Liquid-glass logos and social images live in `public/`:
 |------|-----|
 | `images/logo-icon.png` | App icon / master mark (glass A + Aye orb) |
 | `images/logo-wordmark.png` | Horizontal lockup |
-| `images/og-image.png` | Default Open Graph |
-| `images/hero-product.png` | Full-bleed hero atmosphere |
+| `images/og-image.jpg` | Default Open Graph |
+| `images/hero-product.jpg` | Full-bleed hero atmosphere |
 | `favicon.svg` | Crisp favicon |
 | `apple-touch-icon.png` | iOS home-screen icon |
 
