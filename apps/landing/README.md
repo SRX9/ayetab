@@ -30,14 +30,14 @@ Liquid-glass logos and social images live in `public/`:
 
 | File | Use |
 |------|-----|
-| `images/logo-icon.png` | App icon / master mark (glass A + Aye orb) |
+| `images/logo-icon.png` | App icon / master mark (abstract glass tab) |
 | `images/logo-wordmark.png` | Horizontal lockup |
 | `images/og-image.jpg` | Default Open Graph |
 | `images/hero-product.jpg` | Full-bleed hero atmosphere |
-| `favicon.svg` | Crisp favicon |
+| `favicon.svg` | Crisp favicon (tab mark) |
 | `apple-touch-icon.png` | iOS home-screen icon |
 
-Theme: macOS liquid glass — frosted refraction, system blue (`#007AFF`), soft sky mist. Typography: **Instrument Sans** (UI + display) · JetBrains Mono (code).
+Theme: macOS liquid glass — frosted refraction, system blue (`#007AFF`), soft sky mist. Mark: abstract browser tab in a squircle. Typography: **Instrument Sans** (UI + display) · JetBrains Mono (code).
 
 ## Deploy
 

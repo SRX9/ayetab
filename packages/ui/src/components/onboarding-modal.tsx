@@ -26,7 +26,7 @@ export function OnboardingModal() {
     <Dialog open={open} onClose={dismiss} labelledBy="onboarding-title" panelClassName="max-w-md">
       <div className="menu-surface overflow-hidden p-6">
         <div className="flex items-center gap-2.5">
-          <BrandMark className="h-7 w-7" size={28} />
+          <BrandMark className="h-7 w-7" size={28} src="/logo-icon.png" />
           <h2 id="onboarding-title" className="text-title font-semibold">
             AyeTab
           </h2>

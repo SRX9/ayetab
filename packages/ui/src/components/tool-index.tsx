@@ -56,7 +56,7 @@ export function ToolIndex({ tools, onSelect, title = "All tools", description, f
     <ShellContent>
       <header>
         <div className="flex items-center gap-2.5">
-          <BrandMark className="h-8 w-8" size={32} />
+          <BrandMark className="h-8 w-8" size={32} src="/logo-icon.png" />
           <h1 className="text-display font-semibold text-balance">{title}</h1>
         </div>
         <p className="mt-1.5 text-ui text-muted-foreground">
