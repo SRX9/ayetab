@@ -54,7 +54,9 @@ HTML/CSS/JS/SQL formatters, YAML↔JSON, JSON↔CSV, Text Diff, Markdown, Cron, 
 
 - [ ] Submit to Chrome Web Store (`pnpm --filter extension zip`)
 - [ ] Submit to Firefox Add-ons
-- [ ] Host public privacy policy URL from `docs/PRIVACY.md`
+- [x] Host public privacy policy URL from `docs/PRIVACY.md` → https://ayetab.dev/privacy
+- [x] Terms of use → https://ayetab.dev/terms
+- [x] Unified liquid-glass AyeTab mark across landing, web, and extension
 - [ ] E2E tests (Playwright) for extension side panel
 - [ ] Lighthouse performance audit
 - [ ] WCAG 2.1 AA formal audit

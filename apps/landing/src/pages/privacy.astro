@@ -1,0 +1,172 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const updated = "2026-08-01";
+---
+
+<Layout
+  title="Privacy Policy — AyeTab"
+  description="AyeTab privacy policy: offline-first developer tools. We do not collect, sell, or transmit your tool input or personal data."
+>
+  <Nav />
+  <main class="mx-auto w-full max-w-[760px] px-6 py-14 md:py-20">
+    <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">Legal</p>
+    <h1 class="mt-2 text-[36px] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+      Privacy Policy
+    </h1>
+    <p class="mt-3 text-[14px] text-muted">Last updated: {updated}</p>
+
+    <div class="prose-legal mt-10">
+      <p>
+        AyeTab is an offline-first developer toolbox (browser extension and optional web app). This
+        policy describes what happens to data when you use AyeTab.
+      </p>
+
+      <h2>Summary</h2>
+      <ul>
+        <li>
+          <strong class="text-ink">We do not collect, sell, or transmit</strong> your tool input or
+          personal data.
+        </li>
+        <li>
+          All formatting, encoding, conversion, and generation runs
+          <strong class="text-ink">locally in your browser</strong>.
+        </li>
+        <li>
+          Preferences and tool drafts are stored
+          <strong class="text-ink">only on your device</strong>.
+        </li>
+        <li>AyeTab does not use tracking cookies or third-party analytics.</li>
+      </ul>
+
+      <h2>Data stored on your device</h2>
+      <p>
+        AyeTab may store the following locally (never uploaded by AyeTab to a server we operate):
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Where</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Favorites &amp; recent tools</td>
+            <td><code>chrome.storage.local</code> (extension) or <code>localStorage</code> (web)</td>
+            <td>Quick access</td>
+          </tr>
+          <tr>
+            <td>Theme preference</td>
+            <td>Local storage</td>
+            <td>Dark / light mode</td>
+          </tr>
+          <tr>
+            <td>Onboarding flag</td>
+            <td>Local storage</td>
+            <td>Show welcome once</td>
+          </tr>
+          <tr>
+            <td>Tool drafts / productivity notes</td>
+            <td>IndexedDB on your device</td>
+            <td>Restore your last input</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        You can clear this data anytime via the browser’s site / extension storage controls, or by
+        removing the extension.
+      </p>
+
+      <h2>New tab page</h2>
+      <p>
+        AyeTab replaces your browser’s new tab page with its own tool list. That page runs entirely
+        from files bundled inside the extension — it makes no network requests, and it does
+        <strong class="text-ink">not</strong> read the URLs or contents of your other tabs.
+        Replacing the new tab requires no browser permission.
+      </p>
+      <p>
+        To restore your browser’s default new tab page, disable or remove AyeTab from your browser’s
+        extensions page.
+      </p>
+
+      <h2>Permissions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Permission</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>sidePanel</code> (Chrome)</td>
+            <td>Show the AyeTab sidebar</td>
+          </tr>
+          <tr>
+            <td><code>storage</code></td>
+            <td>Save favorites, recents, home layout, and settings on device</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        AyeTab does <strong class="text-ink">not</strong> request host permissions, browsing-history
+        access, or clipboard permissions.
+      </p>
+
+      <h2>Network activity</h2>
+      <p>
+        AyeTab tools do not send your input to AyeTab servers. The extension is designed to work
+        offline.
+      </p>
+      <p>
+        If you open HTML or Markdown previews that contain remote image URLs, those requests would be
+        blocked by the preview’s sandbox CSP (local <code>data:</code> / <code>blob:</code> images
+        only).
+      </p>
+      <p>
+        The separate <strong class="text-ink">web app</strong> may load its own static assets from
+        the host you visit; that is normal website hosting and is unrelated to processing your tool
+        input.
+      </p>
+
+      <h2>Draw &amp; Write (web app)</h2>
+      <p>
+        The Draw &amp; Write (Excalidraw) tool is available on the web app only. It is omitted from
+        the extension build because Excalidraw relies on constructs incompatible with Manifest V3’s
+        Content Security Policy.
+      </p>
+      <p>
+        The extension lists it and links out to
+        <a href="https://app.ayetab.dev/tools/excalidraw">app.ayetab.dev/tools/excalidraw</a>, which
+        opens in a normal browser tab. Following that link is the only point at which AyeTab sends
+        you to a network resource for a tool, and it happens only when you click it.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        AyeTab does not set advertising or analytics cookies. Any cookies from the static host (if
+        present) are limited to normal website delivery and are not used to track tool usage.
+      </p>
+
+      <h2>Children</h2>
+      <p>AyeTab is a developer utility and is not directed at children under 13.</p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update this policy as the product changes. The “Last updated” date above will change
+        when we do.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        For privacy questions about this open-source project, open an issue on the
+        <a href="https://github.com/SRX9/ayetab" rel="noopener" target="_blank">AyeTab repository</a>.
+      </p>
+    </div>
+  </main>
+  <Footer />
+</Layout>

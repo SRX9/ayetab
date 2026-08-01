@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CommandIcon, StarIcon, WifiDisconnected01Icon } from "@hugeicons/core-free-icons";
 import { isOnboarded, setOnboarded } from "../lib/preferences";
+import { BrandMark } from "./brand-mark";
 import { Dialog } from "./dialog";
 import { Button } from "./button";
 
@@ -24,9 +25,12 @@ export function OnboardingModal() {
   return (
     <Dialog open={open} onClose={dismiss} labelledBy="onboarding-title" panelClassName="max-w-md">
       <div className="menu-surface overflow-hidden p-6">
-        <h2 id="onboarding-title" className="text-title font-semibold">
-          AyeTab
-        </h2>
+        <div className="flex items-center gap-2.5">
+          <BrandMark className="h-8 w-8 shrink-0" />
+          <h2 id="onboarding-title" className="text-title font-semibold">
+            AyeTab
+          </h2>
+        </div>
         <p className="mt-1.5 text-ui-md leading-relaxed text-muted-foreground">
           Every developer tool in one list. Pick one on the left, use it on the right.
         </p>

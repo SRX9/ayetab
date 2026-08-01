@@ -1,14 +1,17 @@
 # Privacy Policy — AyeTab
 
-**Last updated:** 2026-07-25
+**Last updated:** 2026-08-01
 
 AyeTab is an offline-first developer toolbox (browser extension and optional web app). This policy describes what happens to data when you use AyeTab.
+
+**Canonical public URL:** [https://ayetab.dev/privacy](https://ayetab.dev/privacy)
 
 ## Summary
 
 - **We do not collect, sell, or transmit your tool input or personal data.**
 - All formatting, encoding, conversion, and generation runs **locally in your browser**.
 - Preferences and tool drafts are stored **only on your device**.
+- AyeTab does not use tracking cookies or third-party analytics.
 
 ## Data stored on your device
 
@@ -59,6 +62,10 @@ The extension lists it and links out to `https://app.ayetab.dev/tools/excalidraw
 ## Children
 
 AyeTab is a developer utility and is not directed at children under 13.
+
+## Cookies
+
+AyeTab does not set advertising or analytics cookies. Any cookies from the static host (if present) are limited to normal website delivery and are not used to track tool usage.
 
 ## Changes
 

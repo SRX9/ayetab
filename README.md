@@ -1,8 +1,8 @@
 # AyeTab
 
-All-in-one developer toolbox — a Chrome/Firefox extension side panel + Next.js web app, inspired by [DevUtils](https://devutils.com).
+All-in-one developer toolbox — a Chrome/Firefox extension (new tab + side panel) and Next.js web app.
 
-**50 tools** — all processing runs locally in your browser. Your data never leaves your device.
+**100 tools** — all processing runs locally in your browser. Your data never leaves your device.
 
 ## Quick start
 
@@ -31,9 +31,9 @@ pnpm --filter extension zip
 Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist/chrome`  
 Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/firefox/manifest.json`
 
-Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY.md](docs/PRIVACY.md)
+Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY.md](docs/PRIVACY.md) · Terms: [docs/TERMS.md](docs/TERMS.md)
 
-## Tool categories (50 tools)
+## Tool categories (100 tools)
 
 | Category | Tools |
 |----------|-------|
@@ -42,6 +42,7 @@ Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY
 | **Convert** | YAML↔JSON, JSON↔CSV, HTML→JSX, SVG→CSS, Case, Color, Hex↔ASCII, Number Base, URL Parser, Query String, PHP Serialize, cURL→Code, JSON→Code |
 | **Inspect** | JWT, Unix Time, RegExp, String Inspector, Text Diff, Markdown, HTML Preview, Cron, Certificate |
 | **Generate** | Hash (MD5/SHA/Keccak), UUID, ULID, Random String, Lorem Ipsum, QR Code, Draw & Write |
+| **Design & assets** | Colour tools, image tools, typography, favicons, social cards, and more |
 | **Productivity** | To-Do List, Kanban Board, Pomodoro Timer, Quick Notes, Stopwatch, Habit Tracker |
 
 ## Features
@@ -60,10 +61,10 @@ Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY
 ## Monorepo
 
 ```
-apps/landing      → Astro marketing / install landing page
+apps/landing      → Astro marketing / install landing page (+ /privacy, /terms)
 apps/web          → Next.js 15
 apps/extension    → Chrome MV3 + Firefox sidebar
-packages/utils    → executeTool() + tool implementations (43 routed + 7 custom UI)
+packages/utils    → executeTool() + tool implementations
 packages/ui       → Shared React components
 docs/             → Analysis, architecture, store listing guide
 ```
@@ -76,3 +77,8 @@ docs/             → Analysis, architecture, store listing guide
 - [Implementation Roadmap](docs/implementation-roadmap.md)
 - [Store Listing Guide](docs/STORE.md)
 - [Privacy Policy](docs/PRIVACY.md)
+- [Terms of Use](docs/TERMS.md)
+
+## License
+
+[MIT](./LICENSE)

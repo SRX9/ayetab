@@ -11,6 +11,7 @@ import {
 } from "@ayetab/utils";
 import {
   AppearanceSync,
+  BrandMark,
   CommandPalette,
   FadeScroller,
   OnboardingModal,
@@ -188,8 +189,9 @@ function AppContent() {
           onSelect={(t) => openTool(t)}
           recentIds={prefs.recents}
         />
-        <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
-          <h1 className="flex-1 truncate ps-1 text-ui font-semibold">AyeTab</h1>
+        <header className="flex shrink-0 items-center gap-1.5 border-b border-border px-2 py-1.5">
+          <BrandMark className="h-5 w-5 shrink-0" />
+          <h1 className="flex-1 truncate text-ui font-semibold">AyeTab</h1>
           <SettingsButton />
           <ThemeToggle />
         </header>

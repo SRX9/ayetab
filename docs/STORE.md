@@ -62,7 +62,7 @@ rejected or pulled. Cover all of the following in the submission:
 1. Open the [Developer Dashboard](https://chrome.google.com/webstore/devconsole).
 2. Upload `ayetab-chrome-v*.zip`.
 3. Privacy practices: **no remote data collection**; justify `sidePanel` + `storage` (see below).
-4. Link this privacy policy: `docs/PRIVACY.md` (host a public URL for the listing).
+4. Link this privacy policy: https://ayetab.dev/privacy (source: `docs/PRIVACY.md`).
 5. Single purpose: developer utilities, presented on the new tab page and in the side panel.
 6. Answer the new tab override prompt with the disclosure text above.
 

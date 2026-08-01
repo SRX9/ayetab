@@ -15,29 +15,41 @@ const guarantees = [
 ];
 ---
 
-<section id="privacy" class="border-y border-line bg-tint">
-  <div class="mx-auto grid w-full max-w-[1100px] gap-10 px-6 py-16 md:grid-cols-[1.1fr_0.9fr] md:py-24">
-    <div>
-      <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">
-        Privacy by design
-      </p>
-      <h2 class="mt-2 max-w-[16ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
-        Your data never leaves the device.
-      </h2>
-      <p class="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-muted">
-        Every transform runs locally in the browser. No accounts, no telemetry pipelines, no “upload
-        to process.” Export and import your preferences as JSON when you want a backup.
-      </p>
+<section id="privacy" class="relative">
+  <div class="mx-auto w-full max-w-[1080px] px-6 py-16 md:py-24">
+    <div class="glass rounded-[28px] px-6 py-10 md:px-12 md:py-14">
+      <div class="grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">
+            Privacy by design
+          </p>
+          <h2
+            class="mt-2 max-w-[16ch] text-[30px] font-bold leading-[1.12] tracking-[-0.03em] text-ink md:text-[40px]"
+          >
+            Your data never leaves the device.
+          </h2>
+          <p class="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-muted md:text-[16px]">
+            Every transform runs locally in the browser. No accounts, no telemetry pipelines, no
+            “upload to process.” Export and import your preferences as JSON when you want a backup.
+          </p>
+          <a
+            href="/privacy"
+            class="mt-6 inline-flex text-[14px] font-semibold text-accent underline underline-offset-4"
+          >
+            Read the full privacy policy
+          </a>
+        </div>
+        <ul class="m-0 list-none p-0">
+          {
+            guarantees.map((item) => (
+              <li class="border-t border-line/80 py-4 first:border-t-0 first:pt-0">
+                <strong class="block text-[14px] font-semibold text-ink">{item.title}</strong>
+                <span class="mt-1 block text-[13px] leading-relaxed text-muted">{item.body}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
-    <ul class="m-0 list-none border-t border-line p-0">
-      {
-        guarantees.map((item) => (
-          <li class="border-b border-line py-4">
-            <strong class="block text-[14px] font-semibold text-ink">{item.title}</strong>
-            <span class="mt-1 block text-[13px] leading-relaxed text-muted">{item.body}</span>
-          </li>
-        ))
-      }
-    </ul>
   </div>
 </section>
