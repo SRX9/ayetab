@@ -1,12 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 /**
  * AyeTab landing — liquid-glass macOS brand language.
  * Soft sky mist, system blue, frosted chrome, restrained motion.
+ * Type: Instrument Sans (display + UI) · JetBrains Mono (code).
  */
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-ink: #1a2333;
   --color-muted: #5b6578;
@@ -35,6 +38,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
+  font-optical-sizing: auto;
   color: var(--color-ink);
   background:
     radial-gradient(1200px 600px at 12% -10%, rgba(0, 122, 255, 0.14), transparent 55%),
@@ -42,6 +46,35 @@ body {
     linear-gradient(180deg, #f7fbff 0%, var(--color-paper) 42%, #ffffff 100%);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-feature-settings: "ss01" on, "cv11" on;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+h1 {
+  letter-spacing: -0.04em;
+}
+
+h2 {
+  letter-spacing: -0.035em;
+}
+
+h3 {
+  letter-spacing: -0.02em;
+}
+
+pre,
+code,
+.font-mono {
+  font-family: var(--font-mono);
 }
 
 img {
@@ -159,11 +192,17 @@ button {
   }
 }
 
+.prose-legal h1,
+.prose-legal h2 {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01" on, "cv11" on;
+}
+
 .prose-legal h2 {
   margin: 2rem 0 0.75rem;
   font-size: 1.25rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .prose-legal h2:first-child {

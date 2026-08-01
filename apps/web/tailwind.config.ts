@@ -72,10 +72,10 @@ const config: Config = {
         ui: ["0.8125rem", { lineHeight: "1.4" }],
         "ui-md": ["0.875rem", { lineHeight: "1.45" }],
         "ui-lg": ["0.9375rem", { lineHeight: "1.5" }],
-        subtitle: ["1.0625rem", { lineHeight: "1.35", letterSpacing: "-0.01em" }],
-        title: ["1.375rem", { lineHeight: "1.2", letterSpacing: "-0.02em" }],
-        display: ["1.875rem", { lineHeight: "1.1", letterSpacing: "-0.025em" }],
-        "display-lg": ["2.125rem", { lineHeight: "1.08", letterSpacing: "-0.03em" }],
+        subtitle: ["1.0625rem", { lineHeight: "1.35", letterSpacing: "-0.015em", fontWeight: "600" }],
+        title: ["1.375rem", { lineHeight: "1.18", letterSpacing: "-0.025em", fontWeight: "600" }],
+        display: ["1.875rem", { lineHeight: "1.08", letterSpacing: "-0.03em", fontWeight: "600" }],
+        "display-lg": ["2.125rem", { lineHeight: "1.05", letterSpacing: "-0.035em", fontWeight: "600" }],
       },
       /**
        * Flat scale. Corners are a rounding of the edge, not a shape — the top
@@ -91,15 +91,9 @@ const config: Config = {
         "3xl": "8px",
       },
       fontFamily: {
-        sans: [
-          "var(--font-sans)",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Helvetica Neue",
-          "sans-serif",
-        ],
-        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        sans: ["var(--font-sans)", "Instrument Sans", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-sans)", "Instrument Sans", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
     },
   },

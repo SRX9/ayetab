@@ -37,7 +37,7 @@ Liquid-glass logos and social images live in `public/`:
 | `favicon.svg` | Crisp favicon |
 | `apple-touch-icon.png` | iOS home-screen icon |
 
-Theme: macOS liquid glass — frosted refraction, system blue (`#007AFF`), soft sky mist. Typography: Plus Jakarta Sans.
+Theme: macOS liquid glass — frosted refraction, system blue (`#007AFF`), soft sky mist. Typography: **Instrument Sans** (UI + display) · JetBrains Mono (code).
 
 ## Deploy
 
