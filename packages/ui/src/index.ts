@@ -1,6 +1,7 @@
 export { cn } from "./lib/utils";
 export { pressable } from "./lib/pressable";
 export { AppShell, ShellContent } from "./components/app-shell";
+export { BrandMark } from "./components/brand-mark";
 export { FadeScroller } from "./components/fade-scroller";
 export { ToolIndex } from "./components/tool-index";
 export { Button } from "./components/button";

@@ -8,5 +8,17 @@
   body {
     @apply bg-background text-foreground antialiased;
     min-height: 100vh;
+    font-optical-sizing: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  .text-display,
+  .text-display-lg,
+  .text-title,
+  .text-subtitle {
+    font-feature-settings: "ss01" on, "cv11" on;
+    font-optical-sizing: auto;
   }
 }

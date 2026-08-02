@@ -21,30 +21,26 @@ const features = [
     body: "Syntax highlighting, diff view, markdown and HTML previews, QR codes, and image decode.",
   },
   {
-    title: "Dark & light themes",
-    body: "One flat, quiet interface in either mode. Your choice persists locally.",
-  },
-  {
     title: "Keyboard-first",
     body: "Press ? for shortcuts. Built for muscle memory, not mouse marathons.",
   },
 ];
 ---
 
-<section id="features" class="mx-auto w-full max-w-[1100px] px-6 py-16 md:py-24">
-  <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">Core features</p>
-  <h2 class="mt-2 max-w-[18ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
+<section id="features" class="mx-auto w-full max-w-[1080px] px-6 py-16 md:py-24">
+  <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">Core features</p>
+  <h2 class="mt-2 max-w-[18ch] text-[30px] font-bold leading-[1.12] tracking-[-0.03em] text-ink md:text-[40px]">
     Everything you reach for, already open.
   </h2>
-  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted md:text-[16px]">
     The utilities you open twenty times a day, waiting on every new tab — and in a side panel when
     you’d rather not leave the page you’re on.
   </p>
 
-  <div class="mt-10 grid grid-cols-1 gap-x-10 border-t border-line sm:grid-cols-2 lg:grid-cols-3">
+  <div class="mt-12 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
     {
       features.map((feature) => (
-        <article class="border-b border-line py-6">
+        <article class="border-t border-line/80 py-6">
           <h3 class="text-[15px] font-semibold text-ink">{feature.title}</h3>
           <p class="mt-1.5 text-[14px] leading-relaxed text-muted">{feature.body}</p>
         </article>

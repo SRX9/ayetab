@@ -20,6 +20,7 @@ import {
 import { cn } from "../lib/utils";
 import { FOCUS_RING } from "../lib/pressable";
 import { usePreferences } from "../hooks/use-preferences";
+import { BrandMark } from "./brand-mark";
 import { FadeScroller } from "./fade-scroller";
 import { SettingsButton } from "./settings-panel";
 import { ThemeToggle } from "./theme-toggle";
@@ -127,7 +128,8 @@ export function AppShell({
 
   const sidebar = (
     <>
-      <div className="flex items-center gap-1 px-3 pt-3">
+      <div className="flex items-center gap-1.5 px-3 pt-3">
+        <BrandMark className="h-6 w-6" title={title} size={24} src="/logo-icon.png" />
         <span className="min-w-0 flex-1 truncate text-ui-md font-semibold">{title}</span>
         <SettingsButton />
         <ThemeToggle />
@@ -286,6 +288,7 @@ export function AppShell({
           >
             <HugeiconsIcon icon={Menu01Icon} size={18} strokeWidth={1.75} color="currentColor" />
           </button>
+          <BrandMark className="h-6 w-6" title={title} size={24} src="/logo-icon.png" />
           <span className="truncate text-ui-md font-medium">{title}</span>
         </div>
 

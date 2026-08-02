@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const updated = "2026-08-01";
+---
+
+<Layout
+  title="Terms of Use — AyeTab"
+  description="Terms of use for AyeTab: free offline developer utilities for Chrome, Firefox, and the web."
+>
+  <Nav />
+  <main class="mx-auto w-full max-w-[760px] px-6 py-14 md:py-20">
+    <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">Legal</p>
+    <h1 class="mt-2 text-[36px] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+      Terms of Use
+    </h1>
+    <p class="mt-3 text-[14px] text-muted">Last updated: {updated}</p>
+
+    <div class="prose-legal mt-10">
+      <p>
+        These Terms of Use govern your use of AyeTab — the browser extension, web app, and related
+        marketing site at <a href="https://ayetab.dev">ayetab.dev</a>. By installing or using
+        AyeTab, you agree to these terms.
+      </p>
+
+      <h2>What AyeTab is</h2>
+      <p>
+        AyeTab is a free, offline-first developer toolbox. Tools run locally in your browser. We do
+        not operate an account system, and we do not process your tool input on our servers.
+      </p>
+
+      <h2>License</h2>
+      <p>
+        Unless a different license is stated in the repository, AyeTab source code is provided under
+        the MIT License. You may use, copy, modify, and distribute the software subject to that
+        license.
+      </p>
+
+      <h2>Acceptable use</h2>
+      <ul>
+        <li>Use AyeTab for lawful purposes only.</li>
+        <li>
+          Do not attempt to reverse-engineer store listings, impersonate AyeTab, or distribute
+          malware under the AyeTab name.
+        </li>
+        <li>
+          Do not abuse browser APIs or extension permissions beyond what AyeTab requests for its
+          documented features.
+        </li>
+      </ul>
+
+      <h2>New tab replacement</h2>
+      <p>
+        Installing the extension may replace your browser’s new tab page. You can restore the
+        default at any time by disabling or removing AyeTab from your browser’s extensions page.
+      </p>
+
+      <h2>No warranty</h2>
+      <p>
+        AyeTab is provided “as is,” without warranty of any kind, express or implied, including but
+        not limited to warranties of merchantability, fitness for a particular purpose, and
+        non-infringement. Tool outputs (formatting, encoding, hashing, JWT decoding, and similar)
+        are for convenience; verify critical results independently.
+      </p>
+
+      <h2>Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, the authors and contributors of AyeTab are not
+        liable for any claim, damages, or other liability arising from your use of the software —
+        whether in contract, tort, or otherwise.
+      </p>
+
+      <h2>Third-party services</h2>
+      <p>
+        Links to the Chrome Web Store, Firefox Add-ons, GitHub, or the hosted web app are provided
+        for convenience. Those services have their own terms and privacy policies.
+      </p>
+
+      <h2>Privacy</h2>
+      <p>
+        How AyeTab handles data is described in the
+        <a href="/privacy">Privacy Policy</a>.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update these terms as the product evolves. Continued use after an update constitutes
+        acceptance of the revised terms. The “Last updated” date above will change when we revise
+        them.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms can be raised as an issue on the
+        <a href="https://github.com/SRX9/ayetab" rel="noopener" target="_blank">AyeTab repository</a>.
+      </p>
+    </div>
+  </main>
+  <Footer />
+</Layout>

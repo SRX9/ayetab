@@ -15,20 +15,20 @@ const categories = [
 ];
 ---
 
-<section id="tools" class="mx-auto w-full max-w-[1100px] px-6 py-16 md:py-24">
-  <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">{TOOL_COUNT} tools</p>
-  <h2 class="mt-2 max-w-[16ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
+<section id="tools" class="mx-auto w-full max-w-[1080px] px-6 py-16 md:py-24">
+  <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">{TOOL_COUNT} tools</p>
+  <h2 class="mt-2 max-w-[16ch] text-[30px] font-bold leading-[1.12] tracking-[-0.03em] text-ink md:text-[40px]">
     A full toolbox, one new tab.
   </h2>
-  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted md:text-[16px]">
     From everyday formatters to JWT debugging and habit tracking — all processing stays on your
     device.
   </p>
 
-  <div class="mt-10 grid grid-cols-1 gap-x-10 border-t border-line sm:grid-cols-2 lg:grid-cols-3">
+  <div class="mt-12 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
     {
       categories.map((cat) => (
-        <div class="border-b border-line py-6">
+        <div class="border-t border-line/80 py-6">
           <h3 class="text-[15px] font-semibold text-ink">{cat.name}</h3>
           <p class="mt-1.5 text-[13px] leading-relaxed text-muted">{cat.tools}</p>
         </div>
@@ -36,10 +36,10 @@ const categories = [
     }
   </div>
 
-  <p class="mt-6 max-w-[70ch] text-[13px] leading-relaxed text-muted">
+  <p class="mt-8 max-w-[70ch] text-[13px] leading-relaxed text-muted">
     Draw &amp; Write runs in the <a
       href="https://app.ayetab.dev"
-      class="text-accent underline underline-offset-2">web app</a
+      class="font-medium text-accent underline underline-offset-2">web app</a
     > — browser extension security rules block the library it needs, so the extension ships {
       EXTENSION_TOOL_COUNT
     } of the {TOOL_COUNT} and links out to the rest.

@@ -11,7 +11,9 @@ inspired by [DevUtils](https://devutils.com).
 | [Utilities Catalog](./utilities-catalog.md) | Full catalog of 47+ utilities with categories, inputs/outputs, and priority tiers |
 | [Architecture](./architecture.md) | Monorepo structure, Chrome extension design, and shared package strategy |
 | [Implementation Roadmap](./implementation-roadmap.md) | Phased build plan from scaffold to full utility suite |
-| [New Tab Plan](./newtab-plan.md) | Making AyeTab the default new tab page — tasks, pitfalls, production checklist |
+| [Privacy Policy](./PRIVACY.md) | Offline-first privacy policy (live at ayetab.dev/privacy) |
+| [Terms of Use](./TERMS.md) | Terms of use (live at ayetab.dev/terms) |
+| [Store Listing Guide](./STORE.md) | Chrome / Firefox store listing checklist |
 
 ## Project Vision
 

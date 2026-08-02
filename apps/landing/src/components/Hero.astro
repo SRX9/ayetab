@@ -1,98 +1,54 @@
 ---
 const TOOL_COUNT = 100;
-
-const sidebarGroups = [
-  { label: "Favorites", items: ["JSON Formatter", "JWT Debugger"] },
-  { label: "Format & Validate", items: ["HTML Formatter", "SQL Formatter", "XML Formatter"] },
-  { label: "Encode & Decode", items: ["Base64 Encode/Decode", "URL Encode/Decode"] },
-];
-
-const active = "JSON Formatter";
 ---
 
-<section class="mx-auto w-full max-w-[1100px] px-6 pb-16 pt-16 md:pb-20 md:pt-24">
-  <h1
-    class="max-w-[18ch] text-[38px] font-semibold leading-[1.12] tracking-tight text-ink md:text-[52px]"
-  >
-    Developer utilities, offline &amp; instant
-  </h1>
-  <p class="mt-5 max-w-[52ch] text-[16px] leading-relaxed text-muted">
-    {TOOL_COUNT} tools on your new tab page and in your browser sidebar — format, convert, generate,
-    and debug without sending a byte to the cloud.
-  </p>
-
-  <div class="mt-8 flex flex-wrap items-center gap-2">
-    <a
-      class="rounded bg-ink px-4 py-2 text-[14px] font-medium text-white transition-opacity hover:opacity-90"
-      href="#install"
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <img
+      src="/images/hero-product.jpg"
+      alt=""
+      class="h-full w-full object-cover opacity-60"
+      width="1920"
+      height="1080"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-[#f7fbff]/40 via-[#f5f9fd]/78 to-[#f5f9fd]"
     >
-      Install extension
-    </a>
-    <a
-      class="rounded border border-line px-4 py-2 text-[14px] font-medium text-ink transition-colors hover:bg-tint"
-      href="https://app.ayetab.dev"
-      rel="noopener"
-    >
-      Open the web app
-    </a>
+    </div>
   </div>
 
-  <!--
-    The preview is built from the same tokens as the product rather than a
-    screenshot, so it can never drift out of date with the real interface.
-  -->
-  <figure
-    class="mt-14 overflow-hidden rounded-md border border-line"
-    role="img"
-    aria-label="AyeTab: a sidebar listing every tool beside the open tool's input and output"
+  <div
+    class="mx-auto flex w-full max-w-[1080px] flex-col items-center px-6 pb-20 pt-14 text-center md:pb-28 md:pt-20"
   >
-    <div class="grid grid-cols-[168px_1fr] md:grid-cols-[212px_1fr]" aria-hidden="true">
-      <div class="border-e border-line bg-tint p-2">
-        <div class="mb-2 flex items-center gap-1.5 px-1 py-1">
-          <span class="text-[12px] font-semibold text-ink">AyeTab</span>
-        </div>
-        <div class="mb-3 rounded-sm border border-line bg-white px-2 py-1 text-[11px] text-muted">
-          Search tools
-        </div>
-        {
-          sidebarGroups.map((group) => (
-            <div class="mb-3">
-              <p class="px-1 pb-1 text-[9px] font-medium tracking-[0.08em] text-muted uppercase">
-                {group.label}
-              </p>
-              {group.items.map((item) => (
-                <p
-                  class:list={[
-                    "truncate rounded-sm px-1.5 py-1 text-[11px]",
-                    item === active ? "bg-black/[0.08] font-medium text-ink" : "text-ink/80",
-                  ]}
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-          ))
-        }
-      </div>
+    <img
+      src="/images/logo-icon.png"
+      width="148"
+      height="148"
+      alt=""
+      class="reveal float-soft h-28 w-28 drop-shadow-[0_22px_48px_rgba(0,122,255,0.25)] md:h-36 md:w-36"
+    />
 
-      <div class="bg-white p-5 md:p-8">
-        <p class="text-[15px] font-semibold text-ink md:text-[19px]">{active}</p>
-        <p class="mt-1 text-[11px] text-muted md:text-[12px]">
-          Pretty-print and validate JSON, with error positions.
-        </p>
-        <div class="mt-5 grid gap-3 md:grid-cols-2">
-          <div>
-            <p class="pb-1 text-[9px] font-medium tracking-[0.08em] text-muted uppercase">Input</p>
-            <pre
-              class="overflow-hidden rounded-sm border border-line px-2 py-2 font-mono text-[10px] leading-[1.6] text-ink md:text-[11px]">{'{"id":7,"tags":["a","b"]}'}</pre>
-          </div>
-          <div>
-            <p class="pb-1 text-[9px] font-medium tracking-[0.08em] text-muted uppercase">Output</p>
-            <pre
-              class="overflow-hidden rounded-sm border border-line px-2 py-2 font-mono text-[10px] leading-[1.6] text-ink md:text-[11px]">{'{\n  "id": 7,\n  "tags": ["a", "b"]\n}'}</pre>
-          </div>
-        </div>
-      </div>
+    <h1
+      class="reveal reveal-delay-1 mt-8 text-[52px] font-bold leading-none tracking-[-0.04em] text-ink md:text-[76px]"
+    >
+      AyeTab
+    </h1>
+
+    <p class="reveal reveal-delay-2 mt-4 max-w-[38ch] text-[17px] leading-relaxed text-muted md:text-[19px]">
+      {TOOL_COUNT} developer tools on every new tab — offline, instant, and private by design.
+    </p>
+
+    <div class="reveal reveal-delay-3 mt-9 flex flex-wrap items-center justify-center gap-3">
+      <a class="btn-primary rounded-2xl px-5 py-2.5 text-[14px] font-semibold" href="#install">
+        Install extension
+      </a>
+      <a
+        class="btn-ghost rounded-2xl px-5 py-2.5 text-[14px] font-semibold"
+        href="https://app.ayetab.dev"
+        rel="noopener"
+      >
+        Open the web app
+      </a>
     </div>
-  </figure>
+  </div>
 </section>
