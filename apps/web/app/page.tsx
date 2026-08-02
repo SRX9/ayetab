@@ -1,22 +1,35 @@
-"use client";
+import type { Metadata } from "next";
+import { TOOL_REGISTRY, buildToolsItemListJsonLd } from "@ayetab/utils";
+import { homeMetadata } from "@/lib/seo-metadata";
+import HomePageClient from "./home-page-client";
 
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { OnboardingModal, ToolIndex } from "@ayetab/ui";
-import { TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
+export const metadata: Metadata = homeMetadata();
 
 export default function HomePage() {
-  const router = useRouter();
-
-  const handleOpen = useCallback(
-    (tool: ToolDefinition) => router.push(`/tools/${tool.id}`),
-    [router]
-  );
+  const jsonLd = buildToolsItemListJsonLd(TOOL_REGISTRY);
 
   return (
-    <div data-testid="home-page">
-      <OnboardingModal />
-      <ToolIndex tools={TOOL_REGISTRY} onSelect={handleOpen} />
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {/*
+        Server-rendered index for crawlers: every tool name + description as
+        crawlable links. Visually hidden from the interactive UI (sr-only).
+      */}
+      <nav className="sr-only" aria-label="All AyeTab tools">
+        <ul>
+          {TOOL_REGISTRY.map((tool) => (
+            <li key={tool.id}>
+              <a href={`/tools/${tool.id}`}>
+                {tool.name} — {tool.description}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <HomePageClient />
+    </>
   );
 }

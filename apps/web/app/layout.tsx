@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { WEB_APP_ORIGIN } from "@ayetab/utils";
 import { Providers } from "@/components/providers";
+import { homeMetadata } from "@/lib/seo-metadata";
 import "./globals.css";
 
 /* Instrument Sans — cool geometric professional face for titles + UI */
@@ -17,31 +19,24 @@ const mono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
-const siteUrl = "https://app.ayetab.dev";
-const titleDefault = "AyeTab — Developer Utilities";
+const base = homeMetadata();
+const titleDefault =
+  typeof base.title === "string" ? base.title : "AyeTab — Developer Utilities";
 const description =
+  base.description ??
   "All-in-one developer toolbox. Format, convert, generate, and debug — 100 tools, all offline in your browser.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(WEB_APP_ORIGIN),
   title: {
     default: titleDefault,
     template: "%s · AyeTab",
   },
   description,
+  keywords: base.keywords,
   applicationName: "AyeTab",
   authors: [{ name: "AyeTab" }],
   creator: "AyeTab",
-  keywords: [
-    "AyeTab",
-    "developer tools",
-    "JSON formatter",
-    "Base64",
-    "JWT",
-    "UUID",
-    "offline",
-    "browser utilities",
-  ],
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -53,12 +48,8 @@ export const metadata: Metadata = {
     shortcut: ["/favicon-32.png"],
   },
   openGraph: {
-    type: "website",
-    siteName: "AyeTab",
+    ...base.openGraph,
     locale: "en_US",
-    title: titleDefault,
-    description,
-    url: siteUrl,
     images: [
       {
         url: "/og-image.jpg",
@@ -77,21 +68,24 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
+    ...base.twitter,
     card: "summary_large_image",
-    title: titleDefault,
-    description,
     images: ["/og-image.jpg"],
   },
+  alternates: { canonical: WEB_APP_ORIGIN },
   robots: {
     index: true,
     follow: true,
-  },
-  alternates: {
-    canonical: siteUrl,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   manifest: "/site.webmanifest",
   other: {
-    "og:logo": `${siteUrl}/logo-icon.png`,
+    "og:logo": `${WEB_APP_ORIGIN}/logo-icon.png`,
   },
 };
 
@@ -111,9 +105,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     operatingSystem: "Web",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     description,
-    url: siteUrl,
-    image: `${siteUrl}/og-image.jpg`,
-    logo: `${siteUrl}/logo-icon.png`,
+    url: WEB_APP_ORIGIN,
+    image: `${WEB_APP_ORIGIN}/og-image.jpg`,
+    logo: `${WEB_APP_ORIGIN}/logo-icon.png`,
   };
 
   return (
