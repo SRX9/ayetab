@@ -14,7 +14,7 @@ Package manager is **pnpm** (`pnpm@9.15.4`, Node >= 20). Standard commands are i
 | `web` (`apps/web`) | Next.js 15 app, full tool suite | `pnpm dev --filter web` → http://localhost:3000 | Primary runnable app. Tool pages live at `/tools/<id>` (e.g. `/tools/base64`, `/tools/uuid-generator`). Wrong slugs render a "Tool not found" page by design. |
 | `extension` (`apps/extension`) | Chrome MV3 + Firefox sidebar (Vite + CRXJS) | `pnpm dev --filter extension` | Dev server builds `apps/extension/dist` to load unpacked; it does NOT type-check. Needs a browser to load — no localhost page to hit. |
 
-Shared logic: `packages/utils` (the 41 tool implementations + `executeTool()`) and `packages/ui` (shared React components).
+Shared logic: `packages/utils` (the 100 tool implementations + `executeTool()`) and `packages/ui` (shared React components).
 
 ### Lint / test / build (non-obvious caveats)
 

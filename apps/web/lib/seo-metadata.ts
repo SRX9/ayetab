@@ -6,7 +6,7 @@ import {
   type ToolDefinition,
 } from "@ayetab/utils";
 
-const OG_IMAGE = `${WEB_APP_ORIGIN}/og-image.png`;
+const OG_IMAGE = `${WEB_APP_ORIGIN}/og-image.jpg`;
 
 export function homeMetadata(): Metadata {
   const seo = getHomeSeo();

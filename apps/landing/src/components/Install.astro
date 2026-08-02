@@ -2,54 +2,64 @@
 const targets = [
   {
     name: "Chrome",
-    body: "New tab page plus a persistent side panel. Install from the Chrome Web Store, or unpack a local build while developing.",
-    cta: "Add to Chrome",
+    body: "New tab page plus a persistent side panel. Install from the Chrome Web Store when the listing goes live, or unpack a local build while developing.",
+    cta: "Chrome Web Store",
     href: "https://chromewebstore.google.com/",
     primary: true,
+    note: "Listing coming soon",
   },
   {
     name: "Firefox",
     body: "New tab page plus a native sidebar action, with the same tool suite. Built for Firefox’s extension model.",
-    cta: "Add to Firefox",
+    cta: "Firefox Add-ons",
     href: "https://addons.mozilla.org/",
     primary: true,
+    note: "Listing coming soon",
   },
   {
     name: "Web app",
-    body: "Prefer a full tab? Open the web suite with every tool available in the browser.",
+    body: "Prefer a full tab? Open the web suite with every tool available in the browser — same offline processing model.",
     cta: "Open AyeTab Web",
     href: "https://app.ayetab.dev",
     primary: false,
+    note: null,
   },
 ];
 ---
 
-<section id="install" class="mx-auto w-full max-w-[1100px] px-6 py-16 md:py-24">
-  <p class="text-[12px] font-medium tracking-[0.08em] text-muted uppercase">Get AyeTab</p>
-  <h2 class="mt-2 max-w-[18ch] text-[28px] font-semibold leading-[1.15] tracking-tight text-ink md:text-[36px]">
+<section id="install" class="mx-auto w-full max-w-[1080px] px-6 py-16 md:py-24">
+  <div class="flex items-center gap-3">
+    <img src="/images/logo-icon.png" width="40" height="40" alt="" class="h-10 w-10" />
+    <p class="text-[12px] font-semibold tracking-[0.12em] text-accent uppercase">Get AyeTab</p>
+  </div>
+  <h2 class="mt-3 max-w-[18ch] text-[30px] font-bold leading-[1.12] tracking-[-0.03em] text-ink md:text-[40px]">
     Install in a minute. Use forever offline.
   </h2>
-  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+  <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted md:text-[16px]">
     Chrome or Firefox — the same new tab page, the same local toolkit, the same privacy model.
     Installing replaces your new tab; disable or remove AyeTab to put the default back.
   </p>
 
-  <div class="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+  <div class="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
     {
       targets.map((target) => (
-        <article class="flex min-h-full flex-col items-start gap-3 rounded-md border border-line p-5">
-          <h3 class="text-[16px] font-semibold text-ink">{target.name}</h3>
+        <article class="flex min-h-full flex-col items-start gap-3 border-t border-line/80 pt-6">
+          <div class="flex items-center gap-2.5">
+            <img src="/images/logo-icon.png" width="24" height="24" alt="" class="h-6 w-6" />
+            <h3 class="text-[17px] font-semibold text-ink">{target.name}</h3>
+          </div>
           <p class="m-0 flex-1 text-[13px] leading-relaxed text-muted">{target.body}</p>
+          {target.note ? (
+            <p class="m-0 text-[11px] font-medium tracking-wide text-muted uppercase">{target.note}</p>
+          ) : null}
           <a
             class:list={[
-              "mt-1 rounded px-3.5 py-2 text-[13px] font-medium transition-colors",
-              target.primary
-                ? "bg-ink text-white hover:opacity-90"
-                : "border border-line text-ink hover:bg-tint",
+              "mt-1 rounded-xl px-3.5 py-2 text-[13px] font-semibold transition-transform",
+              target.primary ? "btn-primary" : "btn-ghost",
             ]}
             href={target.href}
             rel="noopener"
-            target={target.primary ? "_blank" : undefined}
+            target="_blank"
           >
             {target.cta}
           </a>

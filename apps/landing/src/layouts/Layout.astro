@@ -5,27 +5,55 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** Optional page type override for Open Graph */
+  ogType?: string;
+  noindex?: boolean;
 }
 
 const {
   title = "AyeTab — Developer utilities, offline & instant",
-  description = "Developer toolbox on your new tab page, for Chrome and Firefox. Format, convert, generate, and debug — 50 tools that run locally in your browser.",
-  ogImage = "/images/og-image.png",
+  description = "100 developer tools on your new tab and sidebar for Chrome and Firefox. Format, convert, generate, and debug — all offline in your browser.",
+  ogImage = "/images/og-image.jpg",
+  ogType = "website",
+  noindex = false,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const absoluteOg = new URL(ogImage, Astro.site);
+const site = Astro.site ?? new URL("https://ayetab.dev");
+const canonical = new URL(Astro.url.pathname, site);
+const absoluteOg = new URL(ogImage, site);
+const logoUrl = new URL("/images/logo-icon.png", site).href;
 
-const jsonLd = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "AyeTab",
-  applicationCategory: "DeveloperApplication",
-  operatingSystem: "Chrome, Firefox",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  description,
-  url: "https://ayetab.dev",
-});
+const jsonLd = JSON.stringify([
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "AyeTab",
+    url: "https://ayetab.dev",
+    logo: logoUrl,
+    sameAs: ["https://github.com/SRX9/ayetab"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "AyeTab",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Chrome, Firefox, Web",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description,
+    url: "https://ayetab.dev",
+    image: [absoluteOg.href, logoUrl],
+    logo: logoUrl,
+    screenshot: absoluteOg.href,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "AyeTab",
+    url: "https://ayetab.dev",
+    description,
+    publisher: { "@type": "Organization", name: "AyeTab", logo: logoUrl },
+  },
+]);
 ---
 
 <!doctype html>
@@ -33,27 +61,46 @@ const jsonLd = JSON.stringify({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#F5F9FD" />
+    <meta name="color-scheme" content="light" />
     <meta name="description" content={description} />
+    <meta
+      name="keywords"
+      content="AyeTab, developer tools, browser extension, offline, JSON formatter, Base64, JWT, UUID, Chrome, Firefox, new tab"
+    />
+    <meta name="author" content="AyeTab" />
     <meta name="generator" content={Astro.generator} />
+    {noindex ? <meta name="robots" content="noindex,nofollow" /> : <meta name="robots" content="index,follow" />}
 
     <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/favicon.svg" color="#007AFF" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="AyeTab" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={absoluteOg} />
+    <meta property="og:image:secure_url" content={absoluteOg} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="AyeTab — 100 developer tools. Offline. Instant." />
+    <meta property="og:logo" content={logoUrl} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absoluteOg} />
+    <meta name="twitter:image:alt" content="AyeTab — 100 developer tools. Offline. Instant." />
+
+    <link rel="image_src" href={logoUrl} />
 
     <title>{title}</title>
 

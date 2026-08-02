@@ -1,15 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
   <defs>
-    <linearGradient id="face" x1="20" y1="12" x2="108" y2="116" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#F3F6FA"/>
+    <linearGradient id="tile" x1="16" y1="8" x2="112" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="0.5" stop-color="#E8F2FC"/>
+      <stop offset="1" stop-color="#D4E6F8"/>
     </linearGradient>
-    <linearGradient id="mark" x1="40" y1="30" x2="88" y2="98" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#1A2333"/>
-      <stop offset="1" stop-color="#0A152D"/>
+    <linearGradient id="tab" x1="34" y1="28" x2="94" y2="66" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4AA3FF"/>
+      <stop offset="1" stop-color="#007AFF"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="40" y1="30" x2="88" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect x="8" y="8" width="112" height="112" rx="30" fill="url(#face)" stroke="#E8EEF5" stroke-width="1"/>
-  <path d="M42 90 L64 34 L86 90" stroke="url(#mark)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M51 68 H77" stroke="url(#mark)" stroke-width="8" stroke-linecap="round"/>
+  <!-- macOS squircle -->
+  <rect x="8" y="8" width="112" height="112" rx="30" fill="url(#tile)" stroke="#C2D6EA" stroke-width="1.2"/>
+  <!-- Chrome divider -->
+  <path d="M24 64 H104" stroke="#7FA3C4" stroke-width="2.75" stroke-linecap="round"/>
+  <!-- Abstract tab sitting on the divider -->
+  <rect x="34" y="32" width="60" height="32" rx="11" fill="url(#tab)"/>
+  <rect x="34" y="32" width="60" height="12" rx="11" fill="url(#sheen)"/>
+  <circle cx="46" cy="40" r="2.8" fill="#FFFFFF" opacity="0.5"/>
 </svg>

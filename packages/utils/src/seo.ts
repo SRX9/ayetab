@@ -56,7 +56,7 @@ export function getHomeSeo(origin = WEB_APP_ORIGIN) {
   return {
     title: `${SITE_NAME} — Developer Utilities Online`,
     description:
-      "All-in-one developer toolbox: format JSON, decode JWT, encode Base64, generate UUIDs, and 90+ more utilities. Free, private, runs offline in your browser.",
+      "All-in-one developer toolbox: format JSON, decode JWT, encode Base64, generate UUIDs, and 100 tools total. Free, private, runs offline in your browser.",
     canonicalUrl: origin,
     keywords: [
       "developer tools",

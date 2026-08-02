@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   TOOL_REGISTRY,
   getToolById,
@@ -6,19 +8,16 @@ import {
   CATEGORY_LABELS,
   type ToolDefinition,
 } from "@ayetab/utils";
-import type { Metadata } from "next";
 import { notFoundToolMetadata, toolMetadata } from "@/lib/seo-metadata";
 import ToolPageClient from "./tool-page-client";
+
+type Props = { params: Promise<{ id: string }> };
 
 export function generateStaticParams() {
   return TOOL_REGISTRY.map((tool) => ({ id: tool.id }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const tool = getToolById(id);
   if (!tool) return notFoundToolMetadata();
@@ -47,10 +46,7 @@ function RelatedTools({ tool }: { tool: ToolDefinition }) {
       <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((t) => (
           <li key={t.id}>
-            <Link
-              href={`/tools/${t.id}`}
-              className="block text-ui text-brand hover:underline"
-            >
+            <Link href={`/tools/${t.id}`} className="block text-ui text-brand hover:underline">
               {t.name}
             </Link>
             <p className="text-ui text-muted-foreground">{t.description}</p>
@@ -61,7 +57,7 @@ function RelatedTools({ tool }: { tool: ToolDefinition }) {
   );
 }
 
-export default async function ToolPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ToolPage({ params }: Props) {
   const { id } = await params;
   const tool = getToolById(id);
   const jsonLd = tool ? buildToolJsonLd(tool) : null;
@@ -74,7 +70,9 @@ export default async function ToolPage({ params }: { params: Promise<{ id: strin
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
-      <ToolPageClient toolId={id} />
+      <Suspense>
+        <ToolPageClient toolId={id} />
+      </Suspense>
       {tool && tool.id !== "excalidraw" && <RelatedTools tool={tool} />}
     </>
   );
