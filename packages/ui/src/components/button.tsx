@@ -14,10 +14,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-selection text-selection-foreground hover:bg-selection/90",
+  primary:
+    "bg-selection text-selection-foreground shadow-[0_1px_0_rgba(255,255,255,0.28)_inset] hover:brightness-[1.04]",
   secondary: "bg-secondary text-secondary-foreground hover:bg-accent",
   ghost: "text-muted-foreground hover:bg-[hsl(var(--hover-fill))] hover:text-foreground",
-  outline: "border border-border bg-background text-foreground hover:bg-[hsl(var(--hover-fill))]",
+  outline:
+    "border border-border bg-background/80 text-foreground backdrop-blur-sm hover:bg-[hsl(var(--hover-fill))]",
   destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
 };
 
@@ -40,9 +42,10 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex select-none items-center justify-center font-medium transition-colors duration-100",
+        "inline-flex select-none items-center justify-center font-medium transition-[color,background-color,transform,filter,box-shadow] duration-150",
         FOCUS_RING,
         "disabled:pointer-events-none disabled:opacity-50",
+        "active:scale-[0.98]",
         variantClasses[variant],
         sizeClasses[size],
         className

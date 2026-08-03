@@ -248,7 +248,7 @@ export function AppShell({
 
   return (
     <div
-      className="flex h-screen overflow-hidden"
+      className="app-shell flex h-screen overflow-hidden"
       data-testid="app-shell"
       data-hydrated={hydrated || undefined}
     >
@@ -273,8 +273,8 @@ export function AppShell({
         </div>
       )}
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex shrink-0 items-center gap-2 border-b border-border px-3 py-2 md:hidden">
+      <div className="content-pane flex min-w-0 flex-1 flex-col">
+        <div className="app-topbar flex shrink-0 items-center gap-2 px-3 py-2 md:hidden">
           <button
             ref={menuButtonRef}
             type="button"

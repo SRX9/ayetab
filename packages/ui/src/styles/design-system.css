@@ -1,108 +1,123 @@
 /**
- * AyeTab — flat document design system.
- * Notion-like: a tinted sidebar, a plain content pane, hairline rules, and
- * almost no chrome. No blur, no glass, no elevation stacking.
- * Shared by web + extension. Plain CSS (no @layer / @apply).
+ * AyeTab design system — glass chrome, flat content.
+ *
+ * Brand language matches the liquid-glass tab mark: cool sky mist, system blue
+ * (#007AFF), frosted shell materials. Tool panes stay opaque paper so dense
+ * documents stay readable. Shared by web + extension. Plain CSS.
  */
 
 :root {
+  /* Paper content — stay opaque and calm */
   --background: 0 0% 100%;
-  --foreground: 45 8% 20%;
+  --foreground: 215 28% 15%;
   --card: 0 0% 100%;
-  --card-foreground: 45 8% 20%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 45 8% 20%;
-  --primary: 45 8% 20%;
+  --card-foreground: 215 28% 15%;
+  --popover: 210 40% 99%;
+  --popover-foreground: 215 28% 15%;
+  --primary: 215 28% 15%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 60 6% 95%;
-  --secondary-foreground: 45 8% 20%;
-  --muted: 60 8% 96%;
-  --muted-foreground: 45 3% 46%;
-  --accent: 60 6% 94%;
-  --accent-foreground: 45 8% 20%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 215 28% 15%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 220 14% 40%;
+  --accent: 210 40% 94%;
+  --accent-foreground: 215 28% 15%;
   --destructive: 2 62% 52%;
   --destructive-foreground: 0 0% 100%;
-  --border: 60 4% 91%;
-  --input: 60 4% 91%;
-  --ring: 210 77% 51%;
-  --radius: 0.1875rem;
+  --border: 210 35% 88%;
+  --input: 210 35% 88%;
+  --ring: 211 100% 50%;
+  --radius: 0.25rem;
 
-  /* The sidebar is the only tinted surface; content stays paper-white. */
-  --sidebar: 60 11% 96%;
-  --sidebar-border: 48 6% 89%;
+  /* Shell mist — cool tint behind frosted chrome */
+  --shell: 210 50% 96%;
+  --sidebar: 210 45% 95%;
+  --sidebar-border: 210 35% 86%;
 
-  /* Row states are translucent ink, so they read the same on either surface. */
-  --hover-fill: 45 8% 20% / 0.055;
-  --active-fill: 45 8% 20% / 0.08;
+  /* Row states: translucent cool ink */
+  --hover-fill: 215 28% 15% / 0.05;
+  --active-fill: 211 100% 50% / 0.1;
 
-  /* Notion stone (#a4a097) resting, steel (#787671) under the pointer. */
-  --scrollbar-thumb: 42 6% 61%;
-  --scrollbar-thumb-strong: 40 5% 47%;
+  --scrollbar-thumb: 210 18% 62%;
+  --scrollbar-thumb-strong: 210 16% 48%;
 
-  /*
-   * Switch / slider trough. The hairline token is far too faint to carry a
-   * control's off state — steel lightened to 55% clears 3:1 against the page
-   * while still reading as "not on".
-   */
-  --control-track: 40 5% 55%;
-  --control-track-strong: 40 5% 45%;
+  --control-track: 210 12% 55%;
+  --control-track-strong: 210 14% 45%;
 
-  --selection: 210 77% 51%;
+  /* System blue — matches the logo tab plate */
+  --selection: 211 100% 50%;
   --selection-foreground: 0 0% 100%;
   --selection-soft: 210 60% 96%;
 
-  --brand: 210 77% 51%;
+  --brand: 211 100% 50%;
   --brand-foreground: 0 0% 100%;
   --favorite: 38 92% 50%;
 
-  /* Menus and dialogs lift off the page — the one place a shadow is earned. */
-  --elevation-menu: 0 0 0 1px hsl(45 8% 20% / 0.06), 0 3px 6px hsl(45 8% 20% / 0.06),
-    0 9px 24px hsl(45 8% 20% / 0.09);
+  /* Glass materials (chrome only) */
+  --glass-fill: 210 55% 97% / 0.78;
+  --glass-fill-strong: 210 50% 98% / 0.9;
+  --glass-border: 210 40% 82% / 0.8;
+  --glass-highlight: 0 0% 100% / 0.7;
+  --glass-blur: 22px;
+  --glass-saturate: 180%;
+
+  --elevation-menu:
+    0 1px 0 hsl(var(--glass-highlight)) inset,
+    0 0 0 1px hsl(215 28% 15% / 0.05),
+    0 8px 28px hsl(215 28% 15% / 0.08);
 }
 
 .dark {
-  --background: 0 0% 10%;
-  --foreground: 0 0% 88%;
-  --card: 0 0% 10%;
-  --card-foreground: 0 0% 88%;
-  --popover: 0 0% 15%;
-  --popover-foreground: 0 0% 88%;
-  --primary: 0 0% 88%;
-  --primary-foreground: 0 0% 10%;
-  --secondary: 0 0% 16%;
-  --secondary-foreground: 0 0% 88%;
-  --muted: 0 0% 16%;
-  --muted-foreground: 45 3% 60%;
-  --accent: 0 0% 18%;
-  --accent-foreground: 0 0% 88%;
+  --background: 220 28% 8%;
+  --foreground: 210 20% 92%;
+  --card: 220 28% 8%;
+  --card-foreground: 210 20% 92%;
+  --popover: 220 24% 12%;
+  --popover-foreground: 210 20% 92%;
+  --primary: 210 20% 92%;
+  --primary-foreground: 220 28% 8%;
+  --secondary: 220 20% 14%;
+  --secondary-foreground: 210 20% 92%;
+  --muted: 220 20% 14%;
+  --muted-foreground: 215 12% 62%;
+  --accent: 220 18% 16%;
+  --accent-foreground: 210 20% 92%;
   --destructive: 2 58% 54%;
   --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 18%;
-  --input: 0 0% 18%;
-  --ring: 210 77% 56%;
+  --border: 220 16% 18%;
+  --input: 220 16% 18%;
+  --ring: 211 100% 56%;
 
-  --sidebar: 0 0% 13%;
-  --sidebar-border: 0 0% 18%;
+  --shell: 220 30% 7%;
+  --sidebar: 220 26% 10%;
+  --sidebar-border: 220 16% 18%;
 
   --hover-fill: 0 0% 100% / 0.055;
   --active-fill: 0 0% 100% / 0.09;
 
-  --scrollbar-thumb: 0 0% 40%;
-  --scrollbar-thumb-strong: 0 0% 55%;
+  --scrollbar-thumb: 215 10% 40%;
+  --scrollbar-thumb-strong: 215 10% 55%;
 
-  --control-track: 0 0% 44%;
-  --control-track-strong: 0 0% 56%;
+  --control-track: 215 10% 44%;
+  --control-track-strong: 215 10% 56%;
 
-  --selection: 210 77% 56%;
+  --selection: 211 100% 56%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 210 40% 22%;
+  --selection-soft: 211 40% 18%;
 
-  --brand: 210 77% 60%;
-  --brand-foreground: 0 0% 10%;
+  --brand: 211 100% 58%;
+  --brand-foreground: 220 28% 8%;
   --favorite: 38 92% 56%;
 
-  --elevation-menu: 0 0 0 1px hsl(0 0% 100% / 0.08), 0 3px 6px hsl(0 0% 0% / 0.3),
-    0 9px 24px hsl(0 0% 0% / 0.4);
+  --glass-fill: 220 24% 12% / 0.72;
+  --glass-fill-strong: 220 24% 14% / 0.88;
+  --glass-border: 210 20% 100% / 0.1;
+  --glass-highlight: 0 0% 100% / 0.08;
+
+  --elevation-menu:
+    0 1px 0 hsl(var(--glass-highlight)) inset,
+    0 0 0 1px hsl(0 0% 100% / 0.06),
+    0 10px 32px hsl(0 0% 0% / 0.45);
 }
 
 * {
@@ -136,42 +151,91 @@ kbd {
   color: hsl(var(--muted-foreground));
 }
 
-/* The list rail. Tinted, separated by a hairline — never a shadow. */
+/* ---------------------------------------------------------------------------
+ * Materials
+ * Glass lives on shell chrome (sidebar, top bar, menus). Content panes stay
+ * opaque paper — blur over dense tool UI hurts legibility.
+ * ------------------------------------------------------------------------ */
+
+.app-shell {
+  background:
+    radial-gradient(980px 480px at 0% -5%, hsl(211 100% 50% / 0.1), transparent 55%),
+    radial-gradient(820px 420px at 100% 0%, hsl(200 90% 70% / 0.14), transparent 52%),
+    hsl(var(--shell));
+}
+
+/* Frosted list rail — content scrolls under the material. */
 .app-sidebar {
-  background: hsl(var(--sidebar));
-  border-inline-end: 1px solid hsl(var(--sidebar-border));
-  /* Scroll edges dissolve into the rail, not into the content pane's white. */
+  background: hsl(var(--glass-fill));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border-inline-end: 1px solid hsl(var(--glass-border));
+  box-shadow: 1px 0 0 hsl(var(--glass-highlight)) inset;
+  /* Fade bands use an opaque cousin so edges don't go muddy. */
   --fade-surface: var(--sidebar);
 }
 
-/* Menus, dialogs, command palette — the only floating surfaces. */
+/* Mobile / compact chrome bar */
+.app-topbar {
+  background: hsl(var(--glass-fill-strong));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border-bottom: 1px solid hsl(var(--glass-border));
+  box-shadow: 0 1px 0 hsl(var(--glass-highlight)) inset;
+}
+
+/* Menus, dialogs, command palette — frosted floating surfaces. */
 .menu-surface {
-  background: hsl(var(--popover));
-  border-radius: 6px;
+  background: hsl(var(--glass-fill-strong));
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid hsl(var(--glass-border));
+  border-radius: 10px;
   box-shadow: var(--elevation-menu);
 }
 
-/* A bordered block inside the content pane (code output, previews, tables). */
+/* Content documents stay flat and opaque. */
 .panel {
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* Text inputs and textareas. */
 .field {
   background: hsl(var(--background));
   border: 1px solid hsl(var(--border));
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .field:focus-within {
-  border-color: hsl(var(--ring) / 0.6);
+  border-color: hsl(var(--ring) / 0.55);
+  box-shadow: 0 0 0 3px hsl(var(--selection-soft));
 }
 
 .chip {
   background: hsl(var(--muted));
   border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+}
+
+.content-pane {
+  background: hsl(var(--background));
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .app-sidebar,
+  .app-topbar,
+  .menu-surface {
+    background: hsl(var(--sidebar));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .menu-surface {
+    background: hsl(var(--popover));
+    box-shadow: var(--elevation-menu);
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -280,6 +344,7 @@ kbd {
   background: hsl(var(--active-fill));
   color: hsl(var(--foreground));
   font-weight: 500;
+  box-shadow: inset 3px 0 0 hsl(var(--brand));
 }
 
 /* ---------------------------------------------------------------------------

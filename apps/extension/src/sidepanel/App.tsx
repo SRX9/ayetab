@@ -183,13 +183,13 @@ function AppContent() {
   return (
     <>
       {modals}
-      <div className="flex h-screen flex-col text-foreground">
+      <div className="app-shell flex h-screen flex-col text-foreground">
         <CommandPalette
           tools={EXTENSION_TOOLS}
           onSelect={(t) => openTool(t)}
           recentIds={prefs.recents}
         />
-        <header className="flex shrink-0 items-center gap-1.5 border-b border-border px-2 py-1.5">
+        <header className="app-topbar flex shrink-0 items-center gap-1.5 px-2 py-1.5">
           <BrandMark className="h-6 w-6" size={24} src="/logo-icon.png" />
           <h1 className="flex-1 truncate text-ui font-semibold">AyeTab</h1>
           <SettingsButton />

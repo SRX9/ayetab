@@ -59,6 +59,9 @@ const config: Config = {
           DEFAULT: "hsl(var(--sidebar))",
           border: "hsl(var(--sidebar-border))",
         },
+        shell: "hsl(var(--shell))",
+        mist: "hsl(var(--sidebar))",
+        line: "hsl(var(--border))",
       },
       /**
        * Named type scale. Arbitrary `text-[13px]` values set font-size only and

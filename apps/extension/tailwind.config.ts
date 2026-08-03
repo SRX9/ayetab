@@ -58,6 +58,9 @@ const config: Config = {
           DEFAULT: "hsl(var(--sidebar))",
           border: "hsl(var(--sidebar-border))",
         },
+        shell: "hsl(var(--shell))",
+        mist: "hsl(var(--sidebar))",
+        line: "hsl(var(--border))",
       },
       /** Keep in sync with apps/web/tailwind.config.ts — packages/ui uses these. */
       fontSize: {
