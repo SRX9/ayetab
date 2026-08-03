@@ -53,48 +53,55 @@
   --favorite: 38 92% 50%;
 
   /*
-   * Liquid glass recipes — refractive gradients + specular inset, not flat
-   * translucent gray. Values are used as full backgrounds (not hsl()).
+   * Liquid glass recipes — clear refractive volume like the logo mark, not
+   * milky frost. Used as full backgrounds (not hsl()).
    */
-  --glass-blur: 40px;
-  --glass-saturate: 180%;
+  --glass-blur: 48px;
+  --glass-saturate: 200%;
   --glass-fill: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.78) 0%,
-    rgba(255, 255, 255, 0.48) 42%,
-    rgba(220, 236, 250, 0.55) 100%
+    155deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(255, 255, 255, 0.28) 38%,
+    rgba(186, 220, 255, 0.32) 72%,
+    rgba(220, 238, 255, 0.42) 100%
   );
   --glass-fill-strong: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.7) 45%,
-    rgba(232, 244, 255, 0.78) 100%
+    155deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.55) 40%,
+    rgba(210, 232, 255, 0.58) 100%
   );
   --glass-fill-soft: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.58) 0%,
-    rgba(255, 255, 255, 0.28) 50%,
-    rgba(200, 226, 248, 0.35) 100%
+    155deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(170, 210, 245, 0.28) 100%
   );
-  --glass-border: rgba(255, 255, 255, 0.72);
-  --glass-border-outer: rgba(120, 160, 200, 0.38);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-outer: rgba(90, 150, 210, 0.45);
   --glass-specular:
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(100, 140, 180, 0.06);
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(80, 130, 180, 0.12),
+    inset 1.5px 0 0 rgba(255, 255, 255, 0.45),
+    inset -1px 0 0 rgba(120, 170, 220, 0.15);
   --elevation-menu:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 0 0 0.5px rgba(120, 160, 200, 0.28),
-    0 16px 48px rgba(40, 90, 140, 0.14),
-    0 4px 12px rgba(40, 90, 140, 0.06),
-    0 0 32px rgba(0, 122, 255, 0.08);
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 0 0 1.5px rgba(90, 150, 210, 0.2),
+    0 20px 56px rgba(40, 90, 140, 0.18),
+    0 6px 16px rgba(40, 90, 140, 0.08),
+    0 0 40px rgba(0, 122, 255, 0.12);
   --elevation-glass:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 8px 28px rgba(40, 90, 140, 0.1),
-    0 2px 6px rgba(40, 90, 140, 0.05);
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 12px 36px rgba(40, 90, 140, 0.14),
+    0 4px 10px rgba(40, 90, 140, 0.06),
+    0 0 28px rgba(0, 122, 255, 0.08);
   --shadow-accent:
-    0 1px 0 rgba(255, 255, 255, 0.32) inset,
-    0 -1px 0 rgba(0, 60, 140, 0.18) inset,
-    0 8px 24px rgba(0, 122, 255, 0.36);
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 -1px 0 rgba(0, 60, 140, 0.2) inset,
+    0 10px 28px rgba(0, 122, 255, 0.42),
+    0 0 20px rgba(0, 122, 255, 0.18);
 }
 
 .dark {
@@ -228,11 +235,12 @@ kbd {
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(ellipse 90% 70% at 8% -8%, rgba(255, 255, 255, 0.95) 0%, transparent 52%),
-    radial-gradient(ellipse 70% 55% at 96% 4%, rgba(120, 190, 255, 0.5) 0%, transparent 48%),
-    radial-gradient(ellipse 55% 45% at 48% 108%, rgba(0, 122, 255, 0.16) 0%, transparent 52%),
-    radial-gradient(ellipse 40% 30% at 72% 38%, rgba(180, 220, 255, 0.32) 0%, transparent 60%),
-    linear-gradient(165deg, #eef6fd 0%, #c8e0f5 42%, #aed4f2 72%, #c2ddf5 100%);
+    radial-gradient(ellipse 100% 80% at 12% -12%, rgba(255, 255, 255, 1) 0%, transparent 48%),
+    radial-gradient(ellipse 80% 60% at 92% 0%, rgba(90, 180, 255, 0.65) 0%, transparent 46%),
+    radial-gradient(ellipse 60% 50% at 50% 110%, rgba(0, 122, 255, 0.28) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 35% at 68% 42%, rgba(160, 220, 255, 0.45) 0%, transparent 58%),
+    radial-gradient(ellipse 30% 25% at 25% 60%, rgba(200, 235, 255, 0.4) 0%, transparent 55%),
+    linear-gradient(165deg, #f2f8ff 0%, #b7d8f5 38%, #8fc4ef 68%, #a8d2f4 100%);
 }
 
 .dark .app-shell {
@@ -267,26 +275,20 @@ kbd {
   z-index: 1;
 }
 
-/* Thick liquid-glass rail */
+/* Thick floating liquid-glass rail — logo-like volume */
 .app-sidebar {
   position: relative;
   background: var(--glass-fill);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  border-inline-end: 1px solid var(--glass-border);
-  box-shadow:
-    var(--glass-specular),
-    4px 0 32px rgba(40, 90, 140, 0.08),
-    inset -1px 0 0 rgba(255, 255, 255, 0.28);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elevation-glass);
   /* Fade bands need an opaque HSL cousin so edges don't muddy */
-  --fade-surface: 210 50% 96%;
+  --fade-surface: 210 55% 94%;
 }
 
 .dark .app-sidebar {
-  box-shadow:
-    var(--glass-specular),
-    4px 0 36px rgba(0, 0, 0, 0.35),
-    inset -1px 0 0 rgba(255, 255, 255, 0.04);
+  box-shadow: var(--elevation-glass);
   --fade-surface: 220 28% 9%;
 }
 
@@ -360,29 +362,18 @@ kbd {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
-/* Floating glass content sheet — high opacity for readability */
+/* Floating glass content sheet — refractive but readable */
 .content-pane {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.78) 0%,
-    rgba(255, 255, 255, 0.88) 100%
-  );
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-  box-shadow:
-    inset 1px 0 0 rgba(255, 255, 255, 0.55),
-    -8px 0 40px rgba(40, 90, 140, 0.05);
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elevation-glass);
 }
 
 .dark .content-pane {
-  background: linear-gradient(
-    180deg,
-    rgba(16, 28, 42, 0.82) 0%,
-    rgba(12, 22, 34, 0.9) 100%
-  );
-  box-shadow:
-    inset 1px 0 0 rgba(255, 255, 255, 0.05),
-    -8px 0 40px rgba(0, 0, 0, 0.25);
+  background: var(--glass-fill-strong);
+  box-shadow: var(--elevation-glass);
 }
 
 .panel {

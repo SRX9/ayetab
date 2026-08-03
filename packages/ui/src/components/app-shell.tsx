@@ -248,11 +248,13 @@ export function AppShell({
 
   return (
     <div
-      className="app-shell flex h-screen overflow-hidden"
+      className="app-shell flex h-screen gap-3 overflow-hidden p-3 max-md:gap-0 max-md:p-0"
       data-testid="app-shell"
       data-hydrated={hydrated || undefined}
     >
-      <aside className="app-sidebar hidden w-[15rem] shrink-0 flex-col md:flex">{sidebar}</aside>
+      <aside className="app-sidebar hidden w-[15rem] shrink-0 flex-col overflow-hidden rounded-2xl md:flex">
+        {sidebar}
+      </aside>
 
       {navOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
@@ -266,14 +268,14 @@ export function AppShell({
             role="dialog"
             aria-modal="true"
             aria-label="Tools"
-            className="app-sidebar absolute inset-y-0 start-0 flex w-[16rem] flex-col"
+            className="app-sidebar absolute inset-y-0 start-0 flex w-[16rem] flex-col overflow-hidden shadow-2xl"
           >
             {sidebar}
           </aside>
         </div>
       )}
 
-      <div className="content-pane flex min-w-0 flex-1 flex-col">
+      <div className="content-pane flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl max-md:rounded-none">
         <div className="app-topbar flex shrink-0 items-center gap-2 px-3 py-2 md:hidden">
           <button
             ref={menuButtonRef}
@@ -282,7 +284,7 @@ export function AppShell({
             aria-label="Open navigation"
             aria-expanded={navOpen}
             className={cn(
-              "flex h-8 w-8 items-center justify-center rounded text-muted-foreground row-idle",
+              "flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground row-idle",
               FOCUS_RING
             )}
           >
