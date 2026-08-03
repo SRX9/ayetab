@@ -1,32 +1,38 @@
 # AyeTab design system
 
-Shared visual language for the web app and extension (`packages/ui/src/styles/design-system.css`). The marketing site (`apps/landing`) already speaks the same liquid-glass brand.
+Shared visual language for the web app and extension (`packages/ui/src/styles/design-system.css`). Matches the liquid-glass brand mark and the marketing site (`apps/landing`).
 
 ## Principle
 
-**Glass chrome, flat content.**
+**Liquid glass throughout — readable sheets, not flat paper.**
 
 | Layer | Material | Why |
 |-------|----------|-----|
-| Shell / sidebar / top bar / menus | Frosted glass (`backdrop-filter`) | Matches the tab logo; hierarchy without heavy borders |
-| Tool panes, fields, panels | Opaque paper | Dense documents stay readable; blur over text fails |
+| Shell atmosphere | Caustic sky gradients + grain | Same backdrop language as the logo |
+| Sidebar / top bar / menus | Thick refractive glass, specular edge | Hierarchy that feels like the mark |
+| Content pane / panels | High-opacity floating glass | Soft depth without muddy text |
+| Fields | Inset glass wells | Controls sit *in* the material |
+| Primary actions | Luminous system-blue gradient | Logo tab + landing CTA |
 
 ## Palette
 
 | Token | Role | Light |
 |-------|------|-------|
 | `--brand` / `--selection` | System blue (logo tab) | `#007AFF` |
-| `--shell` / `--sidebar` | Sky mist behind chrome | cool blue-gray |
-| `--background` / `--card` | Content paper | white |
-| `--foreground` | Cool ink | `#1a2333`-ish |
-| `--border` | Hairline | `#d7e3f0`-ish |
+| `--shell` | Sky mist behind chrome | cool blue wash |
+| `--background` / `--card` | Soft cool paper under glass | near-white sky |
+| `--foreground` | Cool ink | deep navy |
+| Glass borders | Specular white + soft blue outer | white / mist |
 
 ## Materials
 
-- `.app-shell` — soft sky mist atmosphere
-- `.app-sidebar` / `.app-topbar` / `.menu-surface` — frosted glass
-- `.content-pane` / `.panel` / `.field` — opaque
-- `prefers-reduced-transparency` — solid sidebar/menu fills
+- `.app-shell` — caustic sky + grain overlay
+- `.app-sidebar` / `.app-topbar` / `.menu-surface` — refractive fills, blur 28–40px, specular sheen
+- `.content-pane` / `.panel` — high-opacity glass sheets
+- `.field` — inset wells with focus glow
+- `.nav-active` — luminous blue fill + rail
+- `.btn-liquid-primary` — gradient + blue glow (landing CTA)
+- `prefers-reduced-transparency` — solid fills, no blur
 
 ## Type
 
@@ -34,7 +40,9 @@ Instrument Sans (UI + titles) · JetBrains Mono (code). Display sizes use tighte
 
 ## Do / don’t
 
-- Do frost structural chrome and floating menus
-- Do keep primary actions on system blue with a light inset sheen
-- Don’t glass input/output panes or long-form tool content
-- Don’t stack translucent surfaces on translucent surfaces
+- Do keep refractive gradients and specular top edges on chrome
+- Do keep primary actions on luminous system blue
+- Do keep tool content highly opaque so monospace stays readable
+- Don’t flatten glass into cool-gray frost
+- Don’t use purple gradients or heavy multi-layer drop shadows
+- Don’t round everything into pills — soft squircles (8–14px) only

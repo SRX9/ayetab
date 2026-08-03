@@ -81,17 +81,17 @@ const config: Config = {
         "display-lg": ["2.125rem", { lineHeight: "1.05", letterSpacing: "-0.035em", fontWeight: "600" }],
       },
       /**
-       * Flat scale. Corners are a rounding of the edge, not a shape — the top
-       * step is 8px so no surface ever reads as a floating pill.
+       * Soft glass scale — squircles like the brand mark, not Notion-flat
+       * chips or full pills.
        */
       borderRadius: {
-        sm: "2px",
-        DEFAULT: "3px",
-        md: "4px",
+        sm: "6px",
+        DEFAULT: "8px",
+        md: "10px",
         lg: "var(--radius)",
-        xl: "6px",
-        "2xl": "8px",
-        "3xl": "8px",
+        xl: "14px",
+        "2xl": "18px",
+        "3xl": "24px",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "Instrument Sans", "ui-sans-serif", "system-ui", "sans-serif"],

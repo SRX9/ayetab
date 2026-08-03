@@ -13,7 +13,7 @@ inspired by [DevUtils](https://devutils.com).
 | [Implementation Roadmap](./implementation-roadmap.md) | Phased build plan from scaffold to full utility suite |
 | [Privacy Policy](./PRIVACY.md) | Offline-first privacy policy (live at ayetab.dev/privacy) |
 | [Terms of Use](./TERMS.md) | Terms of use (live at ayetab.dev/terms) |
-| [Design System](./DESIGN.md) | Glass chrome + flat content tokens (matches the tab logo) |
+| [Design System](./DESIGN.md) | Liquid-glass tokens + materials (matches the tab logo) |
 | [Store Listing Guide](./STORE.md) | Chrome / Firefox store listing checklist |
 
 ## Project Vision

@@ -259,7 +259,7 @@ export function AppShell({
           <button
             type="button"
             aria-label="Close navigation"
-            className="absolute inset-0 border-0 bg-black/30"
+            className="overlay-backdrop absolute inset-0 border-0 bg-[rgba(10,30,55,0.35)] backdrop-blur-md"
             onClick={() => setNavOpen(false)}
           />
           <aside

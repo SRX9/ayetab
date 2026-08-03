@@ -135,20 +135,20 @@ function AppContent() {
     return (
       <>
         {modals}
-        <div className="flex h-screen flex-col text-foreground">
+        <div className="app-shell flex h-screen flex-col text-foreground">
           <CommandPalette
             tools={EXTENSION_TOOLS}
             onSelect={(t) => openTool(t)}
             recentIds={prefs.recents}
           />
-          <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
+          <header className="app-topbar flex shrink-0 items-center gap-1 px-2 py-1.5">
             <button
               type="button"
               onClick={() => {
                 setSelectedTool(null);
                 setInitialInput("");
               }}
-              className="inline-flex items-center gap-0.5 rounded px-1.5 py-1 text-caption text-muted-foreground transition-colors hover:bg-[hsl(var(--hover-fill))] hover:text-foreground"
+              className="inline-flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-caption text-muted-foreground transition-colors hover:bg-white/40 hover:text-foreground dark:hover:bg-white/10"
             >
               <HugeiconsIcon
                 icon={ChevronLeftIcon}
@@ -163,7 +163,7 @@ function AppContent() {
             <SettingsButton />
             <ThemeToggle />
           </header>
-          <div className="flex-1 overflow-auto p-3">
+          <div className="content-pane flex-1 overflow-auto p-3">
             <ToolHost
               key={`${selectedTool.id}-${initialInput}`}
               tool={selectedTool}

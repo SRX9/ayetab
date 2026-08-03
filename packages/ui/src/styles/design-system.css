@@ -1,123 +1,179 @@
 /**
- * AyeTab design system — glass chrome, flat content.
+ * AyeTab design system — liquid glass.
  *
- * Brand language matches the liquid-glass tab mark: cool sky mist, system blue
- * (#007AFF), frosted shell materials. Tool panes stay opaque paper so dense
- * documents stay readable. Shared by web + extension. Plain CSS.
+ * Materials match the brand mark and landing site: refractive fills, specular
+ * edges, cool sky atmosphere, luminous system blue (#007AFF). Shared by web +
+ * extension. Plain CSS; HSL tokens feed Tailwind.
  */
 
 :root {
-  /* Paper content — stay opaque and calm */
-  --background: 0 0% 100%;
-  --foreground: 215 28% 15%;
-  --card: 0 0% 100%;
-  --card-foreground: 215 28% 15%;
-  --popover: 210 40% 99%;
-  --popover-foreground: 215 28% 15%;
-  --primary: 215 28% 15%;
+  /* Soft paper — slightly cool so glass reads against it */
+  --background: 210 60% 99%;
+  --foreground: 215 32% 12%;
+  --card: 210 50% 99%;
+  --card-foreground: 215 32% 12%;
+  --popover: 210 45% 98%;
+  --popover-foreground: 215 32% 12%;
+  --primary: 215 32% 12%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 215 28% 15%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 220 14% 40%;
-  --accent: 210 40% 94%;
-  --accent-foreground: 215 28% 15%;
-  --destructive: 2 62% 52%;
+  --secondary: 210 45% 95%;
+  --secondary-foreground: 215 32% 12%;
+  --muted: 210 40% 95%;
+  --muted-foreground: 215 16% 42%;
+  --accent: 210 50% 94%;
+  --accent-foreground: 215 32% 12%;
+  --destructive: 2 78% 56%;
   --destructive-foreground: 0 0% 100%;
-  --border: 210 35% 88%;
-  --input: 210 35% 88%;
+  --border: 210 38% 86%;
+  --input: 210 38% 86%;
   --ring: 211 100% 50%;
-  --radius: 0.25rem;
+  --radius: 0.625rem;
 
-  /* Shell mist — cool tint behind frosted chrome */
-  --shell: 210 50% 96%;
-  --sidebar: 210 45% 95%;
-  --sidebar-border: 210 35% 86%;
+  /* Atmosphere behind chrome — caustic sky like the logo backdrop */
+  --shell: 210 55% 94%;
+  --sidebar: 210 50% 96%;
+  --sidebar-border: 210 40% 82%;
 
-  /* Row states: translucent cool ink */
-  --hover-fill: 215 28% 15% / 0.05;
-  --active-fill: 211 100% 50% / 0.1;
+  --hover-fill: 215 32% 12% / 0.05;
+  --active-fill: 211 100% 50% / 0.14;
 
-  --scrollbar-thumb: 210 18% 62%;
-  --scrollbar-thumb-strong: 210 16% 48%;
+  --scrollbar-thumb: 210 22% 62%;
+  --scrollbar-thumb-strong: 210 20% 48%;
 
-  --control-track: 210 12% 55%;
-  --control-track-strong: 210 14% 45%;
+  --control-track: 210 14% 55%;
+  --control-track-strong: 210 16% 45%;
 
-  /* System blue — matches the logo tab plate */
+  /* System blue — logo tab plate */
   --selection: 211 100% 50%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 210 60% 96%;
+  --selection-soft: 211 100% 50% / 0.14;
 
   --brand: 211 100% 50%;
   --brand-foreground: 0 0% 100%;
   --favorite: 38 92% 50%;
 
-  /* Glass materials (chrome only) */
-  --glass-fill: 210 55% 97% / 0.78;
-  --glass-fill-strong: 210 50% 98% / 0.9;
-  --glass-border: 210 40% 82% / 0.8;
-  --glass-highlight: 0 0% 100% / 0.7;
-  --glass-blur: 22px;
+  /*
+   * Liquid glass recipes — refractive gradients + specular inset, not flat
+   * translucent gray. Values are used as full backgrounds (not hsl()).
+   */
+  --glass-blur: 40px;
   --glass-saturate: 180%;
-
+  --glass-fill: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(255, 255, 255, 0.48) 42%,
+    rgba(220, 236, 250, 0.55) 100%
+  );
+  --glass-fill-strong: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 45%,
+    rgba(232, 244, 255, 0.78) 100%
+  );
+  --glass-fill-soft: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.58) 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(200, 226, 248, 0.35) 100%
+  );
+  --glass-border: rgba(255, 255, 255, 0.72);
+  --glass-border-outer: rgba(120, 160, 200, 0.38);
+  --glass-specular:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(100, 140, 180, 0.06);
   --elevation-menu:
-    0 1px 0 hsl(var(--glass-highlight)) inset,
-    0 0 0 1px hsl(215 28% 15% / 0.05),
-    0 8px 28px hsl(215 28% 15% / 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 0.5px rgba(120, 160, 200, 0.28),
+    0 16px 48px rgba(40, 90, 140, 0.14),
+    0 4px 12px rgba(40, 90, 140, 0.06),
+    0 0 32px rgba(0, 122, 255, 0.08);
+  --elevation-glass:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 28px rgba(40, 90, 140, 0.1),
+    0 2px 6px rgba(40, 90, 140, 0.05);
+  --shadow-accent:
+    0 1px 0 rgba(255, 255, 255, 0.32) inset,
+    0 -1px 0 rgba(0, 60, 140, 0.18) inset,
+    0 8px 24px rgba(0, 122, 255, 0.36);
 }
 
 .dark {
-  --background: 220 28% 8%;
-  --foreground: 210 20% 92%;
-  --card: 220 28% 8%;
-  --card-foreground: 210 20% 92%;
-  --popover: 220 24% 12%;
-  --popover-foreground: 210 20% 92%;
-  --primary: 210 20% 92%;
-  --primary-foreground: 220 28% 8%;
-  --secondary: 220 20% 14%;
-  --secondary-foreground: 210 20% 92%;
-  --muted: 220 20% 14%;
-  --muted-foreground: 215 12% 62%;
-  --accent: 220 18% 16%;
-  --accent-foreground: 210 20% 92%;
-  --destructive: 2 58% 54%;
+  --background: 220 30% 7%;
+  --foreground: 210 25% 94%;
+  --card: 220 26% 9%;
+  --card-foreground: 210 25% 94%;
+  --popover: 220 24% 11%;
+  --popover-foreground: 210 25% 94%;
+  --primary: 210 25% 94%;
+  --primary-foreground: 220 30% 7%;
+  --secondary: 220 22% 14%;
+  --secondary-foreground: 210 25% 94%;
+  --muted: 220 22% 13%;
+  --muted-foreground: 215 14% 62%;
+  --accent: 220 20% 15%;
+  --accent-foreground: 210 25% 94%;
+  --destructive: 2 70% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 220 16% 18%;
-  --input: 220 16% 18%;
+  --border: 220 18% 18%;
+  --input: 220 18% 18%;
   --ring: 211 100% 56%;
 
-  --shell: 220 30% 7%;
-  --sidebar: 220 26% 10%;
-  --sidebar-border: 220 16% 18%;
+  --shell: 220 32% 6%;
+  --sidebar: 220 28% 9%;
+  --sidebar-border: 220 16% 16%;
 
-  --hover-fill: 0 0% 100% / 0.055;
-  --active-fill: 0 0% 100% / 0.09;
+  --hover-fill: 0 0% 100% / 0.06;
+  --active-fill: 211 100% 56% / 0.22;
 
-  --scrollbar-thumb: 215 10% 40%;
-  --scrollbar-thumb-strong: 215 10% 55%;
+  --scrollbar-thumb: 215 12% 38%;
+  --scrollbar-thumb-strong: 215 12% 52%;
 
-  --control-track: 215 10% 44%;
-  --control-track-strong: 215 10% 56%;
+  --control-track: 215 12% 42%;
+  --control-track-strong: 215 12% 55%;
 
   --selection: 211 100% 56%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 211 40% 18%;
+  --selection-soft: 211 100% 56% / 0.22;
 
   --brand: 211 100% 58%;
-  --brand-foreground: 220 28% 8%;
+  --brand-foreground: 220 30% 7%;
   --favorite: 38 92% 56%;
 
-  --glass-fill: 220 24% 12% / 0.72;
-  --glass-fill-strong: 220 24% 14% / 0.88;
-  --glass-border: 210 20% 100% / 0.1;
-  --glass-highlight: 0 0% 100% / 0.08;
-
+  --glass-fill: linear-gradient(
+    165deg,
+    rgba(48, 68, 92, 0.72) 0%,
+    rgba(18, 32, 48, 0.58) 45%,
+    rgba(12, 24, 40, 0.68) 100%
+  );
+  --glass-fill-strong: linear-gradient(
+    165deg,
+    rgba(55, 78, 105, 0.88) 0%,
+    rgba(28, 44, 64, 0.78) 50%,
+    rgba(18, 32, 50, 0.85) 100%
+  );
+  --glass-fill-soft: linear-gradient(
+    165deg,
+    rgba(40, 60, 85, 0.5) 0%,
+    rgba(18, 32, 48, 0.35) 50%,
+    rgba(10, 20, 35, 0.45) 100%
+  );
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-outer: rgba(255, 255, 255, 0.08);
+  --glass-specular:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
   --elevation-menu:
-    0 1px 0 hsl(var(--glass-highlight)) inset,
-    0 0 0 1px hsl(0 0% 100% / 0.06),
-    0 10px 32px hsl(0 0% 0% / 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 20px 56px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(10, 132, 255, 0.12);
+  --elevation-glass:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 32px rgba(0, 0, 0, 0.4);
+  --shadow-accent:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 -1px 0 rgba(0, 40, 100, 0.3) inset,
+    0 8px 28px rgba(10, 132, 255, 0.42);
 }
 
 * {
@@ -134,116 +190,329 @@ html.dark {
 }
 
 ::selection {
-  background: hsl(var(--selection) / 0.25);
+  background: hsl(var(--selection) / 0.22);
 }
 
 kbd {
   display: inline-flex;
   align-items: center;
-  border-radius: 3px;
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--muted));
-  padding: 0.0625rem 0.3125rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  border-radius: 5px;
+  border: 1px solid rgba(120, 160, 200, 0.3);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.0625rem 0.375rem;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: 10px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: hsl(var(--muted-foreground));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 1px 2px rgba(40, 90, 140, 0.08);
+}
+
+.dark kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* ---------------------------------------------------------------------------
- * Materials
- * Glass lives on shell chrome (sidebar, top bar, menus). Content panes stay
- * opaque paper — blur over dense tool UI hurts legibility.
+ * Materials — true liquid glass (logo / landing language)
  * ------------------------------------------------------------------------ */
 
 .app-shell {
+  position: relative;
+  isolation: isolate;
   background:
-    radial-gradient(980px 480px at 0% -5%, hsl(211 100% 50% / 0.1), transparent 55%),
-    radial-gradient(820px 420px at 100% 0%, hsl(200 90% 70% / 0.14), transparent 52%),
-    hsl(var(--shell));
+    radial-gradient(ellipse 90% 70% at 8% -8%, rgba(255, 255, 255, 0.95) 0%, transparent 52%),
+    radial-gradient(ellipse 70% 55% at 96% 4%, rgba(120, 190, 255, 0.5) 0%, transparent 48%),
+    radial-gradient(ellipse 55% 45% at 48% 108%, rgba(0, 122, 255, 0.16) 0%, transparent 52%),
+    radial-gradient(ellipse 40% 30% at 72% 38%, rgba(180, 220, 255, 0.32) 0%, transparent 60%),
+    linear-gradient(165deg, #eef6fd 0%, #c8e0f5 42%, #aed4f2 72%, #c2ddf5 100%);
 }
 
-/* Frosted list rail — content scrolls under the material. */
+.dark .app-shell {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(10, 132, 255, 0.22) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 92% 8%, rgba(60, 100, 160, 0.28) 0%, transparent 48%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(0, 80, 160, 0.16) 0%, transparent 50%),
+    linear-gradient(165deg, #070e16 0%, #0c1622 50%, #08121c 100%);
+}
+
+/* Fine grain — same optical “glass depth” cue as the mark */
+.app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+}
+
+.dark .app-shell::before {
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+}
+
+.app-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Thick liquid-glass rail */
 .app-sidebar {
-  background: hsl(var(--glass-fill));
+  position: relative;
+  background: var(--glass-fill);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  border-inline-end: 1px solid hsl(var(--glass-border));
-  box-shadow: 1px 0 0 hsl(var(--glass-highlight)) inset;
-  /* Fade bands use an opaque cousin so edges don't go muddy. */
-  --fade-surface: var(--sidebar);
+  border-inline-end: 1px solid var(--glass-border);
+  box-shadow:
+    var(--glass-specular),
+    4px 0 32px rgba(40, 90, 140, 0.08),
+    inset -1px 0 0 rgba(255, 255, 255, 0.28);
+  /* Fade bands need an opaque HSL cousin so edges don't muddy */
+  --fade-surface: 210 50% 96%;
 }
 
-/* Mobile / compact chrome bar */
+.dark .app-sidebar {
+  box-shadow:
+    var(--glass-specular),
+    4px 0 36px rgba(0, 0, 0, 0.35),
+    inset -1px 0 0 rgba(255, 255, 255, 0.04);
+  --fade-surface: 220 28% 9%;
+}
+
+.app-sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 4%,
+    rgba(255, 255, 255, 0.9) 28%,
+    rgba(255, 255, 255, 0.98) 50%,
+    rgba(255, 255, 255, 0.9) 72%,
+    transparent 96%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dark .app-sidebar::after {
+  background: linear-gradient(
+    90deg,
+    transparent 4%,
+    rgba(255, 255, 255, 0.14) 28%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.14) 72%,
+    transparent 96%
+  );
+}
+
 .app-topbar {
-  background: hsl(var(--glass-fill-strong));
+  background: var(--glass-fill-soft);
+  backdrop-filter: blur(28px) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(28px) saturate(var(--glass-saturate));
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-specular), 0 4px 20px rgba(40, 90, 140, 0.06);
+}
+
+.dark .app-topbar {
+  box-shadow: var(--glass-specular), 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Crystal floating menus */
+.menu-surface {
+  position: relative;
+  background: var(--glass-fill-strong);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  border-bottom: 1px solid hsl(var(--glass-border));
-  box-shadow: 0 1px 0 hsl(var(--glass-highlight)) inset;
-}
-
-/* Menus, dialogs, command palette — frosted floating surfaces. */
-.menu-surface {
-  background: hsl(var(--glass-fill-strong));
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid hsl(var(--glass-border));
-  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
   box-shadow: var(--elevation-menu);
+  overflow: hidden;
 }
 
-/* Content documents stay flat and opaque. */
+.menu-surface::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dark .menu-surface::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* Floating glass content sheet — high opacity for readability */
+.content-pane {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(255, 255, 255, 0.88) 100%
+  );
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.55),
+    -8px 0 40px rgba(40, 90, 140, 0.05);
+}
+
+.dark .content-pane {
+  background: linear-gradient(
+    180deg,
+    rgba(16, 28, 42, 0.82) 0%,
+    rgba(12, 22, 34, 0.9) 100%
+  );
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.05),
+    -8px 0 40px rgba(0, 0, 0, 0.25);
+}
+
 .panel {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 6px;
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--elevation-glass);
 }
 
+/* Inset glass wells */
 .field {
-  background: hsl(var(--background));
-  border: 1px solid hsl(var(--border));
-  border-radius: 6px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.62) 100%
+  );
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(120, 160, 200, 0.3);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 1px 3px rgba(40, 90, 140, 0.08),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.field:hover {
+  border-color: rgba(0, 122, 255, 0.32);
 }
 
 .field:focus-within {
-  border-color: hsl(var(--ring) / 0.55);
-  box-shadow: 0 0 0 3px hsl(var(--selection-soft));
+  border-color: hsl(var(--ring));
+  box-shadow:
+    0 0 0 3px hsl(var(--selection-soft)),
+    inset 0 1px 3px rgba(40, 90, 140, 0.06),
+    0 0 20px rgba(0, 122, 255, 0.1);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.dark .field {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(20, 35, 50, 0.55) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 4px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+}
+
+.dark .field:hover {
+  border-color: rgba(10, 132, 255, 0.4);
+}
+
+.dark .field:focus-within {
+  background: rgba(20, 35, 55, 0.72);
+  box-shadow:
+    0 0 0 3px hsl(var(--selection-soft)),
+    inset 0 1px 4px rgba(0, 0, 0, 0.3),
+    0 0 24px rgba(10, 132, 255, 0.12);
 }
 
 .chip {
-  background: hsl(var(--muted));
-  border: 1px solid hsl(var(--border));
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-.content-pane {
-  background: hsl(var(--background));
+.dark .chip {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  .app-shell::before {
+    display: none;
+  }
+
   .app-sidebar,
   .app-topbar,
-  .menu-surface {
+  .menu-surface,
+  .content-pane,
+  .panel,
+  .field,
+  .chip {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .app-sidebar,
+  .app-topbar {
     background: hsl(var(--sidebar));
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     box-shadow: none;
+  }
+
+  .app-sidebar::after,
+  .menu-surface::before {
+    display: none;
   }
 
   .menu-surface {
     background: hsl(var(--popover));
     box-shadow: var(--elevation-menu);
   }
+
+  .content-pane,
+  .panel {
+    background: hsl(var(--background));
+    box-shadow: none;
+  }
+
+  .field,
+  .chip {
+    background: hsl(var(--background));
+  }
 }
 
 /* ---------------------------------------------------------------------------
  * Range slider
- * `appearance: none` hands us the whole control, so both halves of the track
- * and the thumb are drawn here — otherwise each engine invents its own. The
- * filled half is painted with a gradient stopped at `--range-fill`, which the
- * component keeps in sync with the value, so the slider reads its own position.
  * ------------------------------------------------------------------------ */
 .range-input {
   appearance: none;
@@ -255,57 +524,69 @@ kbd {
 }
 
 .range-input::-webkit-slider-runnable-track {
-  height: 4px;
+  height: 5px;
   border-radius: 9999px;
   background: linear-gradient(
     to right,
     hsl(var(--selection)) 0 var(--range-fill, 0%),
-    hsl(var(--control-track) / 0.4) var(--range-fill, 0%) 100%
+    hsl(var(--control-track) / 0.35) var(--range-fill, 0%) 100%
   );
+  box-shadow: inset 0 1px 2px rgba(40, 90, 140, 0.12);
 }
 
 .range-input::-moz-range-track {
-  height: 4px;
+  height: 5px;
   border-radius: 9999px;
-  background: hsl(var(--control-track) / 0.4);
+  background: hsl(var(--control-track) / 0.35);
+  box-shadow: inset 0 1px 2px rgba(40, 90, 140, 0.12);
 }
 
 .range-input::-moz-range-progress {
-  height: 4px;
+  height: 5px;
   border-radius: 9999px;
   background: hsl(var(--selection));
 }
 
-/* The knob is the only round, raised thing in the system — it has to look grabbable. */
 .range-input::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  margin-top: -5px;
-  height: 14px;
-  width: 14px;
+  margin-top: -6px;
+  height: 16px;
+  width: 16px;
   border-radius: 9999px;
-  background: hsl(var(--selection));
-  border: 2px solid hsl(var(--background));
-  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.25);
-  transition: transform 100ms ease;
+  background: linear-gradient(180deg, #ffffff 0%, #e8f4fc 100%);
+  border: 1px solid rgba(0, 122, 255, 0.4);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 2px 8px rgba(0, 122, 255, 0.32),
+    0 0 0 3px rgba(0, 122, 255, 0.12);
+  transition: transform 100ms ease, box-shadow 150ms ease;
 }
 
 .range-input::-moz-range-thumb {
-  height: 14px;
-  width: 14px;
+  height: 16px;
+  width: 16px;
   border-radius: 9999px;
-  background: hsl(var(--selection));
-  border: 2px solid hsl(var(--background));
-  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.25);
+  background: linear-gradient(180deg, #ffffff 0%, #e8f4fc 100%);
+  border: 1px solid rgba(0, 122, 255, 0.4);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 2px 8px rgba(0, 122, 255, 0.32);
   transition: transform 100ms ease;
 }
 
+.dark .range-input::-webkit-slider-thumb,
+.dark .range-input::-moz-range-thumb {
+  background: linear-gradient(180deg, #5a7a9a 0%, #2a4058 100%);
+  border-color: rgba(10, 132, 255, 0.5);
+}
+
 .range-input:active::-webkit-slider-thumb {
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 
 .range-input:active::-moz-range-thumb {
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 
 .range-input:disabled {
@@ -320,38 +601,80 @@ kbd {
   }
 }
 
-/*
- * Row states. Selection is a neutral fill, not a blue bar: in a list this dense
- * a saturated row pulls the eye away from the content pane it controls.
- */
+/* ---------------------------------------------------------------------------
+ * Row / nav states — luminous liquid active
+ * ------------------------------------------------------------------------ */
 .row-selected {
   background: hsl(var(--active-fill));
   color: hsl(var(--foreground));
   font-weight: 500;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .row-idle {
   color: hsl(var(--foreground));
+  border-radius: 8px;
+  transition: background 140ms ease, box-shadow 140ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .row-idle:hover {
-    background: hsl(var(--hover-fill));
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  .dark .row-idle:hover {
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: none;
   }
 }
 
 .nav-active {
-  background: hsl(var(--active-fill));
-  color: hsl(var(--foreground));
-  font-weight: 500;
-  box-shadow: inset 3px 0 0 hsl(var(--brand));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 255, 0.22) 0%,
+    rgba(0, 122, 255, 0.1) 100%
+  );
+  color: hsl(var(--brand));
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 3px 0 0 hsl(var(--brand)),
+    0 0 18px rgba(0, 122, 255, 0.1);
+}
+
+.dark .nav-active {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 132, 255, 0.3) 0%,
+    rgba(10, 132, 255, 0.14) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 3px 0 0 hsl(var(--brand)),
+    0 0 22px rgba(10, 132, 255, 0.14);
+}
+
+/* ---------------------------------------------------------------------------
+ * Primary action — landing luminous blue
+ * ------------------------------------------------------------------------ */
+.btn-liquid-primary {
+  background: linear-gradient(180deg, #3d9bff 0%, #007aff 48%, #0066d6 100%);
+  color: #fff;
+  box-shadow: var(--shadow-accent);
+}
+
+.btn-liquid-primary:hover {
+  background: linear-gradient(180deg, #5aadff 0%, #1a88ff 48%, #0070e8 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 10px 28px rgba(0, 122, 255, 0.48),
+    0 0 20px rgba(0, 122, 255, 0.2);
 }
 
 /* ---------------------------------------------------------------------------
  * Scroll surfaces
- * A scrollbar is chrome, and chrome in a 240px rail is noise. The gutter is
- * always reserved — nothing reflows when the bar turns up — but stays
- * transparent until the surface actually moves, then fades back out.
  * ------------------------------------------------------------------------ */
 .fade-scroller-frame {
   position: relative;
@@ -371,7 +694,6 @@ kbd {
   scrollbar-color: hsl(var(--scrollbar-thumb)) transparent;
 }
 
-/* Safari has no scrollbar-width; Chromium ignores these once it is set. */
 .fade-scroller::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -397,10 +719,6 @@ kbd {
   background-color: hsl(var(--scrollbar-thumb-strong));
 }
 
-/*
- * Edge bands. Shown only while there is content past that edge, so a list that
- * fits its pane carries no decoration at all.
- */
 .fade-scroller-edge {
   position: absolute;
   inset-inline: 0;
@@ -427,7 +745,6 @@ kbd {
   --fade-scroller-direction: to top;
 }
 
-/* The tint, painted over the blur: rows dissolve into the surface behind them. */
 .fade-scroller-edge::after {
   content: "";
   position: absolute;
@@ -440,11 +757,6 @@ kbd {
   );
 }
 
-/*
- * Progressive blur: four stacked bands, each blurring what the ones beneath it
- * already produced. Blur ramps up toward the edge instead of switching on at a
- * seam, which is the whole difference between this and a single blurred strip.
- */
 .fade-scroller-edge > span {
   position: absolute;
   inset: 0;
@@ -506,7 +818,6 @@ kbd {
   }
 }
 
-/* Icon state cross-fade — opacity only, no scale or blur. */
 .icon-swap {
   position: relative;
   display: grid;
