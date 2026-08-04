@@ -170,7 +170,7 @@ export function KanbanTool({
                 <button
                   type="button"
                   onClick={() => addCard(column.id)}
-                  className="rounded-md bg-primary px-2 py-1.5 text-xs text-primary-foreground hover:bg-primary/90"
+                  className="btn-liquid-primary rounded-md px-2 py-1.5 text-xs"
                 >
                   +
                 </button>

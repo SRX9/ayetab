@@ -144,7 +144,7 @@ export function HabitTrackerTool({
             />
             <button
               type="submit"
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="btn-liquid-primary rounded-md px-4 py-2 text-sm font-medium"
             >
               Add
             </button>

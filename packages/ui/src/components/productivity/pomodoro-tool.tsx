@@ -185,7 +185,7 @@ export function PomodoroTool({
             <button
               type="button"
               onClick={() => setRunning((r) => !r)}
-              className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90 motion-reduce:transition-none"
+              className="btn-liquid-primary rounded-md px-6 py-2 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none"
             >
               {running ? "Pause" : "Start"}
             </button>
