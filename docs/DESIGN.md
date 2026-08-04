@@ -6,7 +6,10 @@ This document defines the shared visual language for **web app**, **browser exte
 
 The app should feel like **your own new tab** — a calm, whitish, physical surface. Chrome and controls are glass; content stays readable. Brand blue (`#007AFF`) is reserved for meaning: active tabs, primary actions, focus.
 
-**Materials over decoration.** Depth comes from translucency, specular edges, and soft shadow — not borders everywhere.
+**Materials over decoration.** Depth comes from translucency, specular edges, and tint over the wallpaper — never drop shadows.
+
+### Wallpaper
+The backdrop is a real layer (`WallpaperLayer`), like macOS. Pick an abstract preset (Mist, Sequoia, Sonoma, Tahoe, Graphite, Dune) or your own image in **Settings → Appearance → Wallpaper**. Glass sits over it and refracts the color underneath; images get a soft cool veil for legibility.
 
 ---
 

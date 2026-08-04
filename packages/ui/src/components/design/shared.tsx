@@ -342,7 +342,7 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section className={cn("panel p-3.5", className)}>
+    <section className={cn("tool-surface p-4", className)}>
       {(title || actions) && (
         <header className="mb-3 flex items-center justify-between gap-3">
           {title && <h3 className="text-ui font-semibold">{title}</h3>}
@@ -393,10 +393,8 @@ export function Field({
  * `md`, so a field and a button sitting in the same row share a baseline.
  */
 const inputClass = cn(
-  "h-8 w-full min-w-0 rounded border border-border bg-background px-2 text-ui text-foreground",
-  "transition-colors duration-100 placeholder:text-muted-foreground",
-  "hover:border-[hsl(var(--control-track)/0.5)] focus:border-[hsl(var(--ring)/0.6)]",
-  FOCUS_RING,
+  "input-well h-8 w-full min-w-0 px-2.5 text-ui text-foreground",
+  "placeholder:text-muted-foreground",
   "disabled:cursor-not-allowed disabled:opacity-50"
 );
 
@@ -556,7 +554,7 @@ export function Segmented<T extends string>({
     <div
       role="radiogroup"
       aria-labelledby={labelledBy}
-      className={cn("inline-flex flex-wrap gap-1", className)}
+      className={cn("seg-control flex-wrap", className)}
     >
       {options.map((o) => {
         const active = o.value === value;
@@ -567,13 +565,7 @@ export function Segmented<T extends string>({
             role="radio"
             aria-checked={active}
             onClick={() => onChange(o.value)}
-            className={cn(
-              "rounded border px-2 py-1 text-caption font-medium transition-colors duration-100",
-              FOCUS_RING,
-              active
-                ? "border-ring bg-selection-soft text-foreground"
-                : "border-border text-muted-foreground hover:bg-[hsl(var(--hover-fill))] hover:text-foreground"
-            )}
+            className={cn("seg-option", active && "seg-option-active", FOCUS_RING)}
           >
             {o.label}
           </button>
@@ -600,22 +592,15 @@ export function Toggle({
         type="button"
         role="switch"
         aria-checked={checked}
+        data-on={checked}
         onClick={() => onChange(!checked)}
         className={cn(
-          "relative h-5 w-9 shrink-0 rounded-full transition-colors duration-150 motion-reduce:transition-none",
-          // The track is 20px tall; the pseudo-element brings the target to 32.
-          "before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-['']",
-          FOCUS_RING,
-          checked ? "bg-selection" : "bg-[hsl(var(--control-track))]"
+          "ios-switch",
+          // The track is 22px tall; the pseudo-element brings the target to 32.
+          "before:absolute before:-inset-y-[5px] before:inset-x-0 before:content-['']",
+          FOCUS_RING
         )}
-      >
-        <span
-          className={cn(
-            "absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-150 motion-reduce:transition-none",
-            checked ? "translate-x-[1.125rem]" : "translate-x-0.5"
-          )}
-        />
-      </button>
+      />
       <label htmlFor={id} className="cursor-pointer select-none text-ui">
         {label}
       </label>
@@ -646,7 +631,7 @@ export function ColorInput({
         value={swatch}
         onChange={(e) => onChange(e.target.value)}
         className={cn(
-          "h-8 w-8 shrink-0 cursor-pointer rounded border border-border bg-transparent p-0.5",
+          "input-well h-8 w-8 shrink-0 cursor-pointer rounded-lg p-0.5",
           FOCUS_RING
         )}
         aria-label="Colour picker"

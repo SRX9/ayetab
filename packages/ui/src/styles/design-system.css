@@ -646,6 +646,173 @@ kbd {
 }
 
 /* ---------------------------------------------------------------------------
+ * Tool chrome — macOS-app control kit (tint + specular, no shadows)
+ * ------------------------------------------------------------------------ */
+
+/* Tool surface — a glass sheet the tool lives on */
+.tool-surface {
+  background: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elevation-glass);
+}
+
+/* Inset well for text/number inputs and textareas */
+.input-well {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.68) 100%
+  );
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(160, 175, 195, 0.24);
+  border-radius: var(--radius-md);
+  box-shadow:
+    inset 0 1px 2px rgba(30, 42, 62, 0.05),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.input-well:hover {
+  border-color: rgba(0, 122, 255, 0.3);
+}
+
+.input-well:focus,
+.input-well:focus-within,
+.input-well:focus-visible {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow:
+    0 0 0 3px hsl(var(--selection-soft)),
+    inset 0 1px 2px rgba(30, 42, 62, 0.04);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dark .input-well {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(18, 30, 44, 0.5) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+}
+
+.dark .input-well:focus,
+.dark .input-well:focus-within,
+.dark .input-well:focus-visible {
+  background: rgba(16, 28, 42, 0.7);
+}
+
+/* macOS segmented control */
+.seg-control {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.55) 100%);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(160, 175, 195, 0.22);
+  box-shadow: inset 0 1px 2px rgba(30, 42, 62, 0.05);
+}
+
+.dark .seg-control {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(18, 30, 44, 0.5) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.seg-option {
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.seg-option:hover {
+  color: hsl(var(--foreground));
+}
+
+.seg-option-active {
+  background: var(--glass-fill-strong);
+  border-color: var(--glass-border);
+  color: hsl(var(--foreground));
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.dark .seg-option-active {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* iOS switch — softer, glass thumb */
+.ios-switch {
+  position: relative;
+  height: 22px;
+  width: 40px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(160, 175, 195, 0.35) 0%, rgba(160, 175, 195, 0.45) 100%);
+  border: 1px solid rgba(160, 175, 195, 0.3);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.dark .ios-switch {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.ios-switch[data-on="true"] {
+  background: linear-gradient(180deg, #3d9bff 0%, #007aff 100%);
+  border-color: rgba(0, 122, 255, 0.5);
+}
+
+.ios-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fa 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 3px rgba(30, 42, 62, 0.18);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ios-switch[data-on="true"]::after {
+  transform: translateX(18px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-switch,
+  .ios-switch::after,
+  .seg-option,
+  .input-well {
+    transition: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
  * Range slider
  * ------------------------------------------------------------------------ */
 .range-input {
