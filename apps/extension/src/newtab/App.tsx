@@ -7,14 +7,14 @@ import {
   OnboardingModal,
   PreferencesProvider,
   ShortcutsProvider,
+  TabHome,
   ThemeProvider,
-  ToolIndex,
   usePreferences,
 } from "@ayetab/ui";
 import { EXTENSION_TOOLS, openWebOnlyTool } from "../lib/extension-tools";
 import { FirstRunNotice } from "./first-run-notice";
 import { ToolView, WebOnlyToolsSection } from "./tool-view";
-import { navigate, parseRoute, toolHash, type Route } from "./route";
+import { navigate, parseRoute, toolHash, homeHash, type Route } from "./route";
 
 function useHashRoute(): Route {
   const [route, setRoute] = useState<Route>(() => parseRoute(window.location.hash));
@@ -56,18 +56,17 @@ function NewTab() {
         activeToolId={route.kind === "tool" ? route.toolId : undefined}
         onSelectTool={openTool}
         toolHref={(tool) => toolHash(tool.id)}
+        onHome={() => navigate(homeHash())}
       >
         {route.kind === "tool" ? (
           <ToolView toolId={route.toolId} initialInput={route.input} onNavigate={handleNavigate} />
         ) : (
-          <>
+          <TabHome tools={EXTENSION_TOOLS} onOpenTool={openTool}>
             <FirstRunNotice />
-            <ToolIndex
-              tools={EXTENSION_TOOLS}
-              onSelect={openTool}
-              footer={<WebOnlyToolsSection />}
-            />
-          </>
+            <div className="mt-8">
+              <WebOnlyToolsSection />
+            </div>
+          </TabHome>
         )}
       </AppShell>
     </CommandPaletteProvider>
