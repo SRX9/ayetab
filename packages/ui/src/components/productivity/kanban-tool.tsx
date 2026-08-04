@@ -121,7 +121,7 @@ export function KanbanTool({
           {state.columns.map((column) => (
             <div
               key={column.id}
-              className="flex flex-col rounded-lg border border-border bg-muted/30"
+              className="tool-surface flex flex-col"
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => handleDrop(column.id)}
             >
@@ -141,7 +141,7 @@ export function KanbanTool({
                     onDragEnd={() => {
                       dragCardIdRef.current = null;
                     }}
-                    className="rounded-md border border-border bg-card px-3 py-2 text-sm cursor-grab active:cursor-grabbing shadow-sm"
+                    className="tool-surface px-3 py-2 text-sm cursor-grab active:cursor-grabbing"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <span>{card.title}</span>
@@ -165,7 +165,7 @@ export function KanbanTool({
                   onChange={(e) => setDrafts((prev) => ({ ...prev, [column.id]: e.target.value }))}
                   onKeyDown={(e) => e.key === "Enter" && addCard(column.id)}
                   placeholder="Add card…"
-                  className="flex-1 rounded-md border border-border bg-background px-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                  className="input-well flex-1 px-2 py-1.5 text-xs"
                 />
                 <button
                   type="button"

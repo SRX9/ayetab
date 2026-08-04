@@ -103,7 +103,7 @@ export function PxToRemTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
                 type="button"
                 onClick={() => void navigator.clipboard?.writeText(text)}
                 className={cn(
-                  "rounded-md border border-border bg-card px-3 py-2.5 text-left transition-colors",
+                  "tool-surface px-3 py-2.5 text-left transition-colors",
                   "hover:bg-[hsl(var(--hover-fill))]",
                   u === unit && "border-brand/60 bg-brand/5"
                 )}
@@ -122,7 +122,7 @@ export function PxToRemTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
             {SCALE.map((px) => (
               <div
                 key={px}
-                className="flex items-baseline justify-between gap-2 rounded-lg bg-background px-2.5 py-1.5"
+                className="input-well flex items-baseline justify-between gap-2 px-2.5 py-1.5"
               >
                 <span className="text-caption tabular-nums text-muted-foreground">{px}px</span>
                 <span className="text-ui font-medium tabular-nums">
@@ -208,8 +208,8 @@ export function TypoCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
               <div
                 key={t.unit}
                 className={cn(
-                  "flex items-baseline justify-between gap-2 rounded-lg px-2.5 py-2",
-                  t.unit === unit ? "bg-brand/8 ring-1 ring-brand/40" : "bg-background"
+                  "input-well flex items-baseline justify-between gap-2 px-2.5 py-2",
+                  t.unit === unit && "bg-brand/8 ring-1 ring-brand/40"
                 )}
               >
                 <span className="text-caption text-muted-foreground">{t.label}</span>
@@ -324,10 +324,10 @@ export function LineHeightCalcTool({ tool, isFavorite, onToggleFavorite }: Custo
             value={sample}
             onChange={(e) => setSample(e.target.value)}
             rows={3}
-            className="mb-3 w-full resize-y rounded-md border border-border bg-background p-2.5 text-ui focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="input-well mb-3 w-full resize-y p-2.5 text-ui"
           />
           <div
-            className="rounded-md bg-background p-4"
+            className="input-well p-4"
             style={{ fontSize: `${fontSize}px`, lineHeight: active, maxWidth: `${measure}ch` }}
           >
             {sample}
@@ -335,7 +335,7 @@ export function LineHeightCalcTool({ tool, isFavorite, onToggleFavorite }: Custo
         </Panel>
 
         <Panel title="CSS">
-          <pre className="overflow-auto rounded-md bg-background p-3 font-mono text-caption">{css}</pre>
+          <pre className="input-well overflow-auto p-3 font-mono text-caption">{css}</pre>
         </Panel>
       </div>
     </ToolShell>
@@ -402,7 +402,7 @@ export function LargeTypeTool({ tool, isFavorite, onToggleFavorite }: CustomTool
         </Panel>
 
         <div
-          className="flex min-h-[16rem] items-center justify-center break-all rounded-md border border-border p-6 text-center"
+          className="tool-surface flex min-h-[16rem] items-center justify-center break-all p-6 text-center"
           style={{
             backgroundColor: background,
             color,
@@ -551,9 +551,9 @@ export function GlyphBrowserTool({ tool, isFavorite, onToggleFavorite }: CustomT
                     void copy(String.fromCodePoint(cp));
                   }}
                   className={cn(
-                    "flex aspect-square items-center justify-center rounded-lg border text-xl transition-colors",
+                    "input-well flex aspect-square items-center justify-center text-xl transition-colors",
                     "hover:bg-[hsl(var(--hover-fill))]",
-                    cp === selected ? "border-brand bg-brand/10" : "border-border bg-background"
+                    cp === selected && "border-brand bg-brand/10"
                   )}
                 >
                   {String.fromCodePoint(cp)}
@@ -626,7 +626,7 @@ export function PaperSizesTool({ tool, isFavorite, onToggleFavorite }: CustomToo
             <div className="grid gap-4 sm:grid-cols-[10rem_1fr]">
               <div className="flex items-center justify-center">
                 <div
-                  className="rounded-md border-2 border-border bg-card"
+                  className="tool-surface"
                   style={{
                     width: orientation === "portrait" ? `${110 / dims.ratio}px` : "110px",
                     height: orientation === "portrait" ? "110px" : `${110 / dims.ratio}px`,

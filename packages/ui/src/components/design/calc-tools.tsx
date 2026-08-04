@@ -268,7 +268,7 @@ export function SciCalcTool({ tool, onRecent, isFavorite, onToggleFavorite }: Cu
                     key={i}
                     type="button"
                     onClick={() => setExpression(h.expression)}
-                    className="rounded-lg bg-background px-2.5 py-1.5 text-right transition-colors hover:bg-[hsl(var(--hover-fill))]"
+                    className="input-well px-2.5 py-1.5 text-right transition-colors hover:bg-[hsl(var(--hover-fill))]"
                   >
                     <p className="truncate font-mono text-caption text-muted-foreground">{h.expression}</p>
                     <p className="truncate font-mono text-ui font-medium tabular-nums">{h.result}</p>
@@ -416,7 +416,7 @@ export function AlgebraCalcTool({ tool, isFavorite, onToggleFavorite }: CustomTo
           {error ? (
             <ErrorNote>{error}</ErrorNote>
           ) : result ? (
-            <p className="break-all rounded-md bg-background p-4 font-mono text-lg">{result}</p>
+            <p className="input-well break-all p-4 font-mono text-lg">{result}</p>
           ) : (
             <EmptyNote>Enter an expression above.</EmptyNote>
           )}
@@ -884,7 +884,7 @@ export function UnitConverterTool({ tool, isFavorite, onToggleFavorite }: Custom
 
             <div className="flex flex-col gap-3">
               <Field label="Result">
-                <div className="flex h-9 items-center rounded-md border border-border bg-background px-2.5 font-mono text-sm tabular-nums">
+                <div className="input-well flex h-9 items-center px-2.5 font-mono text-sm tabular-nums">
                   {formatUnitValue(result)}
                 </div>
               </Field>
@@ -908,8 +908,8 @@ export function UnitConverterTool({ tool, isFavorite, onToggleFavorite }: Custom
                 type="button"
                 onClick={() => setToId(c.id)}
                 className={cn(
-                  "flex items-baseline justify-between gap-2 rounded-lg px-2.5 py-2 text-left transition-colors",
-                  c.id === toId ? "bg-brand/8 ring-1 ring-brand/40" : "bg-background hover:bg-[hsl(var(--hover-fill))]"
+                  "input-well flex items-baseline justify-between gap-2 px-2.5 py-2 text-left transition-colors",
+                  c.id === toId ? "bg-brand/8 ring-1 ring-brand/40" : "hover:bg-[hsl(var(--hover-fill))]"
                 )}
               >
                 <span className="min-w-0 truncate text-caption text-muted-foreground">{c.label}</span>
@@ -1074,7 +1074,7 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
                     type="datetime-local"
                     value={start}
                     onChange={(e) => setStart(e.target.value)}
-                    className="h-9 w-full rounded-md border border-border bg-background px-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="input-well h-9 w-full px-2.5 text-sm"
                   />
                 </Field>
                 <Field label="To">
@@ -1082,7 +1082,7 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
                     type="datetime-local"
                     value={end}
                     onChange={(e) => setEnd(e.target.value)}
-                    className="h-9 w-full rounded-md border border-border bg-background px-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="input-well h-9 w-full px-2.5 text-sm"
                   />
                 </Field>
               </ControlGrid>
@@ -1126,7 +1126,7 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
                     type="datetime-local"
                     value={start}
                     onChange={(e) => setStart(e.target.value)}
-                    className="h-9 w-full rounded-md border border-border bg-background px-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="input-well h-9 w-full px-2.5 text-sm"
                   />
                 </Field>
                 <ControlGrid className="sm:grid-cols-3">
@@ -1246,7 +1246,7 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
                     type="datetime-local"
                     value={start}
                     onChange={(e) => setStart(e.target.value)}
-                    className="h-9 w-full rounded-md border border-border bg-background px-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="input-well h-9 w-full px-2.5 text-sm"
                   />
                 </Field>
                 <Field label="Highlight zone">
@@ -1278,8 +1278,8 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
                       <div
                         key={tz}
                         className={cn(
-                          "flex items-baseline justify-between gap-2 rounded-lg px-2.5 py-1.5",
-                          tz === zone ? "bg-brand/8 ring-1 ring-brand/40" : "bg-background"
+                          "input-well flex items-baseline justify-between gap-2 px-2.5 py-1.5",
+                          tz === zone && "bg-brand/8 ring-1 ring-brand/40"
                         )}
                       >
                         <span className="min-w-0 truncate text-caption text-muted-foreground">

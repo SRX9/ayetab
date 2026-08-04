@@ -69,14 +69,14 @@ function SegmentedOption({
   children: React.ReactNode;
 }) {
   return (
-    <Button
-      variant={active ? "secondary" : "outline"}
-      size="sm"
+    <button
+      type="button"
       onClick={onClick}
-      className={cn(active && "border-border bg-accent shadow-sm")}
+      aria-pressed={active}
+      className={cn("seg-option", active && "seg-option-active")}
     >
       {children}
-    </Button>
+    </button>
   );
 }
 
@@ -164,24 +164,24 @@ export function ToolRunner({
     <>
       {onToggleFavorite && <FavoriteButton active={!!isFavorite} onClick={onToggleFavorite} />}
       {tool.id === "curl-code" && (
-        <>
+        <div className="seg-control" role="group" aria-label="Output language">
           <SegmentedOption active={curlLang === "fetch"} onClick={() => setCurlLang("fetch")}>
             fetch
           </SegmentedOption>
           <SegmentedOption active={curlLang === "python"} onClick={() => setCurlLang("python")}>
             Python
           </SegmentedOption>
-        </>
+        </div>
       )}
       {tool.id === "json-to-code" && (
-        <>
+        <div className="seg-control" role="group" aria-label="Output language">
           <SegmentedOption active={codeLang === "typescript"} onClick={() => setCodeLang("typescript")}>
             TS
           </SegmentedOption>
           <SegmentedOption active={codeLang === "go"} onClick={() => setCodeLang("go")}>
             Go
           </SegmentedOption>
-        </>
+        </div>
       )}
       {MINIFY_TOOLS.has(tool.id) && (
         <Button

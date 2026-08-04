@@ -54,16 +54,18 @@ export function ToolView({ toolId, initialInput, onNavigate }: ToolViewProps) {
   return (
     <div data-testid="newtab-tool-view">
       <ShellContent wide>
-        <ToolHost
-          key={`${tool.id}-${initialInput}`}
-          tool={tool}
-          initialInput={initialInput}
-          onNavigate={onNavigate}
-          onRecent={addRecent}
-          isFavorite={isFavorite(tool.id)}
-          onToggleFavorite={handleToggleFavorite}
-          standalone
-        />
+        <div className="tool-surface p-5 md:p-7">
+          <ToolHost
+            key={`${tool.id}-${initialInput}`}
+            tool={tool}
+            initialInput={initialInput}
+            onNavigate={onNavigate}
+            onRecent={addRecent}
+            isFavorite={isFavorite(tool.id)}
+            onToggleFavorite={handleToggleFavorite}
+            standalone
+          />
+        </div>
       </ShellContent>
     </div>
   );

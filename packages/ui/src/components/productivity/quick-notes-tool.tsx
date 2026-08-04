@@ -46,7 +46,7 @@ export function QuickNotesTool({
             value={state.content}
             onChange={(e) => updateContent(e.target.value)}
             placeholder="Start typing your notes…"
-            className="min-h-[20rem] w-full resize-y rounded-lg border border-border bg-background px-4 py-3 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-ring"
+            className="input-well min-h-[20rem] w-full resize-y px-4 py-3 text-sm leading-relaxed"
             data-testid="notes-textarea"
           />
           <p className="text-xs text-muted-foreground text-right">

@@ -143,17 +143,15 @@ export function PomodoroTool({
         <LoadingState />
       ) : (
         <div className="flex flex-col items-center gap-6" data-testid="pomodoro-timer">
-          <div className="flex gap-2 text-xs">
+          <div className="seg-control text-xs">
             {(["work", "break", "longBreak"] as PomodoroPhase[]).map((p) => (
               <button
                 key={p}
                 type="button"
                 onClick={() => resetTimer(p)}
                 disabled={running}
-                className={`rounded-md px-3 py-1.5 capitalize transition-colors duration-150 disabled:opacity-50 motion-reduce:transition-none ${
-                  phase === p
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-accent"
+                className={`seg-option capitalize disabled:opacity-50 ${
+                  phase === p ? "seg-option-active" : ""
                 }`}
               >
                 {p === "longBreak" ? "Long break" : p}
@@ -213,7 +211,7 @@ export function PomodoroTool({
                 max={60}
                 value={state.workMinutes}
                 onChange={(e) => updateSetting({ workMinutes: Number(e.target.value) || 25 })}
-                className="rounded-md border border-border bg-background px-2 py-1"
+                className="input-well px-2 py-1"
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -224,7 +222,7 @@ export function PomodoroTool({
                 max={30}
                 value={state.breakMinutes}
                 onChange={(e) => updateSetting({ breakMinutes: Number(e.target.value) || 5 })}
-                className="rounded-md border border-border bg-background px-2 py-1"
+                className="input-well px-2 py-1"
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -235,7 +233,7 @@ export function PomodoroTool({
                 max={60}
                 value={state.longBreakMinutes}
                 onChange={(e) => updateSetting({ longBreakMinutes: Number(e.target.value) || 15 })}
-                className="rounded-md border border-border bg-background px-2 py-1"
+                className="input-well px-2 py-1"
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -248,7 +246,7 @@ export function PomodoroTool({
                 onChange={(e) =>
                   updateSetting({ sessionsBeforeLongBreak: Number(e.target.value) || 4 })
                 }
-                className="rounded-md border border-border bg-background px-2 py-1"
+                className="input-well px-2 py-1"
               />
             </label>
           </div>

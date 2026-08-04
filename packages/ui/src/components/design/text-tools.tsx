@@ -149,9 +149,9 @@ export function MarkdownEditorTool({ tool, onRecent, isFavorite, onToggleFavorit
                 placeholder={STARTER}
                 spellCheck
                 className={cn(
-                  "min-h-[26rem] w-full resize-y rounded-md border border-border bg-card p-5",
-                  "font-mono leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
-                  focusMode && "border-transparent bg-transparent"
+                  "input-well min-h-[26rem] w-full resize-y p-5",
+                  "font-mono leading-relaxed",
+                  focusMode && "border-transparent bg-transparent shadow-none"
                 )}
                 style={{ fontSize: `${fontSize}px` }}
               />
@@ -159,8 +159,8 @@ export function MarkdownEditorTool({ tool, onRecent, isFavorite, onToggleFavorit
             {view !== "write" && (
               <div
                 className={cn(
-                  "prose-tool min-h-[26rem] overflow-auto rounded-md border border-border bg-card p-5",
-                  focusMode && "border-transparent bg-transparent"
+                  "prose-tool tool-surface min-h-[26rem] overflow-auto p-5",
+                  focusMode && "border-transparent bg-transparent shadow-none"
                 )}
                 style={{ fontSize: `${fontSize}px` }}
                 // Rendered from the user's own markdown in their own browser.
@@ -326,7 +326,7 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
             onChange={(e) => saveState({ text: e.target.value })}
             placeholder="Paste or type anything. Use the buttons below to reshape it."
             spellCheck={false}
-            className="min-h-[20rem] w-full resize-y rounded-md border border-border bg-card p-4 font-mono text-ui leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className="input-well min-h-[20rem] w-full resize-y p-4 font-mono text-ui leading-relaxed"
           />
 
           <div className="flex flex-wrap gap-x-5 gap-y-1 px-1 text-caption tabular-nums text-muted-foreground">
@@ -403,7 +403,7 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
             value={text}
             onChange={(e) => saveState({ text: e.target.value })}
             placeholder="Paste or type your text…"
-            className="min-h-[14rem] w-full resize-y rounded-md border border-border bg-card p-4 text-ui-md leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className="input-well min-h-[14rem] w-full resize-y p-4 text-ui-md leading-relaxed"
           />
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -462,7 +462,7 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
                 {s.topWords.map(({ word, count }) => (
                   <span
                     key={word}
-                    className="rounded-lg bg-background px-2.5 py-1 text-caption"
+                    className="input-well px-2.5 py-1 text-caption"
                   >
                     {word}
                     <span className="ml-1.5 tabular-nums text-muted-foreground">{count}</span>
@@ -586,7 +586,7 @@ export function DocConverterTool({ tool, isFavorite, onToggleFavorite }: CustomT
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste a document, or open a file…"
               spellCheck={false}
-              className="min-h-[22rem] w-full resize-y rounded-md border border-border bg-background p-3 font-mono text-caption leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+              className="input-well min-h-[22rem] w-full resize-y p-3 font-mono text-caption leading-relaxed"
             />
           </Panel>
 
@@ -594,7 +594,7 @@ export function DocConverterTool({ tool, isFavorite, onToggleFavorite }: CustomT
             {result.error ? (
               <ErrorNote>{result.error}</ErrorNote>
             ) : result.output ? (
-              <pre className="min-h-[22rem] max-h-[30rem] overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-caption leading-relaxed">
+              <pre className="input-well min-h-[22rem] max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-3 font-mono text-caption leading-relaxed">
                 {result.output}
               </pre>
             ) : (
@@ -644,12 +644,12 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type or paste English text…"
-              className="min-h-[14rem] w-full resize-y rounded-md border border-border bg-background p-3 text-ui-md leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+              className="input-well min-h-[14rem] w-full resize-y p-3 text-ui-md leading-relaxed"
             />
           </Panel>
           <Panel title="Shavian">
             <div
-              className="min-h-[14rem] overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 leading-relaxed"
+              className="input-well min-h-[14rem] overflow-auto whitespace-pre-wrap break-words p-3 leading-relaxed"
               style={{ fontSize: `${fontSize}px` }}
             >
               {result.output || <span className="opacity-40">𐑖𐑱𐑝𐑾𐑯 𐑑𐑧𐑒𐑕𐑑 𐑩𐑐𐑽𐑟 𐑣𐑽</span>}
@@ -690,7 +690,7 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {result.meta.unknownWords.map((w) => (
-                    <span key={w} className="rounded-md bg-background px-1.5 py-0.5 text-caption">
+                    <span key={w} className="input-well px-1.5 py-0.5 text-caption">
                       {w}
                     </span>
                   ))}
@@ -712,7 +712,7 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
                   type="button"
                   onClick={() => void navigator.clipboard?.writeText(l.letter)}
                   title={`Copy ${l.letter}`}
-                  className="rounded-lg border border-border bg-background p-2 text-center transition-colors hover:bg-[hsl(var(--hover-fill))]"
+                  className="input-well p-2 text-center transition-colors hover:bg-[hsl(var(--hover-fill))]"
                 >
                   <p className="text-xl leading-tight">{l.letter}</p>
                   <p className="text-caption font-medium">{l.name}</p>
@@ -893,13 +893,13 @@ export function FontExplorerTool({ tool, isFavorite, onToggleFavorite }: CustomT
                 <Range value={previewSize} onChange={setPreviewSize} min={12} max={140} format={(v) => `${v}px`} />
               </div>
               <p
-                className="break-words rounded-md bg-background p-4 leading-tight"
+                className="input-well break-words p-4 leading-tight"
                 style={{ fontFamily: fontFamily ?? undefined, fontSize: `${previewSize}px` }}
               >
                 {sample || "The quick brown fox"}
               </p>
               <p
-                className="mt-2 rounded-md bg-background p-4 text-ui-lg leading-relaxed"
+                className="input-well mt-2 p-4 text-ui-lg leading-relaxed"
                 style={{ fontFamily: fontFamily ?? undefined }}
               >
                 ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -943,7 +943,7 @@ export function FontExplorerTool({ tool, isFavorite, onToggleFavorite }: CustomT
                 <Panel title={`OpenType features · ${info.features.length}`}>
                   <div className="flex flex-wrap gap-1">
                     {info.features.map((f) => (
-                      <span key={f} className="rounded-md bg-background px-1.5 py-0.5 font-mono text-caption">
+                      <span key={f} className="input-well px-1.5 py-0.5 font-mono text-caption">
                         {f}
                       </span>
                     ))}

@@ -81,5 +81,9 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
     );
   }
 
-  return <ShellContent wide>{host}</ShellContent>;
+  return (
+    <ShellContent wide>
+      <div className="tool-surface p-5 md:p-7">{host}</div>
+    </ShellContent>
+  );
 }

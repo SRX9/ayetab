@@ -302,7 +302,7 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
                     ref={loupeRef}
                     width={LOUPE_SIZE}
                     height={LOUPE_SIZE}
-                    className="mx-auto rounded-md border border-border bg-background"
+                    className="input-well mx-auto"
                   />
                   <div className="mt-3">
                     <Field label="Zoom">
@@ -315,7 +315,7 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
                   {hover && hoverRgb ? (
                     <div className="flex flex-col gap-2">
                       <div
-                        className="h-14 rounded-md border border-border"
+                        className="input-well h-14"
                         style={{ backgroundColor: hover.hex }}
                       />
                       <Select
