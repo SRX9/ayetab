@@ -96,22 +96,24 @@
     inset 0 -1px 0 rgba(140, 155, 175, 0.06),
     inset 1.5px 0 0 rgba(255, 255, 255, 0.5),
     inset -1px 0 0 rgba(160, 175, 195, 0.08);
+  /*
+   * iOS 26 liquid glass separates surfaces by tint + specular edge, not drop
+   * shadow. A faint cool outer tint is the most we allow.
+   */
   --elevation-menu:
     inset 0 1.5px 0 rgba(255, 255, 255, 1),
     0 0 0 1px rgba(255, 255, 255, 0.6),
-    0 0 0 1.5px rgba(160, 175, 195, 0.14),
-    0 18px 48px rgba(30, 42, 62, 0.1),
-    0 4px 12px rgba(30, 42, 62, 0.04);
+    0 0 0 1.5px rgba(160, 175, 195, 0.16),
+    0 0 24px rgba(30, 42, 62, 0.05);
   --elevation-glass:
     inset 0 1.5px 0 rgba(255, 255, 255, 1),
     0 0 0 1px rgba(255, 255, 255, 0.55),
-    0 10px 32px rgba(30, 42, 62, 0.08),
-    0 3px 8px rgba(30, 42, 62, 0.04);
+    0 0 0 1.5px rgba(160, 175, 195, 0.12),
+    0 0 18px rgba(30, 42, 62, 0.04);
   --shadow-accent:
     0 1px 0 rgba(255, 255, 255, 0.4) inset,
     0 -1px 0 rgba(0, 60, 140, 0.2) inset,
-    0 10px 28px rgba(0, 122, 255, 0.42),
-    0 0 20px rgba(0, 122, 255, 0.18);
+    0 0 22px rgba(0, 122, 255, 0.3);
 }
 
 .dark {
@@ -182,15 +184,15 @@
   --elevation-menu:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 0.5px rgba(255, 255, 255, 0.08),
-    0 20px 56px rgba(0, 0, 0, 0.55),
-    0 0 40px rgba(10, 132, 255, 0.12);
+    0 0 28px rgba(0, 0, 0, 0.3);
   --elevation-glass:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 10px 32px rgba(0, 0, 0, 0.4);
+    0 0 0 0.5px rgba(255, 255, 255, 0.06),
+    0 0 22px rgba(0, 0, 0, 0.24);
   --shadow-accent:
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
     0 -1px 0 rgba(0, 40, 100, 0.3) inset,
-    0 8px 28px rgba(10, 132, 255, 0.42);
+    0 0 26px rgba(10, 132, 255, 0.35);
 }
 
 * {
@@ -244,18 +246,12 @@ kbd {
 .app-shell {
   position: relative;
   isolation: isolate;
-  background:
-    radial-gradient(ellipse 90% 70% at 12% -10%, rgba(255, 255, 255, 1) 0%, transparent 52%),
-    radial-gradient(ellipse 55% 45% at 96% 4%, rgba(210, 228, 245, 0.22) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 35% at 50% 108%, rgba(220, 232, 245, 0.12) 0%, transparent 55%),
-    linear-gradient(165deg, #fcfdff 0%, #f7f9fc 48%, #f2f5f9 100%);
+  /* Wallpaper layer supplies the backdrop; this is just the fallback wash. */
+  background: linear-gradient(165deg, #fcfdff 0%, #f7f9fc 48%, #f2f5f9 100%);
 }
 
 .dark .app-shell {
-  background:
-    radial-gradient(ellipse 70% 55% at 10% 0%, rgba(10, 132, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 40% at 90% 10%, rgba(80, 110, 150, 0.12) 0%, transparent 48%),
-    linear-gradient(165deg, #0a0c10 0%, #0e1218 50%, #0a0d12 100%);
+  background: linear-gradient(165deg, #0a0c10 0%, #0e1218 50%, #0a0d12 100%);
 }
 
 /* Fine grain — same optical “glass depth” cue as the mark */
@@ -495,7 +491,7 @@ kbd {
   box-shadow: var(--elevation-glass);
 }
 
-/* Bottom dock — pill launcher */
+/* Bottom dock — pill launcher (tint, no shadow) */
 .dock {
   background: var(--glass-fill-strong);
   backdrop-filter: blur(56px) saturate(180%);
@@ -505,8 +501,8 @@ kbd {
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 1),
     0 0 0 1px rgba(255, 255, 255, 0.55),
-    0 16px 48px rgba(30, 42, 62, 0.12),
-    0 4px 14px rgba(30, 42, 62, 0.05);
+    0 0 0 1.5px rgba(160, 175, 195, 0.14),
+    0 0 28px rgba(30, 42, 62, 0.06);
   padding: 8px;
 }
 
@@ -514,8 +510,7 @@ kbd {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 20px 56px rgba(0, 0, 0, 0.5),
-    0 6px 18px rgba(0, 0, 0, 0.3);
+    0 0 32px rgba(0, 0, 0, 0.32);
 }
 
 /* Widget — personal-tab glass card */
@@ -546,7 +541,7 @@ kbd {
   border: 1px solid var(--glass-border);
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
-    0 2px 8px rgba(30, 42, 62, 0.08);
+    0 0 0 1px rgba(255, 255, 255, 0.4);
   color: hsl(var(--muted-foreground));
   transition:
     transform var(--dur-fast) var(--ease-os),
@@ -558,7 +553,7 @@ kbd {
   background: var(--glass-fill-strong);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.3);
+    0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .app-icon:hover {
@@ -566,7 +561,8 @@ kbd {
   color: hsl(var(--foreground));
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
-    0 6px 20px rgba(30, 42, 62, 0.14);
+    0 0 0 1.5px rgba(255, 255, 255, 0.6),
+    0 0 18px rgba(30, 42, 62, 0.1);
 }
 
 .app-icon:active {
@@ -578,7 +574,7 @@ kbd {
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
     0 0 0 2px hsl(var(--selection-soft)),
-    0 6px 20px rgba(0, 122, 255, 0.18);
+    0 0 20px rgba(0, 122, 255, 0.18);
 }
 
 @media (prefers-reduced-transparency: reduce) {

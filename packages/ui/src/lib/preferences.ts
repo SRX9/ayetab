@@ -3,7 +3,6 @@ import {
   normalizeAppearance,
   type AppearancePreferences,
 } from "./appearance";
-
 export interface UserPreferences {
   favorites: string[];
   recents: string[];
@@ -187,3 +186,5 @@ export function updateAppearance(
 
 export { DEFAULT_APPEARANCE, normalizeAppearance };
 export type { AppearancePreferences };
+export type { ThemeMode, Wallpaper, AbstractWallpaperId } from "./appearance";
+export { DEFAULT_WALLPAPER } from "./appearance";

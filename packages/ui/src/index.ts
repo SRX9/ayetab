@@ -5,6 +5,7 @@ export { BrandMark } from "./components/brand-mark";
 export { Dock } from "./components/dock";
 export { FadeScroller } from "./components/fade-scroller";
 export { TabHome } from "./components/tab-home";
+export { WallpaperLayer } from "./components/wallpaper-layer";
 export { ToolIndex } from "./components/tool-index";
 export { ToolIconTile } from "./components/tool-icon-tile";
 export { WidgetGrid } from "./components/widget-grid";
@@ -42,7 +43,8 @@ export { useShortcutsModal, useShortcutsModalOptional } from "./hooks/use-shortc
 export { OnboardingModal } from "./components/onboarding-modal";
 export { SettingsMenu, SettingsPanel, SettingsButton } from "./components/settings-panel";
 export { DEFAULT_APPEARANCE, normalizeAppearance, resolveTheme } from "./lib/appearance";
-export type { AppearancePreferences, ThemeMode } from "./lib/appearance";
+export type { AppearancePreferences, ThemeMode, Wallpaper, AbstractWallpaperId } from "./lib/appearance";
+export { ABSTRACT_WALLPAPERS, getAbstractWallpaper, wallpaperCss } from "./lib/wallpapers";
 export { useClipboard } from "./hooks/use-clipboard";
 export { useToolState } from "./hooks/use-tool-state";
 export { useKeyboardShortcut } from "./hooks/use-keyboard-shortcut";

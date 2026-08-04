@@ -8,7 +8,9 @@ import {
 } from "react";
 import { type ToolDefinition } from "@ayetab/utils";
 import { useAutoHideScrollbar } from "../hooks/use-auto-hide-scrollbar";
+import { usePreferences } from "../hooks/use-preferences";
 import { Dock } from "./dock";
+import { WallpaperLayer } from "./wallpaper-layer";
 
 interface AppShellProps {
   tools: ToolDefinition[];
@@ -43,6 +45,7 @@ export function AppShell({
 }: AppShellProps) {
   const [hydrated, setHydrated] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
+  const { prefs } = usePreferences();
 
   /*
    * Rows are server-rendered but only navigate once React attaches their
@@ -58,10 +61,11 @@ export function AppShell({
       data-testid="app-shell"
       data-hydrated={hydrated || undefined}
     >
+      <WallpaperLayer wallpaper={prefs.appearance.wallpaper} />
       <main
         ref={mainRef}
         data-scrolling="false"
-        className="ds-scroll min-h-0 min-w-0 flex-1 overflow-y-auto"
+        className="ds-scroll relative z-[1] min-h-0 min-w-0 flex-1 overflow-y-auto"
       >
         {children}
       </main>
