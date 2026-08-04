@@ -44,6 +44,7 @@ export { useToolState } from "./hooks/use-tool-state";
 export { useKeyboardShortcut } from "./hooks/use-keyboard-shortcut";
 export { PreferencesProvider } from "./components/preferences-provider";
 export { usePreferences } from "./hooks/use-preferences";
+export { useAutoHideScrollbar } from "./hooks/use-auto-hide-scrollbar";
 export {
   loadPreferences,
   savePreferences,

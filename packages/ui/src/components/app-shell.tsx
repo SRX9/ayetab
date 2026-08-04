@@ -20,6 +20,7 @@ import {
 import { cn } from "../lib/utils";
 import { FOCUS_RING } from "../lib/pressable";
 import { usePreferences } from "../hooks/use-preferences";
+import { useAutoHideScrollbar } from "../hooks/use-auto-hide-scrollbar";
 import { BrandMark } from "./brand-mark";
 import { FadeScroller } from "./fade-scroller";
 import { SettingsButton } from "./settings-panel";
@@ -69,25 +70,7 @@ export function AppShell({
    * driving the page) can wait for it instead of clicking into the void.
    */
   useEffect(() => setHydrated(true), []);
-
-  /* Content pane scrollbar: ink in while scrolling, vanish shortly after. */
-  useEffect(() => {
-    const el = mainRef.current;
-    if (!el) return;
-    let hideTimer = 0;
-    const onScroll = () => {
-      el.dataset.scrolling = "true";
-      window.clearTimeout(hideTimer);
-      hideTimer = window.setTimeout(() => {
-        el.dataset.scrolling = "false";
-      }, 500);
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.clearTimeout(hideTimer);
-      el.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+  useAutoHideScrollbar(mainRef);
 
   const favoriteTools = useMemo(
     () => prefs.favorites.flatMap((id) => tools.filter((t) => t.id === id)),

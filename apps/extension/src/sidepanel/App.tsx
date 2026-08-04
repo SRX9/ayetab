@@ -22,9 +22,11 @@ import {
   ThemeToggle,
   ToolCard,
   ToolHost,
+  useAutoHideScrollbar,
   usePreferences,
 } from "@ayetab/ui";
 import { EXTENSION_TOOLS, openWebOnlyTool } from "../lib/extension-tools";
+import { useRef } from "react";
 
 const SESSION_TOOL_KEY = "ayetab-active-tool";
 
@@ -163,7 +165,7 @@ function AppContent() {
             <SettingsButton />
             <ThemeToggle />
           </header>
-          <div className="content-pane flex-1 overflow-auto p-3">
+          <div className="content-pane ds-scroll flex-1 overflow-auto p-3">
             <ToolHost
               key={`${selectedTool.id}-${initialInput}`}
               tool={selectedTool}
