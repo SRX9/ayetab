@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronLeftIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import {
@@ -26,7 +26,6 @@ import {
   usePreferences,
 } from "@ayetab/ui";
 import { EXTENSION_TOOLS, openWebOnlyTool } from "../lib/extension-tools";
-import { useRef } from "react";
 
 const SESSION_TOOL_KEY = "ayetab-active-tool";
 
@@ -62,6 +61,8 @@ function AppContent() {
   const [initialInput, setInitialInput] = useState("");
   const [sessionRestored, setSessionRestored] = useState(false);
   const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
+  const toolScrollRef = useRef<HTMLDivElement>(null);
+  useAutoHideScrollbar(toolScrollRef);
 
   useEffect(() => {
     const saved = readSessionTool();
@@ -165,7 +166,11 @@ function AppContent() {
             <SettingsButton />
             <ThemeToggle />
           </header>
-          <div className="content-pane ds-scroll flex-1 overflow-auto p-3">
+          <div
+            ref={toolScrollRef}
+            data-scrolling="false"
+            className="content-pane ds-scroll flex-1 overflow-auto p-3"
+          >
             <ToolHost
               key={`${selectedTool.id}-${initialInput}`}
               tool={selectedTool}
