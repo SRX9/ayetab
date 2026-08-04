@@ -19,19 +19,20 @@ Shared visual language for the web app and extension (`packages/ui/src/styles/de
 | Token | Role | Light |
 |-------|------|-------|
 | `--brand` / `--selection` | System blue (logo tab) | `#007AFF` |
-| `--shell` | Sky mist behind chrome | cool blue wash |
-| `--background` / `--card` | Soft cool paper under glass | near-white sky |
+| `--shell` | Near-white mist | whitish with a whisper of cool |
+| `--background` / `--card` | Soft paper under glass | near-white |
 | `--foreground` | Cool ink | deep navy |
-| Glass borders | Specular white + soft blue outer | white / mist |
+| Glass borders | Specular white | white / soft gray |
 
 ## Materials
 
-- `.app-shell` — caustic sky + grain overlay
-- `.app-sidebar` / `.app-topbar` / `.menu-surface` — refractive fills, blur 28–40px, specular sheen
-- `.content-pane` / `.panel` — high-opacity glass sheets
+- `.app-shell` — near-white atmosphere with a whisper of cool blue
+- `.app-sidebar` / `.app-topbar` / `.menu-surface` — refractive white glass, specular sheen
+- `.content-pane` / `.panel` — high-opacity floating glass sheets
 - `.field` — inset wells with focus glow
 - `.nav-active` — luminous blue fill + rail
 - `.btn-liquid-primary` — gradient + blue glow (landing CTA)
+- `.ds-scroll` / `.fade-scroller` — 4px thumb, invisible until scrolling
 - `prefers-reduced-transparency` — solid fills, no blur
 
 ## Type

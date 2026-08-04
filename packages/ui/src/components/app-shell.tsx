@@ -61,6 +61,7 @@ export function AppShell({
   const [hydrated, setHydrated] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
 
   /*
    * Rows are server-rendered but only navigate once React attaches their
@@ -68,6 +69,25 @@ export function AppShell({
    * driving the page) can wait for it instead of clicking into the void.
    */
   useEffect(() => setHydrated(true), []);
+
+  /* Content pane scrollbar: ink in while scrolling, vanish shortly after. */
+  useEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    let hideTimer = 0;
+    const onScroll = () => {
+      el.dataset.scrolling = "true";
+      window.clearTimeout(hideTimer);
+      hideTimer = window.setTimeout(() => {
+        el.dataset.scrolling = "false";
+      }, 500);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.clearTimeout(hideTimer);
+      el.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const favoriteTools = useMemo(
     () => prefs.favorites.flatMap((id) => tools.filter((t) => t.id === id)),
@@ -294,7 +314,13 @@ export function AppShell({
           <span className="truncate text-ui-md font-medium">{title}</span>
         </div>
 
-        <main className="min-w-0 flex-1 overflow-y-auto">{children}</main>
+        <main
+          ref={mainRef}
+          data-scrolling="false"
+          className="ds-scroll min-w-0 flex-1 overflow-y-auto"
+        >
+          {children}
+        </main>
       </div>
     </div>
   );
