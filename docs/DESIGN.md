@@ -15,13 +15,14 @@ The app should feel like **your own new tab** — a calm, whitish, physical surf
 ### Light theme (primary)
 | Token | Value | Use |
 |---|---|---|
-| `--shell` | `#fbfcfe` → `#f4f6f9` | Atmosphere behind everything — whitish, whisper of cool |
-| `--glass-fill` | white 72% → 38% | Default glass material |
-| `--glass-fill-strong` | white 88% → 70% | Floating sheets (content panes, dock, menus) |
+| `--shell` | `#fbfcfe` → `#f4f6f9` | Fallback wash — real backdrop is the wallpaper layer |
+| Wallpaper | abstract preset / custom image | Rich backdrop the glass reads through |
+| `--glass-fill` | white 72% → 38% | Default glass material (tinted by wallpaper) |
+| `--glass-fill-strong` | white 88% → 70% | Floating sheets (dock, menus) |
 | `--glass-border` | `rgba(255,255,255,.9)` | Specular edge — bright, not dark |
-| Shadow | cool-gray `rgba(30,40,60,.06/.12)` | Soft ambient, never harsh |
+| Separation | tint + specular + faint cool outer ring | **No drop shadows** — iOS 26 reads depth through translucency |
 | `--brand` | `#007AFF` | Active / primary only |
-| Text | ink `#0c1420` / secondary `#45525f` / tertiary `#7d8894` | High contrast for legibility over glass |
+| Text | ink `#0c1420` / secondary `#45525f` / tertiary `#7d8894` | High contrast over glass |
 
 ### Radii (continuous-corner feel)
 - `xs 6 · sm 10 · md 14 · lg 18 · xl 24 · 2xl 32 · full 9999`
@@ -111,8 +112,11 @@ The app should feel like **your own new tab** — a calm, whitish, physical surf
 ---
 
 ## Do / Don't
-- **Do** keep the atmosphere quiet and whitish; put blue only where it means something.
+- **Do** keep the backdrop rich (wallpaper) and the glass tinted by it.
+- **Do** separate surfaces with tint, specular edges, and faint rings — not shadows.
+- **Do** put blue only where it means something.
 - **Do** make every control physical: press, drag, snap.
+- **Don't** add drop shadows — iOS 26 glass doesn't use them.
 - **Don't** stack light glass on light glass.
 - **Don't** add borders, gradients, or glow that doesn't serve hierarchy.
 - **Don't** hide core navigation behind minimalism — dock + search stay one gesture away.
