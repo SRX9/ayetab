@@ -8,9 +8,17 @@ const LINGER_MS = 500;
 /**
  * Ink in a `.ds-scroll` thumb while the element is scrolling, then hide it.
  * Sets `data-scrolling` on the target — CSS does the rest.
+ *
+ * Pass `enabled` (or any remount signal) when the scrollable node is
+ * conditionally rendered — a stable ref object alone won't re-run the effect
+ * when the DOM node appears later.
  */
-export function useAutoHideScrollbar(ref: RefObject<HTMLElement | null>) {
+export function useAutoHideScrollbar(
+  ref: RefObject<HTMLElement | null>,
+  enabled: boolean = true
+) {
   useEffect(() => {
+    if (!enabled) return;
     const el = ref.current;
     if (!el) return;
     let hideTimer = 0;
@@ -26,5 +34,5 @@ export function useAutoHideScrollbar(ref: RefObject<HTMLElement | null>) {
       window.clearTimeout(hideTimer);
       el.removeEventListener("scroll", onScroll);
     };
-  }, [ref]);
+  }, [ref, enabled]);
 }

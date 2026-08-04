@@ -62,7 +62,7 @@ function AppContent() {
   const [sessionRestored, setSessionRestored] = useState(false);
   const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
   const toolScrollRef = useRef<HTMLDivElement>(null);
-  useAutoHideScrollbar(toolScrollRef);
+  useAutoHideScrollbar(toolScrollRef, selectedTool != null);
 
   useEffect(() => {
     const saved = readSessionTool();
