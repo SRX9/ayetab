@@ -83,7 +83,9 @@ export default function ToolPageClient({ toolId }: { toolId: string }) {
 
   return (
     <ShellContent wide>
-      <div className="tool-surface p-5 md:p-7">{host}</div>
+      <div key={tool.id} className="page-enter">
+        <div className="tool-surface p-5 md:p-7">{host}</div>
+      </div>
     </ShellContent>
   );
 }

@@ -14,7 +14,7 @@ export default function HomePageClient() {
   );
 
   return (
-    <div data-testid="home-page">
+    <div data-testid="home-page" className="page-enter">
       <OnboardingModal />
       <TabHome tools={TOOL_REGISTRY} onOpenTool={handleOpen} />
     </div>

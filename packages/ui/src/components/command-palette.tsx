@@ -135,11 +135,11 @@ export function CommandPalette({
     <Dialog
       open={open}
       onClose={() => setOpen(false)}
-      placement="top"
+      placement="center"
       instant
       label="Search tools"
       testId="command-palette"
-      panelClassName="max-w-[640px] mx-auto"
+      panelClassName="max-w-[640px] mx-auto palette-panel"
     >
       <div className="menu-surface overflow-hidden">
         <div className="flex items-center gap-2.5 border-b border-border px-3.5 py-3">
