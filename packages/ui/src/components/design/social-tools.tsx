@@ -221,38 +221,46 @@ export function ScrollGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cust
   const generate = useCallback(async () => {
     if (!image) return;
     setBusy(true);
+    try {
+      const n = Math.max(2, Math.min(10, slides));
+      // Each panel keeps the chosen ratio; height comes from the source.
+      const panelH = image.height;
+      const panelW = Math.round((panelH * rw) / rh);
+      const totalW = panelW * n;
 
-    const n = Math.max(2, Math.min(10, slides));
-    // Each panel keeps the chosen ratio; height comes from the source.
-    const panelH = image.height;
-    const panelW = Math.round((panelH * rw) / rh);
-    const totalW = panelW * n;
+      // Scale the source to span every panel, cropping vertically as needed.
+      const scale = Math.max(totalW / image.width, panelH / image.height);
+      const dw = image.width * scale;
+      const dh = image.height * scale;
+      const offsetX = (totalW - dw) / 2;
+      const offsetY = (panelH - dh) / 2;
 
-    // Scale the source to span every panel, cropping vertically as needed.
-    const scale = Math.max(totalW / image.width, panelH / image.height);
-    const dw = image.width * scale;
-    const dh = image.height * scale;
-    const offsetX = (totalW - dw) / 2;
-    const offsetY = (panelH - dh) / 2;
+      // Panels are independent slices, so encode them together.
+      const blobs = await Promise.all(
+        Array.from({ length: n }, async (_, i) => {
+          const canvas = document.createElement("canvas");
+          canvas.width = panelW;
+          canvas.height = panelH;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return null;
+          ctx.imageSmoothingQuality = "high";
+          ctx.drawImage(image.el, offsetX - i * panelW, offsetY, dw, dh);
+          return canvasToBlob(canvas, "image/jpeg", 0.94);
+        })
+      );
 
-    const out: string[] = [];
-    for (let i = 0; i < n; i++) {
-      const canvas = document.createElement("canvas");
-      canvas.width = panelW;
-      canvas.height = panelH;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) continue;
-      ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(image.el, offsetX - i * panelW, offsetY, dw, dh);
-      const blob = await canvasToBlob(canvas, "image/jpeg", 0.94);
-      out.push(URL.createObjectURL(blob));
+      const out: string[] = [];
+      for (const blob of blobs) {
+        if (blob) out.push(URL.createObjectURL(blob));
+      }
+
+      setPanels((prev) => {
+        prev.forEach((p) => URL.revokeObjectURL(p));
+        return out;
+      });
+    } finally {
+      setBusy(false);
     }
-
-    setPanels((prev) => {
-      prev.forEach((p) => URL.revokeObjectURL(p));
-      return out;
-    });
-    setBusy(false);
   }, [image, slides, rw, rh]);
 
   useEffect(() => {

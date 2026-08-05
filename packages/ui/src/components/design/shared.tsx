@@ -21,43 +21,23 @@ import { ToolIcon } from "../tool-icon";
 import { useClipboard } from "../../hooks/use-clipboard";
 import { cn } from "../../lib/utils";
 import { FOCUS_RING } from "../../lib/pressable";
+import { loadImageFile } from "./shared-utils";
+import type { LoadedImage } from "./shared-utils";
 
 export type { CustomToolProps } from "../../lib/custom-tool-props";
 export { ToolActions, LoadingState } from "../productivity/shared";
-
-// ── Loaded image ────────────────────────────────────────────────────────────
-
-export interface LoadedImage {
-  el: HTMLImageElement;
-  name: string;
-  width: number;
-  height: number;
-  type: string;
-  size: number;
-  url: string;
-}
-
-export async function loadImageFile(file: File): Promise<LoadedImage> {
-  const url = URL.createObjectURL(file);
-  const el = new Image();
-  el.decoding = "async";
-
-  await new Promise<void>((resolve, reject) => {
-    el.onload = () => resolve();
-    el.onerror = () => reject(new Error(`Could not read “${file.name}” as an image.`));
-    el.src = url;
-  });
-
-  return {
-    el,
-    name: file.name,
-    width: el.naturalWidth,
-    height: el.naturalHeight,
-    type: file.type || "image/png",
-    size: file.size,
-    url,
-  };
-}
+export {
+  loadImageFile,
+  canvasToBlob,
+  downloadBlob,
+  downloadText,
+  downloadCanvas,
+  baseName,
+  formatBytes,
+  drawFitted,
+  CHECKER_STYLE,
+} from "./shared-utils";
+export type { LoadedImage } from "./shared-utils";
 
 /**
  * Holds a single dropped/pasted image and revokes its object URL when it is
@@ -193,10 +173,12 @@ export function Dropzone({
 
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {
-      const files = [...(e.clipboardData?.items ?? [])]
-        .filter((i) => i.kind === "file")
-        .map((i) => i.getAsFile())
-        .filter((f): f is File => Boolean(f));
+      const files: File[] = [];
+      for (const item of e.clipboardData?.items ?? []) {
+        if (item.kind !== "file") continue;
+        const file = item.getAsFile();
+        if (file) files.push(file);
+      }
       if (files.length > 0) {
         e.preventDefault();
         onFiles(files);
@@ -240,6 +222,7 @@ export function Dropzone({
         multiple={multiple}
         onChange={handleChange}
         className="sr-only"
+        aria-label={label}
       />
       {children ?? (
         <>
@@ -253,79 +236,6 @@ export function Dropzone({
       </Button>
     </div>
   );
-}
-
-// ── Canvas helpers ──────────────────────────────────────────────────────────
-
-export function canvasToBlob(canvas: HTMLCanvasElement, type = "image/png", quality = 0.92) {
-  return new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Could not encode the canvas."))),
-      type,
-      quality
-    );
-  });
-}
-
-export function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  // Give the browser a tick to start the download before revoking.
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-export function downloadText(text: string, filename: string, mime = "text/plain") {
-  downloadBlob(new Blob([text], { type: `${mime};charset=utf-8` }), filename);
-}
-
-export async function downloadCanvas(
-  canvas: HTMLCanvasElement,
-  filename: string,
-  type = "image/png",
-  quality = 0.92
-) {
-  downloadBlob(await canvasToBlob(canvas, type, quality), filename);
-}
-
-/** Strip the extension from a filename so tools can append their own suffix. */
-export function baseName(name: string): string {
-  return name.replace(/\.[^.]+$/, "") || "image";
-}
-
-export function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
-
-/** Draw `img` into a canvas at the given size, honouring the fit mode. */
-export function drawFitted(
-  ctx: CanvasRenderingContext2D,
-  img: HTMLImageElement,
-  width: number,
-  height: number,
-  fit: "cover" | "contain" | "stretch" = "cover",
-  offsetX = 0.5,
-  offsetY = 0.5
-) {
-  const iw = img.naturalWidth;
-  const ih = img.naturalHeight;
-
-  if (fit === "stretch") {
-    ctx.drawImage(img, 0, 0, width, height);
-    return;
-  }
-
-  const scale =
-    fit === "cover" ? Math.max(width / iw, height / ih) : Math.min(width / iw, height / ih);
-  const dw = iw * scale;
-  const dh = ih * scale;
-  ctx.drawImage(img, (width - dw) * offsetX, (height - dh) * offsetY, dw, dh);
 }
 
 // ── Layout ──────────────────────────────────────────────────────────────────
@@ -359,9 +269,10 @@ export function ControlGrid({ children, className }: { children: ReactNode; clas
 }
 
 /**
- * Lets a control that cannot be labelled implicitly — anything that is not a
- * form element, like `Segmented`'s radiogroup — borrow the id of the `Field`
- * caption above it.
+ * Lets a control borrow the id of the `Field` caption above it for
+ * `aria-labelledby` — used by `Segmented`'s radiogroup, which is not a form
+ * element, and by the shared inputs, whose wrapping `<label>` only exists at
+ * the call site.
  */
 const FieldLabelContext = createContext<string | undefined>(undefined);
 
@@ -441,6 +352,7 @@ export function NumberInput({
   suffix?: string;
   className?: string;
 }) {
+  const labelledBy = useContext(FieldLabelContext);
   return (
     <div className={cn("relative", className)}>
       <input
@@ -453,6 +365,7 @@ export function NumberInput({
           const n = e.target.value === "" ? NaN : Number(e.target.value);
           onChange(n);
         }}
+        aria-labelledby={labelledBy}
         className={cn(inputClass, suffix && "pr-10", "tabular-nums")}
       />
       {suffix && (
@@ -475,11 +388,13 @@ export function Select<T extends string>({
   options: Array<{ value: T; label: string }>;
   className?: string;
 }) {
+  const labelledBy = useContext(FieldLabelContext);
   return (
     <div className={cn("relative min-w-0", className)}>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
+        aria-labelledby={labelledBy}
         className={cn(inputClass, "cursor-pointer appearance-none pe-7")}
       >
         {options.map((o) => (
@@ -516,6 +431,7 @@ export function Range({
   step?: number;
   format?: (v: number) => string;
 }) {
+  const labelledBy = useContext(FieldLabelContext);
   const span = max - min;
   const fill = span > 0 ? Math.min(100, Math.max(0, ((value - min) / span) * 100)) : 0;
 
@@ -528,6 +444,7 @@ export function Range({
         max={max}
         step={step}
         onChange={(e) => onChange(Number(e.target.value))}
+        aria-labelledby={labelledBy}
         className={cn("range-input min-w-0 flex-1 rounded", FOCUS_RING)}
         style={{ "--range-fill": `${fill}%` } as CSSProperties}
       />
@@ -722,17 +639,6 @@ export function Swatch({
     </button>
   );
 }
-
-/** Chequerboard behind anything that can be transparent. */
-export const CHECKER_STYLE: React.CSSProperties = {
-  backgroundImage:
-    "linear-gradient(45deg, rgba(128,128,128,.18) 25%, transparent 25%), " +
-    "linear-gradient(-45deg, rgba(128,128,128,.18) 25%, transparent 25%), " +
-    "linear-gradient(45deg, transparent 75%, rgba(128,128,128,.18) 75%), " +
-    "linear-gradient(-45deg, transparent 75%, rgba(128,128,128,.18) 75%)",
-  backgroundSize: "16px 16px",
-  backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
-};
 
 export function ErrorNote({ children }: { children: ReactNode }) {
   if (!children) return null;

@@ -161,6 +161,7 @@ export function CommandPalette({
             }}
             onKeyDown={handleKeyDown}
             placeholder="Search tools…"
+            aria-label="Search tools"
             className="w-full bg-transparent text-ui-lg outline-none placeholder:text-muted-foreground"
             autoComplete="off"
             spellCheck={false}

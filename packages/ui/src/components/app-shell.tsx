@@ -1,16 +1,20 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useRef, useSyncExternalStore, type ReactNode } from "react";
 import { type ToolDefinition } from "@ayetab/utils";
 import { useAutoHideScrollbar } from "../hooks/use-auto-hide-scrollbar";
 import { usePreferences } from "../hooks/use-preferences";
 import { Dock } from "./dock";
 import { WallpaperLayer } from "./wallpaper-layer";
+
+/*
+ * Hydration signal without a mount effect: the server snapshot is false and
+ * the client snapshot is true, so React flips the flag on the hydration pass
+ * and never re-renders for it again (the store has no subscribers).
+ */
+const subscribeToNothing = () => () => {};
+const getHydratedSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 interface AppShellProps {
   tools: ToolDefinition[];
@@ -43,7 +47,6 @@ export function AppShell({
   onHome,
   children,
 }: AppShellProps) {
-  const [hydrated, setHydrated] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const { prefs } = usePreferences();
 
@@ -52,7 +55,11 @@ export function AppShell({
    * handlers. The shell publishes that moment so tests (and anything else
    * driving the page) can wait for it instead of clicking into the void.
    */
-  useEffect(() => setHydrated(true), []);
+  const hydrated = useSyncExternalStore(
+    subscribeToNothing,
+    getHydratedSnapshot,
+    getServerSnapshot
+  );
   useAutoHideScrollbar(mainRef);
 
   return (

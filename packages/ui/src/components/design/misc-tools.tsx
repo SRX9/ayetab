@@ -571,6 +571,7 @@ export function CipherDecoderTool({ tool, isFavorite, onToggleFavorite }: Custom
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste ciphertext (or plaintext to encode)…"
+              aria-label="Cipher input"
               spellCheck={false}
               className="input-well min-h-[14rem] w-full resize-y p-3 font-mono text-ui leading-relaxed"
             />
@@ -601,8 +602,8 @@ export function CipherDecoderTool({ tool, isFavorite, onToggleFavorite }: Custom
         {candidates.length > 1 && (
           <Panel title="Other candidates">
             <div className="flex flex-col gap-1.5">
-              {candidates.slice(1).map((c, i) => (
-                <div key={i} className="input-well p-2.5">
+              {candidates.slice(1).map((c) => (
+                <div key={`${c.cipher}-${c.detail}`} className="input-well p-2.5">
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span className="text-label font-medium uppercase text-muted-foreground">
                       {c.cipher} · {c.detail}
@@ -791,9 +792,9 @@ export function MetaTagGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
           {warnings.length > 0 && (
             <Panel title="Checks">
               <div className="flex flex-col gap-1.5">
-                {warnings.map((w, i) => (
+                {warnings.map((w) => (
                   <div
-                    key={i}
+                    key={w.field}
                     className={cn(
                       "rounded-md px-3 py-2 text-caption",
                       w.level === "error"

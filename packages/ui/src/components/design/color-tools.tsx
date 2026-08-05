@@ -118,6 +118,20 @@ function PaletteExport({ colors, name }: { colors: string[]; name: string }) {
 
 // ── Palette Generator ───────────────────────────────────────────────────────
 
+/**
+ * Pair each colour with a unique, content-derived list key. Palettes can
+ * legitimately repeat a colour (a grey seed makes every harmony identical),
+ * so the raw value alone is not always unique.
+ */
+function keyedColors(colors: string[]): Array<{ color: string; key: string }> {
+  const seen = new Map<string, number>();
+  return colors.map((color) => {
+    const n = seen.get(color) ?? 0;
+    seen.set(color, n + 1);
+    return { color, key: n === 0 ? color : `${color}~${n}` };
+  });
+}
+
 export function PaletteGeneratorTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const [seed, setSeed] = useState("#4f46e5");
   const [mode, setMode] = useState<PaletteMode>("vibrant");
@@ -130,9 +144,9 @@ export function PaletteGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
     [rgb, mode, count]
   );
 
-  const shown = colors.map((c) => {
-    const parsed = parseColor(c);
-    return parsed ? formatColor(parsed, format) : c;
+  const shown = keyedColors(colors).map(({ color, key }) => {
+    const parsed = parseColor(color);
+    return { key, color, label: parsed ? formatColor(parsed, format) : color };
   });
 
   return (
@@ -182,8 +196,8 @@ export function PaletteGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
               className="grid gap-2"
               style={{ gridTemplateColumns: `repeat(auto-fit, minmax(6.5rem, 1fr))` }}
             >
-              {colors.map((c, i) => (
-                <Swatch key={`${c}-${i}`} color={c} label={shown[i]} height="h-28" />
+              {shown.map((s) => (
+                <Swatch key={s.key} color={s.color} label={s.label} height="h-28" />
               ))}
             </div>
             <PaletteExport colors={colors} name="palette" />
@@ -212,7 +226,13 @@ export function HarmonyGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
   const rgb = parseColor(seed);
 
   const groups = useMemo(
-    () => (rgb ? HARMONY_KINDS.map((k) => ({ kind: k, colors: harmony(rgb, k) })) : []),
+    () =>
+      rgb
+        ? HARMONY_KINDS.map((k) => {
+            const colors = harmony(rgb, k);
+            return { kind: k, colors, swatches: keyedColors(colors) };
+          })
+        : [],
     [rgb]
   );
 
@@ -249,20 +269,20 @@ export function HarmonyGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
           <ErrorNote>Enter a valid colour to see its harmonies.</ErrorNote>
         ) : (
           <div className="grid gap-3 lg:grid-cols-2">
-            {groups.map(({ kind, colors }) => (
+            {groups.map(({ kind, colors, swatches }) => (
               <Panel
                 key={kind}
                 title={HARMONY_LABELS[kind]}
                 actions={<CopyButton text={colors.join(", ")} label="Copy set" />}
               >
                 <div className="flex gap-1.5">
-                  {colors.map((c, i) => {
-                    const p = parseColor(c);
+                  {swatches.map(({ color, key }) => {
+                    const p = parseColor(color);
                     return (
                       <Swatch
-                        key={`${kind}-${i}`}
-                        color={c}
-                        label={p ? formatColor(p, format) : c}
+                        key={key}
+                        color={color}
+                        label={p ? formatColor(p, format) : color}
                         height="h-16"
                         className="flex-1"
                       />
@@ -412,18 +432,25 @@ export function ContrastCheckerTool({ tool, isFavorite, onToggleFavorite }: Cust
 // ── Gradient Generator ──────────────────────────────────────────────────────
 
 interface Stop {
+  id: string;
   color: string;
   position: number;
 }
 
 type GradientKind = "linear" | "radial" | "conic" | "mesh";
 
+const newStop = (color: string, position: number): Stop => ({
+  id: crypto.randomUUID(),
+  color,
+  position,
+});
+
 export function GradientGeneratorTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const [kind, setKind] = useState<GradientKind>("linear");
   const [angle, setAngle] = useState(135);
   const [stops, setStops] = useState<Stop[]>([
-    { color: "#6366f1", position: 0 },
-    { color: "#ec4899", position: 100 },
+    newStop("#6366f1", 0),
+    newStop("#ec4899", 100),
   ]);
 
   const stopList = useMemo(
@@ -468,8 +495,8 @@ export function GradientGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cu
         <ToolActions
           onClear={() =>
             setStops([
-              { color: "#6366f1", position: 0 },
-              { color: "#ec4899", position: 100 },
+              newStop("#6366f1", 0),
+              newStop("#ec4899", 100),
             ])
           }
           isFavorite={isFavorite}
@@ -509,7 +536,7 @@ export function GradientGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cu
 
             <div className="flex flex-col gap-2">
               {stops.map((stop, i) => (
-                <div key={i} className="flex flex-wrap items-end gap-3">
+                <div key={stop.id} className="flex flex-wrap items-end gap-3">
                   <div className="w-48">
                     <Field label={`Stop ${i + 1}`}>
                       <ColorInput value={stop.color} onChange={(v) => update(i, { color: v })} />
@@ -541,7 +568,7 @@ export function GradientGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cu
                 variant="outline"
                 size="sm"
                 disabled={stops.length >= 8}
-                onClick={() => setStops((prev) => [...prev, { color: randomHex(), position: 50 }])}
+                onClick={() => setStops((prev) => [...prev, newStop(randomHex(), 50)])}
               >
                 Add stop
               </Button>
@@ -551,6 +578,7 @@ export function GradientGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cu
                 onClick={() =>
                   setStops((prev) =>
                     prev.map((s, i) => ({
+                      id: s.id,
                       color: randomHex(),
                       position: prev.length === 1 ? 0 : Math.round((i / (prev.length - 1)) * 100),
                     }))

@@ -43,7 +43,7 @@ function loadMath() {
 // ── Scientific Calculator ───────────────────────────────────────────────────
 
 interface CalcState {
-  history: Array<{ expression: string; result: string }>;
+  history: Array<{ id?: string; expression: string; result: string }>;
 }
 
 const CALC_DEFAULT: CalcState = { history: [] };
@@ -148,7 +148,9 @@ export function SciCalcTool({ tool, onRecent, isFavorite, onToggleFavorite }: Cu
       const math = await loadMath();
       const value = math.evaluate(prepare(expression));
       const formatted = typeof value === "number" ? math.format(value, { precision: 12 }) : String(value);
-      saveState({ history: [{ expression, result: formatted }, ...state.history].slice(0, 40) });
+      saveState({
+        history: [{ id: crypto.randomUUID(), expression, result: formatted }, ...state.history].slice(0, 40),
+      });
       setExpression(formatted);
       setError(null);
     } catch (e) {
@@ -205,6 +207,7 @@ export function SciCalcTool({ tool, onRecent, isFavorite, onToggleFavorite }: Cu
                   }
                 }}
                 placeholder="0"
+                aria-label="Expression"
                 spellCheck={false}
                 autoFocus
                 className="w-full bg-transparent text-right font-mono text-3xl tabular-nums focus-visible:outline-none"
@@ -235,9 +238,9 @@ export function SciCalcTool({ tool, onRecent, isFavorite, onToggleFavorite }: Cu
             </div>
 
             <div className="grid grid-cols-5 gap-1.5">
-              {KEYS.flat().map((k, i) => (
+              {KEYS.flat().map((k) => (
                 <Button
-                  key={`${k.label}-${i}`}
+                  key={k.label}
                   variant={k.action === "equals" ? "primary" : k.action ? "secondary" : "outline"}
                   size="md"
                   onClick={() => press(k)}
@@ -263,9 +266,9 @@ export function SciCalcTool({ tool, onRecent, isFavorite, onToggleFavorite }: Cu
               <EmptyNote>Results land here.</EmptyNote>
             ) : (
               <div className="flex max-h-[26rem] flex-col gap-1 overflow-y-auto">
-                {state.history.map((h, i) => (
+                {state.history.map((h) => (
                   <button
-                    key={i}
+                    key={h.id ?? `${h.expression}=${h.result}`}
                     type="button"
                     onClick={() => setExpression(h.expression)}
                     className="input-well px-2.5 py-1.5 text-right transition-colors hover:bg-[hsl(var(--hover-fill))]"
@@ -929,6 +932,23 @@ export function UnitConverterTool({ tool, isFavorite, onToggleFavorite }: Custom
 
 type TimeMode = "difference" | "add" | "duration" | "timestamp" | "timezone";
 
+type AddDirection = "add" | "subtract";
+type AddUnit = "minutes" | "hours" | "days" | "weeks" | "months" | "years";
+
+interface TimeDiff {
+  ms: number;
+  totalSeconds: number;
+  totalMinutes: number;
+  totalHours: number;
+  totalDays: number;
+  totalWeeks: number;
+  years: number;
+  months: number;
+  days: number;
+  businessDays: number;
+  backwards: boolean;
+}
+
 const TIMEZONES = [
   "UTC", "America/Los_Angeles", "America/Denver", "America/Chicago", "America/New_York",
   "America/Sao_Paulo", "Europe/London", "Europe/Paris", "Europe/Berlin", "Europe/Moscow",
@@ -941,13 +961,22 @@ const localIso = (d: Date) => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
+const fmtDuration = (total: number) => {
+  const sign = total < 0 ? "-" : "";
+  const t = Math.abs(Math.round(total));
+  const h = Math.floor(t / 3600);
+  const m = Math.floor((t % 3600) / 60);
+  const s = t % 60;
+  return `${sign}${h}h ${m}m ${s}s`;
+};
+
 export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const [mode, setMode] = useState<TimeMode>("difference");
   const [start, setStart] = useState(() => localIso(new Date()));
   const [end, setEnd] = useState(() => localIso(new Date(Date.now() + 86400000 * 7)));
   const [amount, setAmount] = useState(1);
-  const [unit, setUnit] = useState<"minutes" | "hours" | "days" | "weeks" | "months" | "years">("days");
-  const [direction, setDirection] = useState<"add" | "subtract">("add");
+  const [unit, setUnit] = useState<AddUnit>("days");
+  const [direction, setDirection] = useState<AddDirection>("add");
   const [hours, setHours] = useState(1);
   const [minutes, setMinutes] = useState(30);
   const [seconds, setSeconds] = useState(0);
@@ -955,11 +984,12 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
   const [timestamp, setTimestamp] = useState(() => String(Math.floor(Date.now() / 1000)));
   const [zone, setZone] = useState("UTC");
 
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  /* Memoize the Date objects so effect/memo deps are stable across renders. */
+  const startDate = useMemo(() => new Date(start), [start]);
+  const endDate = useMemo(() => new Date(end), [end]);
   const valid = !Number.isNaN(startDate.getTime()) && !Number.isNaN(endDate.getTime());
 
-  const diff = useMemo(() => {
+  const diff = useMemo<TimeDiff | null>(() => {
     if (!valid) return null;
     const ms = Math.abs(endDate.getTime() - startDate.getTime());
     const totalSeconds = Math.floor(ms / 1000);
@@ -1014,15 +1044,6 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
     (Number.isFinite(seconds) ? seconds : 0);
   const scaled = durationSeconds * (Number.isFinite(multiplier) ? multiplier : 1);
 
-  const fmtDuration = (total: number) => {
-    const sign = total < 0 ? "-" : "";
-    const t = Math.abs(Math.round(total));
-    const h = Math.floor(t / 3600);
-    const m = Math.floor((t % 3600) / 60);
-    const s = t % 60;
-    return `${sign}${h}h ${m}m ${s}s`;
-  };
-
   const tsDate = useMemo(() => {
     const raw = timestamp.trim();
     if (!raw) return null;
@@ -1066,236 +1087,361 @@ export function TimeCalcTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
         />
 
         {mode === "difference" && (
-          <>
-            <Panel>
-              <ControlGrid>
-                <Field label="From">
-                  <input
-                    type="datetime-local"
-                    value={start}
-                    onChange={(e) => setStart(e.target.value)}
-                    className="input-well h-9 w-full px-2.5 text-sm"
-                  />
-                </Field>
-                <Field label="To">
-                  <input
-                    type="datetime-local"
-                    value={end}
-                    onChange={(e) => setEnd(e.target.value)}
-                    className="input-well h-9 w-full px-2.5 text-sm"
-                  />
-                </Field>
-              </ControlGrid>
-            </Panel>
-
-            {diff ? (
-              <>
-                <Panel className="text-center">
-                  <p className="text-2xl font-semibold tracking-tight">
-                    {diff.years > 0 && `${diff.years} year${diff.years === 1 ? "" : "s"}, `}
-                    {diff.months > 0 && `${diff.months} month${diff.months === 1 ? "" : "s"}, `}
-                    {diff.days} day{diff.days === 1 ? "" : "s"}
-                  </p>
-                  {diff.backwards && (
-                    <p className="mt-1 text-caption text-muted-foreground">The end date is before the start.</p>
-                  )}
-                </Panel>
-                <Panel title="Total">
-                  <div className="grid gap-x-6 sm:grid-cols-2">
-                    <StatRow label="Weeks" value={diff.totalWeeks.toFixed(2)} />
-                    <StatRow label="Days" value={diff.totalDays.toFixed(2)} />
-                    <StatRow label="Business days" value={diff.businessDays.toLocaleString()} />
-                    <StatRow label="Hours" value={diff.totalHours.toFixed(2)} />
-                    <StatRow label="Minutes" value={Math.round(diff.totalMinutes).toLocaleString()} />
-                    <StatRow label="Seconds" value={diff.totalSeconds.toLocaleString()} />
-                  </div>
-                </Panel>
-              </>
-            ) : (
-              <ErrorNote>Enter two valid dates.</ErrorNote>
-            )}
-          </>
+          <TimeDifferencePanel start={start} setStart={setStart} end={end} setEnd={setEnd} diff={diff} />
         )}
 
         {mode === "add" && (
-          <>
-            <Panel>
-              <div className="flex flex-col gap-3">
-                <Field label="Starting from">
-                  <input
-                    type="datetime-local"
-                    value={start}
-                    onChange={(e) => setStart(e.target.value)}
-                    className="input-well h-9 w-full px-2.5 text-sm"
-                  />
-                </Field>
-                <ControlGrid className="sm:grid-cols-3">
-                  <Field label="Direction">
-                    <Segmented
-                      value={direction}
-                      onChange={setDirection}
-                      options={[
-                        { value: "add", label: "Add" },
-                        { value: "subtract", label: "Subtract" },
-                      ]}
-                    />
-                  </Field>
-                  <Field label="Amount">
-                    <NumberInput value={amount} onChange={setAmount} />
-                  </Field>
-                  <Field label="Unit">
-                    <Select
-                      value={unit}
-                      onChange={setUnit}
-                      options={[
-                        { value: "minutes", label: "Minutes" },
-                        { value: "hours", label: "Hours" },
-                        { value: "days", label: "Days" },
-                        { value: "weeks", label: "Weeks" },
-                        { value: "months", label: "Months" },
-                        { value: "years", label: "Years" },
-                      ]}
-                    />
-                  </Field>
-                </ControlGrid>
-              </div>
-            </Panel>
-
-            {added && !Number.isNaN(added.getTime()) && (
-              <Panel title="Result">
-                <p className="mb-3 text-center text-xl font-semibold">
-                  {added.toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" })}
-                </p>
-                <StatRow label="ISO 8601" value={added.toISOString()} />
-                <StatRow label="Unix seconds" value={Math.floor(added.getTime() / 1000)} />
-                <StatRow label="Day of week" value={added.toLocaleDateString(undefined, { weekday: "long" })} />
-              </Panel>
-            )}
-          </>
+          <TimeAddPanel
+            start={start}
+            setStart={setStart}
+            direction={direction}
+            setDirection={setDirection}
+            amount={amount}
+            setAmount={setAmount}
+            unit={unit}
+            setUnit={setUnit}
+            added={added}
+          />
         )}
 
         {mode === "duration" && (
-          <>
-            <Panel title="Duration">
-              <ControlGrid className="sm:grid-cols-4">
-                <Field label="Hours">
-                  <NumberInput value={hours} onChange={setHours} min={0} />
-                </Field>
-                <Field label="Minutes">
-                  <NumberInput value={minutes} onChange={setMinutes} min={0} />
-                </Field>
-                <Field label="Seconds">
-                  <NumberInput value={seconds} onChange={setSeconds} min={0} />
-                </Field>
-                <Field label="Multiply by">
-                  <NumberInput value={multiplier} onChange={setMultiplier} step={0.5} />
-                </Field>
-              </ControlGrid>
-            </Panel>
-            <Panel title="Result">
-              <div className="grid gap-x-6 sm:grid-cols-2">
-                <StatRow label="One unit" value={fmtDuration(durationSeconds)} />
-                <StatRow label={`× ${multiplier}`} value={fmtDuration(scaled)} />
-                <StatRow label="Total seconds" value={Math.round(scaled).toLocaleString()} />
-                <StatRow label="Total minutes" value={(scaled / 60).toFixed(2)} />
-                <StatRow label="Total hours" value={(scaled / 3600).toFixed(3)} />
-                <StatRow label="Total days" value={(scaled / 86400).toFixed(4)} />
-              </div>
-            </Panel>
-          </>
+          <TimeDurationPanel
+            hours={hours}
+            setHours={setHours}
+            minutes={minutes}
+            setMinutes={setMinutes}
+            seconds={seconds}
+            setSeconds={setSeconds}
+            multiplier={multiplier}
+            setMultiplier={setMultiplier}
+            durationSeconds={durationSeconds}
+            scaled={scaled}
+          />
         )}
 
         {mode === "timestamp" && (
-          <>
-            <Panel>
-              <div className="flex flex-col gap-3">
-                <Field label="Unix timestamp" hint="Seconds or milliseconds — both are detected">
-                  <TextInput value={timestamp} onChange={setTimestamp} className="font-mono" />
-                </Field>
-                <div className="flex gap-1.5">
-                  <Button variant="outline" size="sm" onClick={() => setTimestamp(String(Math.floor(Date.now() / 1000)))}>
-                    Now (s)
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => setTimestamp(String(Date.now()))}>
-                    Now (ms)
-                  </Button>
-                </div>
-              </div>
-            </Panel>
-            {tsDate && !Number.isNaN(tsDate.getTime()) ? (
-              <Panel title="Resolved">
-                <StatRow label="Local" value={tsDate.toLocaleString(undefined, { dateStyle: "full", timeStyle: "long" })} />
-                <StatRow label="UTC" value={tsDate.toUTCString()} />
-                <StatRow label="ISO 8601" value={tsDate.toISOString()} />
-                <StatRow label="Unix seconds" value={Math.floor(tsDate.getTime() / 1000)} />
-                <StatRow label="Unix ms" value={tsDate.getTime()} />
-                <StatRow label="Relative" value={relativeTime(tsDate)} />
-              </Panel>
-            ) : (
-              timestamp.trim() && <ErrorNote>That is not a valid timestamp.</ErrorNote>
-            )}
-          </>
+          <TimeTimestampPanel timestamp={timestamp} setTimestamp={setTimestamp} tsDate={tsDate} />
         )}
 
         {mode === "timezone" && (
-          <>
-            <Panel>
-              <ControlGrid>
-                <Field label="Moment">
-                  <input
-                    type="datetime-local"
-                    value={start}
-                    onChange={(e) => setStart(e.target.value)}
-                    className="input-well h-9 w-full px-2.5 text-sm"
-                  />
-                </Field>
-                <Field label="Highlight zone">
-                  <Select
-                    value={zone}
-                    onChange={setZone}
-                    options={TIMEZONES.map((z) => ({ value: z, label: z.replace(/_/g, " ") }))}
-                  />
-                </Field>
-              </ControlGrid>
-            </Panel>
-            <Panel title="Around the world">
-              {Number.isNaN(startDate.getTime()) ? (
-                <ErrorNote>Enter a valid date and time.</ErrorNote>
-              ) : (
-                <div className="grid gap-1.5 sm:grid-cols-2">
-                  {TIMEZONES.map((tz) => {
-                    let formatted: string;
-                    try {
-                      formatted = startDate.toLocaleString(undefined, {
-                        timeZone: tz,
-                        dateStyle: "medium",
-                        timeStyle: "short",
-                      });
-                    } catch {
-                      formatted = "unsupported";
-                    }
-                    return (
-                      <div
-                        key={tz}
-                        className={cn(
-                          "input-well flex items-baseline justify-between gap-2 px-2.5 py-1.5",
-                          tz === zone && "bg-brand/8 ring-1 ring-brand/40"
-                        )}
-                      >
-                        <span className="min-w-0 truncate text-caption text-muted-foreground">
-                          {tz.replace(/_/g, " ")}
-                        </span>
-                        <span className="shrink-0 text-caption tabular-nums">{formatted}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </Panel>
-          </>
+          <TimeTimezonePanel start={start} setStart={setStart} zone={zone} setZone={setZone} startDate={startDate} />
         )}
       </div>
     </ToolShell>
+  );
+}
+
+function TimeDifferencePanel({
+  start,
+  setStart,
+  end,
+  setEnd,
+  diff,
+}: {
+  start: string;
+  setStart: (v: string) => void;
+  end: string;
+  setEnd: (v: string) => void;
+  diff: TimeDiff | null;
+}) {
+  return (
+    <>
+      <Panel>
+        <ControlGrid>
+          <Field label="From">
+            <input
+              type="datetime-local"
+              value={start}
+              onChange={(e) => setStart(e.target.value)}
+              className="input-well h-9 w-full px-2.5 text-sm"
+            />
+          </Field>
+          <Field label="To">
+            <input
+              type="datetime-local"
+              value={end}
+              onChange={(e) => setEnd(e.target.value)}
+              className="input-well h-9 w-full px-2.5 text-sm"
+            />
+          </Field>
+        </ControlGrid>
+      </Panel>
+
+      {diff ? (
+        <>
+          <Panel className="text-center">
+            <p className="text-2xl font-semibold tracking-tight">
+              {diff.years > 0 && `${diff.years} year${diff.years === 1 ? "" : "s"}, `}
+              {diff.months > 0 && `${diff.months} month${diff.months === 1 ? "" : "s"}, `}
+              {diff.days} day{diff.days === 1 ? "" : "s"}
+            </p>
+            {diff.backwards && (
+              <p className="mt-1 text-caption text-muted-foreground">The end date is before the start.</p>
+            )}
+          </Panel>
+          <Panel title="Total">
+            <div className="grid gap-x-6 sm:grid-cols-2">
+              <StatRow label="Weeks" value={diff.totalWeeks.toFixed(2)} />
+              <StatRow label="Days" value={diff.totalDays.toFixed(2)} />
+              <StatRow label="Business days" value={diff.businessDays.toLocaleString()} />
+              <StatRow label="Hours" value={diff.totalHours.toFixed(2)} />
+              <StatRow label="Minutes" value={Math.round(diff.totalMinutes).toLocaleString()} />
+              <StatRow label="Seconds" value={diff.totalSeconds.toLocaleString()} />
+            </div>
+          </Panel>
+        </>
+      ) : (
+        <ErrorNote>Enter two valid dates.</ErrorNote>
+      )}
+    </>
+  );
+}
+
+function TimeAddPanel({
+  start,
+  setStart,
+  direction,
+  setDirection,
+  amount,
+  setAmount,
+  unit,
+  setUnit,
+  added,
+}: {
+  start: string;
+  setStart: (v: string) => void;
+  direction: AddDirection;
+  setDirection: (v: AddDirection) => void;
+  amount: number;
+  setAmount: (v: number) => void;
+  unit: AddUnit;
+  setUnit: (v: AddUnit) => void;
+  added: Date | null;
+}) {
+  return (
+    <>
+      <Panel>
+        <div className="flex flex-col gap-3">
+          <Field label="Starting from">
+            <input
+              type="datetime-local"
+              value={start}
+              onChange={(e) => setStart(e.target.value)}
+              className="input-well h-9 w-full px-2.5 text-sm"
+            />
+          </Field>
+          <ControlGrid className="sm:grid-cols-3">
+            <Field label="Direction">
+              <Segmented
+                value={direction}
+                onChange={setDirection}
+                options={[
+                  { value: "add", label: "Add" },
+                  { value: "subtract", label: "Subtract" },
+                ]}
+              />
+            </Field>
+            <Field label="Amount">
+              <NumberInput value={amount} onChange={setAmount} />
+            </Field>
+            <Field label="Unit">
+              <Select
+                value={unit}
+                onChange={setUnit}
+                options={[
+                  { value: "minutes", label: "Minutes" },
+                  { value: "hours", label: "Hours" },
+                  { value: "days", label: "Days" },
+                  { value: "weeks", label: "Weeks" },
+                  { value: "months", label: "Months" },
+                  { value: "years", label: "Years" },
+                ]}
+              />
+            </Field>
+          </ControlGrid>
+        </div>
+      </Panel>
+
+      {added && !Number.isNaN(added.getTime()) && (
+        <Panel title="Result">
+          <p className="mb-3 text-center text-xl font-semibold">
+            {added.toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" })}
+          </p>
+          <StatRow label="ISO 8601" value={added.toISOString()} />
+          <StatRow label="Unix seconds" value={Math.floor(added.getTime() / 1000)} />
+          <StatRow label="Day of week" value={added.toLocaleDateString(undefined, { weekday: "long" })} />
+        </Panel>
+      )}
+    </>
+  );
+}
+
+function TimeDurationPanel({
+  hours,
+  setHours,
+  minutes,
+  setMinutes,
+  seconds,
+  setSeconds,
+  multiplier,
+  setMultiplier,
+  durationSeconds,
+  scaled,
+}: {
+  hours: number;
+  setHours: (v: number) => void;
+  minutes: number;
+  setMinutes: (v: number) => void;
+  seconds: number;
+  setSeconds: (v: number) => void;
+  multiplier: number;
+  setMultiplier: (v: number) => void;
+  durationSeconds: number;
+  scaled: number;
+}) {
+  return (
+    <>
+      <Panel title="Duration">
+        <ControlGrid className="sm:grid-cols-4">
+          <Field label="Hours">
+            <NumberInput value={hours} onChange={setHours} min={0} />
+          </Field>
+          <Field label="Minutes">
+            <NumberInput value={minutes} onChange={setMinutes} min={0} />
+          </Field>
+          <Field label="Seconds">
+            <NumberInput value={seconds} onChange={setSeconds} min={0} />
+          </Field>
+          <Field label="Multiply by">
+            <NumberInput value={multiplier} onChange={setMultiplier} step={0.5} />
+          </Field>
+        </ControlGrid>
+      </Panel>
+      <Panel title="Result">
+        <div className="grid gap-x-6 sm:grid-cols-2">
+          <StatRow label="One unit" value={fmtDuration(durationSeconds)} />
+          <StatRow label={`× ${multiplier}`} value={fmtDuration(scaled)} />
+          <StatRow label="Total seconds" value={Math.round(scaled).toLocaleString()} />
+          <StatRow label="Total minutes" value={(scaled / 60).toFixed(2)} />
+          <StatRow label="Total hours" value={(scaled / 3600).toFixed(3)} />
+          <StatRow label="Total days" value={(scaled / 86400).toFixed(4)} />
+        </div>
+      </Panel>
+    </>
+  );
+}
+
+function TimeTimestampPanel({
+  timestamp,
+  setTimestamp,
+  tsDate,
+}: {
+  timestamp: string;
+  setTimestamp: (v: string) => void;
+  tsDate: Date | null;
+}) {
+  return (
+    <>
+      <Panel>
+        <div className="flex flex-col gap-3">
+          <Field label="Unix timestamp" hint="Seconds or milliseconds — both are detected">
+            <TextInput value={timestamp} onChange={setTimestamp} className="font-mono" />
+          </Field>
+          <div className="flex gap-1.5">
+            <Button variant="outline" size="sm" onClick={() => setTimestamp(String(Math.floor(Date.now() / 1000)))}>
+              Now (s)
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setTimestamp(String(Date.now()))}>
+              Now (ms)
+            </Button>
+          </div>
+        </div>
+      </Panel>
+      {tsDate && !Number.isNaN(tsDate.getTime()) ? (
+        <Panel title="Resolved">
+          <StatRow label="Local" value={tsDate.toLocaleString(undefined, { dateStyle: "full", timeStyle: "long" })} />
+          <StatRow label="UTC" value={tsDate.toUTCString()} />
+          <StatRow label="ISO 8601" value={tsDate.toISOString()} />
+          <StatRow label="Unix seconds" value={Math.floor(tsDate.getTime() / 1000)} />
+          <StatRow label="Unix ms" value={tsDate.getTime()} />
+          <StatRow label="Relative" value={relativeTime(tsDate)} />
+        </Panel>
+      ) : (
+        timestamp.trim() && <ErrorNote>That is not a valid timestamp.</ErrorNote>
+      )}
+    </>
+  );
+}
+
+function TimeTimezonePanel({
+  start,
+  setStart,
+  zone,
+  setZone,
+  startDate,
+}: {
+  start: string;
+  setStart: (v: string) => void;
+  zone: string;
+  setZone: (v: string) => void;
+  startDate: Date;
+}) {
+  return (
+    <>
+      <Panel>
+        <ControlGrid>
+          <Field label="Moment">
+            <input
+              type="datetime-local"
+              value={start}
+              onChange={(e) => setStart(e.target.value)}
+              className="input-well h-9 w-full px-2.5 text-sm"
+            />
+          </Field>
+          <Field label="Highlight zone">
+            <Select
+              value={zone}
+              onChange={setZone}
+              options={TIMEZONES.map((z) => ({ value: z, label: z.replace(/_/g, " ") }))}
+            />
+          </Field>
+        </ControlGrid>
+      </Panel>
+      <Panel title="Around the world">
+        {Number.isNaN(startDate.getTime()) ? (
+          <ErrorNote>Enter a valid date and time.</ErrorNote>
+        ) : (
+          <div className="grid gap-1.5 sm:grid-cols-2">
+            {TIMEZONES.map((tz) => {
+              let formatted: string;
+              try {
+                formatted = startDate.toLocaleString(undefined, {
+                  timeZone: tz,
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                });
+              } catch {
+                formatted = "unsupported";
+              }
+              return (
+                <div
+                  key={tz}
+                  className={cn(
+                    "input-well flex items-baseline justify-between gap-2 px-2.5 py-1.5",
+                    tz === zone && "bg-brand/8 ring-1 ring-brand/40"
+                  )}
+                >
+                  <span className="min-w-0 truncate text-caption text-muted-foreground">
+                    {tz.replace(/_/g, " ")}
+                  </span>
+                  <span className="shrink-0 text-caption tabular-nums">{formatted}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Panel>
+    </>
   );
 }
 
@@ -1313,21 +1459,22 @@ function countBusinessDays(a: Date, b: Date): number {
   return count;
 }
 
+const RELATIVE_TIME_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
+const RELATIVE_UNITS: Array<[Intl.RelativeTimeFormatUnit, number]> = [
+  ["year", 31536000],
+  ["month", 2592000],
+  ["week", 604800],
+  ["day", 86400],
+  ["hour", 3600],
+  ["minute", 60],
+  ["second", 1],
+];
+
 function relativeTime(date: Date): string {
   const seconds = (date.getTime() - Date.now()) / 1000;
-  const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
-  const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
-    ["year", 31536000],
-    ["month", 2592000],
-    ["week", 604800],
-    ["day", 86400],
-    ["hour", 3600],
-    ["minute", 60],
-    ["second", 1],
-  ];
-  for (const [unit, size] of units) {
+  for (const [unit, size] of RELATIVE_UNITS) {
     if (Math.abs(seconds) >= size || unit === "second") {
-      return rtf.format(Math.round(seconds / size), unit);
+      return RELATIVE_TIME_FORMAT.format(Math.round(seconds / size), unit);
     }
   }
   return "now";

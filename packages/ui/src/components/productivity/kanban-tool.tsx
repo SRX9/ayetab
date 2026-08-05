@@ -165,11 +165,13 @@ export function KanbanTool({
                   onChange={(e) => setDrafts((prev) => ({ ...prev, [column.id]: e.target.value }))}
                   onKeyDown={(e) => e.key === "Enter" && addCard(column.id)}
                   placeholder="Add card…"
+                  aria-label={`New card title for ${column.title}`}
                   className="input-well flex-1 px-2 py-1.5 text-xs"
                 />
                 <button
                   type="button"
                   onClick={() => addCard(column.id)}
+                  aria-label={`Add card to ${column.title}`}
                   className="btn-liquid-primary rounded-md px-2 py-1.5 text-xs"
                 >
                   +

@@ -125,6 +125,7 @@ export function TodoListTool({
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addItem()}
               placeholder="Add a new task…"
+              aria-label="Add a new task"
               className={cn(CONTROL_CLASS, "flex-1")}
               data-testid="todo-input"
             />

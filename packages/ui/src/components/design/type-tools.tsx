@@ -39,6 +39,9 @@ import {
 
 const CONVERT_UNITS: TypoUnitId[] = ["px", "rem", "em", "percent", "pt", "pc", "mm", "cm", "in"];
 
+/** The scale most design systems reach for, converted on the fly. */
+const SCALE = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 96];
+
 export function PxToRemTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const [value, setValue] = useState(16);
   const [unit, setUnit] = useState<TypoUnitId>("px");
@@ -49,9 +52,6 @@ export function PxToRemTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
     () => convertTypoUnits(Number.isFinite(value) ? value : 0, unit, rootSize || 16, parentSize || 16),
     [value, unit, rootSize, parentSize]
   );
-
-  /** The scale most design systems reach for, converted on the fly. */
-  const SCALE = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 96];
 
   return (
     <ToolShell
@@ -324,6 +324,7 @@ export function LineHeightCalcTool({ tool, isFavorite, onToggleFavorite }: Custo
             value={sample}
             onChange={(e) => setSample(e.target.value)}
             rows={3}
+            aria-label="Preview text"
             className="input-well mb-3 w-full resize-y p-2.5 text-ui"
           />
           <div
@@ -671,7 +672,14 @@ export function PaperSizesTool({ tool, isFavorite, onToggleFavorite }: CustomToo
                   return (
                     <tr
                       key={s.name}
+                      tabIndex={0}
                       onClick={() => setSelected(s)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelected(s);
+                        }
+                      }}
                       className={cn(
                         "cursor-pointer border-b border-border last:border-0 transition-colors",
                         isActive

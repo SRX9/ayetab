@@ -94,26 +94,26 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "AyeTab",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Web",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    description,
-    url: WEB_APP_ORIGIN,
-    image: `${WEB_APP_ORIGIN}/og-image.jpg`,
-    logo: `${WEB_APP_ORIGIN}/logo-icon.png`,
-  };
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "AyeTab",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description,
+  url: WEB_APP_ORIGIN,
+  image: `${WEB_APP_ORIGIN}/og-image.jpg`,
+  logo: `${WEB_APP_ORIGIN}/logo-icon.png`,
+} as const;
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${sans.variable} ${mono.variable} font-sans`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD).replace(/</g, "\\u003c") }}
         />
         <Providers>{children}</Providers>
       </body>

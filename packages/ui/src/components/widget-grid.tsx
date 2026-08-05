@@ -118,16 +118,20 @@ export function WidgetGrid({ tools, onOpenTool }: WidgetGridProps) {
     [entries, persist]
   );
 
-  const addResults = useMemo(
-    () =>
-      addQuery.trim()
-        ? fuzzySearchTools(addQuery.trim(), tools)
-            .map((r) => r.tool)
-            .filter((t) => !entries.some((e) => e.id === t.id))
-            .slice(0, 8)
-        : tools.filter((t) => !entries.some((e) => e.id === t.id)).slice(0, 8),
-    [addQuery, tools, entries]
-  );
+  const addResults = useMemo(() => {
+    const query = addQuery.trim();
+    const candidates = query
+      ? fuzzySearchTools(query, tools).map((r) => r.tool)
+      : tools;
+    const excluded = new Set(entries.map((e) => e.id));
+    const results: ToolDefinition[] = [];
+    for (const tool of candidates) {
+      if (excluded.has(tool.id)) continue;
+      results.push(tool);
+      if (results.length >= 8) break;
+    }
+    return results;
+  }, [addQuery, tools, entries]);
 
   const onDragStart = (e: DragEvent, id: string) => {
     setDragId(id);

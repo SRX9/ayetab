@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 import type { ToolDefinition } from "@ayetab/utils";
 import {
   AppShell,
@@ -16,16 +16,20 @@ import { FirstRunNotice } from "./first-run-notice";
 import { ToolView, WebOnlyToolsSection } from "./tool-view";
 import { navigate, parseRoute, toolHash, homeHash, type Route } from "./route";
 
+function subscribeToHash(onChange: () => void): () => void {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
+}
+
+function getHashSnapshot(): string {
+  return window.location.hash;
+}
+
 function useHashRoute(): Route {
-  const [route, setRoute] = useState<Route>(() => parseRoute(window.location.hash));
-
-  useEffect(() => {
-    const onHashChange = () => setRoute(parseRoute(window.location.hash));
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
-
-  return route;
+  // The raw hash string is the snapshot (a stable primitive); parsing is
+  // memoized so the Route object identity only changes when the hash does.
+  const hash = useSyncExternalStore(subscribeToHash, getHashSnapshot);
+  return useMemo(() => parseRoute(hash), [hash]);
 }
 
 function NewTab() {

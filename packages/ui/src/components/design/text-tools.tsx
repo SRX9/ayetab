@@ -147,6 +147,7 @@ export function MarkdownEditorTool({ tool, onRecent, isFavorite, onToggleFavorit
                 value={text}
                 onChange={(e) => saveState({ text: e.target.value })}
                 placeholder={STARTER}
+                aria-label="Markdown source"
                 spellCheck
                 className={cn(
                   "input-well min-h-[26rem] w-full resize-y p-5",
@@ -157,13 +158,17 @@ export function MarkdownEditorTool({ tool, onRecent, isFavorite, onToggleFavorit
               />
             )}
             {view !== "write" && (
+              // Safe: convertDocument escapes every source character and attribute
+              // (see escapeHtml in doc-convert.ts), so raw HTML/script in the
+              // markdown renders as inert text, and the input is the user's own
+              // document rendered back to the same user.
+              // eslint-disable-next-line react-doctor/dangerous-html-sink
               <div
                 className={cn(
                   "prose-tool tool-surface min-h-[26rem] overflow-auto p-5",
                   focusMode && "border-transparent bg-transparent shadow-none"
                 )}
                 style={{ fontSize: `${fontSize}px` }}
-                // Rendered from the user's own markdown in their own browser.
                 dangerouslySetInnerHTML={{ __html: html || "<p class='opacity-50'>Nothing yet.</p>" }}
               />
             )}
@@ -281,11 +286,10 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
   };
 
   const undo = () => {
-    setHistory((h) => {
-      if (h.length === 0) return h;
-      saveState({ text: h[h.length - 1] });
-      return h.slice(0, -1);
-    });
+    const previous = history[history.length - 1];
+    if (previous === undefined) return;
+    saveState({ text: previous });
+    setHistory((h) => h.slice(0, -1));
   };
 
   const groups = useMemo(() => {
@@ -325,6 +329,7 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
             value={text}
             onChange={(e) => saveState({ text: e.target.value })}
             placeholder="Paste or type anything. Use the buttons below to reshape it."
+            aria-label="Text to transform"
             spellCheck={false}
             className="input-well min-h-[20rem] w-full resize-y p-4 font-mono text-ui leading-relaxed"
           />
@@ -358,6 +363,15 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
 
 // ── Word Counter ────────────────────────────────────────────────────────────
 
+/** Length limits people actually write against. */
+const LIMITS: Array<[string, number]> = [
+  ["Bluesky post", 300],
+  ["X post", 280],
+  ["Meta description", 160],
+  ["Page title", 60],
+  ["SMS", 160],
+];
+
 function formatSeconds(seconds: number): string {
   if (seconds < 60) return `${Math.max(1, Math.round(seconds))} sec`;
   const mins = Math.floor(seconds / 60);
@@ -378,15 +392,6 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
     ["Paragraphs", s.paragraphs.toLocaleString()],
   ];
 
-  /** Length limits people actually write against. */
-  const LIMITS: Array<[string, number]> = [
-    ["Bluesky post", 300],
-    ["X post", 280],
-    ["Meta description", 160],
-    ["Page title", 60],
-    ["SMS", 160],
-  ];
-
   return (
     <ToolShell
       title={tool.name}
@@ -403,6 +408,7 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
             value={text}
             onChange={(e) => saveState({ text: e.target.value })}
             placeholder="Paste or type your text…"
+            aria-label="Text to count"
             className="input-well min-h-[14rem] w-full resize-y p-4 text-ui-md leading-relaxed"
           />
 
@@ -585,6 +591,7 @@ export function DocConverterTool({ tool, isFavorite, onToggleFavorite }: CustomT
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste a document, or open a file…"
+              aria-label="Document source"
               spellCheck={false}
               className="input-well min-h-[22rem] w-full resize-y p-3 font-mono text-caption leading-relaxed"
             />
@@ -644,6 +651,7 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type or paste English text…"
+              aria-label="English text"
               className="input-well min-h-[14rem] w-full resize-y p-3 text-ui-md leading-relaxed"
             />
           </Panel>
@@ -791,12 +799,21 @@ export function FontExplorerTool({ tool, isFavorite, onToggleFavorite }: CustomT
       };
 
       // Register the font so the preview can actually render with it.
+      // The URL is revoked if registration fails (catch below), when a new
+      // font replaces it (the `setFontUrl` updater), and on unmount.
       const family = `preview-${Date.now()}`;
       const blob = new Blob([buffer], { type: "font/opentype" });
+      // eslint-disable-next-line react-doctor/no-create-object-url-without-revoke
       const url = URL.createObjectURL(blob);
-      const face = new FontFace(family, `url(${url})`);
-      await face.load();
-      document.fonts.add(face);
+      try {
+        const face = new FontFace(family, `url(${url})`);
+        await face.load();
+        document.fonts.add(face);
+      } catch (e) {
+        // Nothing will reference this URL if registration fails.
+        URL.revokeObjectURL(url);
+        throw e;
+      }
 
       const gsub = (font.tables as Record<string, unknown>).gsub as
         | { features?: Array<{ tag: string }> }

@@ -130,9 +130,13 @@ export function ImageConverterTool({ tool, isFavorite, onToggleFavorite }: Custo
       ctx.drawImage(image.el, 0, 0, target.w, target.h);
 
       const blob = await canvasToBlob(canvas, format, quality / 100);
+      // Revoked when the result is replaced (the updater below) and on
+      // unmount (the effect keyed on `result`).
+      // eslint-disable-next-line react-doctor/no-create-object-url-without-revoke
+      const url = URL.createObjectURL(blob);
       setResult((prev) => {
         if (prev) URL.revokeObjectURL(prev.url);
-        return { blob, url: URL.createObjectURL(blob), w: target.w, h: target.h };
+        return { blob, url, w: target.w, h: target.h };
       });
     } finally {
       setBusy(false);
@@ -282,29 +286,41 @@ export function ImageSplitterTool({ tool, isFavorite, onToggleFavorite }: Custom
     const c = Math.max(1, Math.min(12, cols));
     const r = Math.max(1, Math.min(12, rows));
     setBusy(true);
+    try {
+      const tw = Math.floor(image.width / c);
+      const th = Math.floor(image.height / r);
 
-    const tw = Math.floor(image.width / c);
-    const th = Math.floor(image.height / r);
-    const out: Array<{ url: string; row: number; col: number }> = [];
-
-    for (let row = 0; row < r; row++) {
-      for (let col = 0; col < c; col++) {
-        const canvas = document.createElement("canvas");
-        canvas.width = tw;
-        canvas.height = th;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) continue;
-        ctx.drawImage(image.el, col * tw, row * th, tw, th, 0, 0, tw, th);
-        const blob = await canvasToBlob(canvas, format);
-        out.push({ url: URL.createObjectURL(blob), row, col });
+      const cells: Array<{ row: number; col: number }> = [];
+      for (let row = 0; row < r; row++) {
+        for (let col = 0; col < c; col++) cells.push({ row, col });
       }
-    }
 
-    setTiles((prev) => {
-      prev.forEach((t) => URL.revokeObjectURL(t.url));
-      return out;
-    });
-    setBusy(false);
+      // Tiles are independent slices, so encode them together.
+      const blobs = await Promise.all(
+        cells.map(async ({ row, col }) => {
+          const canvas = document.createElement("canvas");
+          canvas.width = tw;
+          canvas.height = th;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return null;
+          ctx.drawImage(image.el, col * tw, row * th, tw, th, 0, 0, tw, th);
+          const blob = await canvasToBlob(canvas, format);
+          return { blob, row, col };
+        })
+      );
+
+      const out: Array<{ url: string; row: number; col: number }> = [];
+      for (const tile of blobs) {
+        if (tile) out.push({ url: URL.createObjectURL(tile.blob), row: tile.row, col: tile.col });
+      }
+
+      setTiles((prev) => {
+        prev.forEach((t) => URL.revokeObjectURL(t.url));
+        return out;
+      });
+    } finally {
+      setBusy(false);
+    }
   }, [image, cols, rows, format]);
 
   useEffect(() => {
@@ -490,7 +506,7 @@ export function ImageStitcherTool({ tool, isFavorite, onToggleFavorite }: Custom
             <Panel title={`Images · ${images.length}`}>
               <div className="flex flex-col gap-1.5">
                 {images.map((img, i) => (
-                  <div key={`${img.url}-${i}`} className="flex items-center gap-2.5 rounded-lg bg-background p-1.5">
+                  <div key={img.url} className="flex items-center gap-2.5 rounded-lg bg-background p-1.5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={img.url} alt="" className="h-10 w-10 shrink-0 rounded object-cover" />
                     <div className="min-w-0 flex-1">
@@ -813,6 +829,15 @@ export function PasteImageTool({ tool, isFavorite, onToggleFavorite }: CustomToo
 
 // ── Placeholder Generator ───────────────────────────────────────────────────
 
+const PRESETS: Array<[string, number, number]> = [
+  ["OG image", 1200, 630],
+  ["Square", 1080, 1080],
+  ["Story", 1080, 1920],
+  ["Hero", 1920, 1080],
+  ["Avatar", 400, 400],
+  ["Banner", 1500, 500],
+];
+
 export function PlaceholderGeneratorTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const [width, setWidth] = useState(1200);
   const [height, setHeight] = useState(630);
@@ -895,15 +920,6 @@ export function PlaceholderGeneratorTool({ tool, isFavorite, onToggleFavorite }:
         : ""
     }</svg>`;
   }, [width, height, bg, fg, label]);
-
-  const PRESETS: Array<[string, number, number]> = [
-    ["OG image", 1200, 630],
-    ["Square", 1080, 1080],
-    ["Story", 1080, 1920],
-    ["Hero", 1920, 1080],
-    ["Avatar", 400, 400],
-    ["Banner", 1500, 500],
-  ];
 
   return (
     <ToolShell

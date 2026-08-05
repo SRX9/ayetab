@@ -139,6 +139,7 @@ export function HabitTrackerTool({
               name="habit-name"
               type="text"
               placeholder="Add a new habit…"
+              aria-label="Add a new habit"
               className="input-well flex-1 px-3 py-2 text-sm"
               data-testid="habit-input"
             />
