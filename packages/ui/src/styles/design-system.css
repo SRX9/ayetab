@@ -111,9 +111,9 @@
     0 0 0 1.5px rgba(160, 175, 195, 0.12),
     0 0 18px rgba(30, 42, 62, 0.04);
   --shadow-accent:
-    0 1px 0 rgba(255, 255, 255, 0.4) inset,
-    0 -1px 0 rgba(0, 60, 140, 0.2) inset,
-    0 0 22px rgba(0, 122, 255, 0.3);
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 -1px 0 rgba(0, 60, 140, 0.18) inset,
+    0 1px 3px rgba(0, 60, 140, 0.18);
 }
 
 .dark {
@@ -192,7 +192,7 @@
   --shadow-accent:
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
     0 -1px 0 rgba(0, 40, 100, 0.3) inset,
-    0 0 26px rgba(10, 132, 255, 0.35);
+    0 1px 3px rgba(0, 20, 60, 0.3);
 }
 
 * {
@@ -417,8 +417,7 @@ kbd {
   border-color: hsl(var(--ring));
   box-shadow:
     0 0 0 3px hsl(var(--selection-soft)),
-    inset 0 1px 3px rgba(40, 90, 140, 0.06),
-    0 0 20px rgba(0, 122, 255, 0.1);
+    inset 0 1px 3px rgba(40, 90, 140, 0.06);
   background: rgba(255, 255, 255, 0.82);
 }
 
@@ -442,8 +441,7 @@ kbd {
   background: rgba(20, 35, 55, 0.72);
   box-shadow:
     0 0 0 3px hsl(var(--selection-soft)),
-    inset 0 1px 4px rgba(0, 0, 0, 0.3),
-    0 0 24px rgba(10, 132, 255, 0.12);
+    inset 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .chip {
@@ -573,8 +571,7 @@ kbd {
   color: hsl(var(--brand));
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
-    0 0 0 2px hsl(var(--selection-soft)),
-    0 0 20px rgba(0, 122, 255, 0.18);
+    0 0 0 2px hsl(var(--brand) / 0.35);
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -858,12 +855,11 @@ kbd {
   height: 16px;
   width: 16px;
   border-radius: 9999px;
-  background: linear-gradient(180deg, #ffffff 0%, #e8f4fc 100%);
-  border: 1px solid rgba(0, 122, 255, 0.4);
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fa 100%);
+  border: 1px solid rgba(30, 42, 62, 0.14);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 2px 8px rgba(0, 122, 255, 0.32),
-    0 0 0 3px rgba(0, 122, 255, 0.12);
+    0 1px 3px rgba(30, 42, 62, 0.16);
   transition: transform 100ms ease, box-shadow 150ms ease;
 }
 
@@ -871,11 +867,11 @@ kbd {
   height: 16px;
   width: 16px;
   border-radius: 9999px;
-  background: linear-gradient(180deg, #ffffff 0%, #e8f4fc 100%);
-  border: 1px solid rgba(0, 122, 255, 0.4);
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fa 100%);
+  border: 1px solid rgba(30, 42, 62, 0.14);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 2px 8px rgba(0, 122, 255, 0.32);
+    0 1px 3px rgba(30, 42, 62, 0.16);
   transition: transform 100ms ease;
 }
 
@@ -906,7 +902,7 @@ kbd {
 }
 
 /* ---------------------------------------------------------------------------
- * Row / nav states — luminous liquid active
+ * Row / nav states — clean selection, no accent rails
  * ------------------------------------------------------------------------ */
 .row-selected {
   background: hsl(var(--active-fill));
@@ -933,33 +929,22 @@ kbd {
   }
 }
 
+/* Selection is a soft elevated chip — tint + ring, never a side bar. */
 .nav-active {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 122, 255, 0.28) 0%,
-    rgba(61, 155, 255, 0.16) 55%,
-    rgba(0, 122, 255, 0.1) 100%
-  );
+  background: hsl(var(--selection-soft));
   color: hsl(var(--brand));
   font-weight: 600;
   border-radius: 10px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 3px 0 0 hsl(var(--brand)),
-    0 0 24px rgba(0, 122, 255, 0.18),
-    0 2px 8px rgba(0, 122, 255, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 0 0 1px hsl(var(--brand) / 0.22);
 }
 
 .dark .nav-active {
-  background: linear-gradient(
-    135deg,
-    rgba(10, 132, 255, 0.38) 0%,
-    rgba(10, 132, 255, 0.16) 100%
-  );
+  background: hsl(var(--selection-soft));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 3px 0 0 hsl(var(--brand)),
-    0 0 28px rgba(10, 132, 255, 0.22);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px hsl(var(--brand) / 0.3);
 }
 
 /* ---------------------------------------------------------------------------
@@ -975,8 +960,8 @@ kbd {
   background: linear-gradient(180deg, #5aadff 0%, #1a88ff 48%, #0070e8 100%);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.4) inset,
-    0 10px 28px rgba(0, 122, 255, 0.48),
-    0 0 20px rgba(0, 122, 255, 0.2);
+    0 -1px 0 rgba(0, 60, 140, 0.14) inset,
+    0 2px 6px rgba(0, 60, 140, 0.22);
 }
 
 /* ---------------------------------------------------------------------------
