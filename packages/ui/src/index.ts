@@ -22,7 +22,6 @@ export { CommandPaletteProvider } from "./components/command-palette-provider";
 export { useCommandPalette, useCommandPaletteOptional } from "./hooks/use-command-palette";
 export { ThemeProvider } from "./components/theme-provider";
 export { useTheme } from "./hooks/use-theme";
-export { ThemeToggle } from "./components/theme-toggle";
 export { AppearanceSync } from "./components/appearance-sync";
 export { SmartPasteBanner } from "./components/smart-paste-banner";
 export { FavoriteButton } from "./components/favorite-button";

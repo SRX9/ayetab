@@ -2,32 +2,14 @@
 
 import { useRef, type RefObject } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  ComputerIcon,
-  Download04Icon,
-  Image01Icon,
-  Moon02Icon,
-  Sun03Icon,
-  Upload04Icon,
-} from "@hugeicons/core-free-icons";
-import { type ThemeMode, type Wallpaper } from "../lib/appearance";
+import { Download04Icon, Image01Icon, Upload04Icon } from "@hugeicons/core-free-icons";
+import { type Wallpaper } from "../lib/appearance";
 import { ABSTRACT_WALLPAPERS } from "../lib/wallpapers";
 import { usePreferences } from "../hooks/use-preferences";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 
-const THEME_OPTIONS: Array<{ id: ThemeMode; label: string; hint: string; icon: typeof Sun03Icon }> = [
-  { id: "light", label: "Light", hint: "Bright interface", icon: Sun03Icon },
-  { id: "dark", label: "Dark", hint: "Dim interface", icon: Moon02Icon },
-  { id: "system", label: "Auto", hint: "Match your system", icon: ComputerIcon },
-];
-
-interface AppearanceSectionProps {
-  effectiveTheme: ThemeMode;
-  onTheme: (mode: ThemeMode) => void;
-}
-
-export function AppearanceSection({ effectiveTheme, onTheme }: AppearanceSectionProps) {
+export function AppearanceSection() {
   const { prefs, updateAppearance } = usePreferences();
   const imageRef = useRef<HTMLInputElement>(null);
   const wallpaper = prefs.appearance.wallpaper;
@@ -46,44 +28,6 @@ export function AppearanceSection({ effectiveTheme, onTheme }: AppearanceSection
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h3 className="text-ui-lg font-semibold">Appearance</h3>
-        <p className="mt-0.5 text-ui text-muted-foreground">
-          Choose light, dark, or automatically match your system.
-        </p>
-      </div>
-      <div className="grid grid-cols-3 gap-2">
-        {THEME_OPTIONS.map((opt) => {
-          const selected = effectiveTheme === opt.id;
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => onTheme(opt.id)}
-              data-testid={`theme-option-${opt.id}`}
-              className={cn(
-                "flex flex-col items-start gap-2 rounded border p-3 text-left transition-colors",
-                selected
-                  ? "border-ring bg-selection-soft"
-                  : "border-border hover:bg-[hsl(var(--hover-fill))]"
-              )}
-            >
-              <HugeiconsIcon
-                icon={opt.icon}
-                size={18}
-                strokeWidth={1.75}
-                color="currentColor"
-                className={cn(selected ? "text-foreground" : "text-muted-foreground")}
-              />
-              <div>
-                <p className="text-ui font-medium">{opt.label}</p>
-                <p className="text-caption text-muted-foreground">{opt.hint}</p>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
       <div>
         <h3 className="text-ui-lg font-semibold">Wallpaper</h3>
         <p className="mt-0.5 text-ui text-muted-foreground">

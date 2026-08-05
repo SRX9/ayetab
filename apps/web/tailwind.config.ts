@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: ["class"],
+  // Light-only product: dark mode removed.
   /** `hover:` only fires on real pointers, so taps don't leave rows stuck lit. */
   future: { hoverOnlyWhenSupported: true },
   content: [

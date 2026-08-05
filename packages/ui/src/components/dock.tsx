@@ -7,7 +7,6 @@ import { FOCUS_RING } from "../lib/pressable";
 import { usePreferences } from "../hooks/use-preferences";
 import { BrandMark } from "./brand-mark";
 import { SettingsButton } from "./settings-panel";
-import { ThemeToggle } from "./theme-toggle";
 import { ToolIcon } from "./tool-icon";
 import { ToolIconTile } from "./tool-icon-tile";
 
@@ -203,7 +202,6 @@ export function Dock({
       <span className="mx-0.5 h-8 w-px bg-[hsl(var(--border))]" aria-hidden />
 
       <SettingsButton />
-      <ThemeToggle />
     </nav>
   );
 }

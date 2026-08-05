@@ -19,7 +19,6 @@ import {
   SettingsButton,
   ShortcutsProvider,
   ThemeProvider,
-  ThemeToggle,
   ToolCard,
   ToolHost,
   useAutoHideScrollbar,
@@ -164,7 +163,6 @@ function AppContent() {
             </button>
             <span className="flex-1 truncate text-caption font-medium">{selectedTool.name}</span>
             <SettingsButton />
-            <ThemeToggle />
           </header>
           <div
             ref={toolScrollRef}
@@ -200,7 +198,6 @@ function AppContent() {
           <BrandMark className="h-6 w-6" size={24} src="/logo-icon.png" />
           <h1 className="flex-1 truncate text-ui font-semibold">AyeTab</h1>
           <SettingsButton />
-          <ThemeToggle />
         </header>
 
         <div className="shrink-0 px-2 py-2">

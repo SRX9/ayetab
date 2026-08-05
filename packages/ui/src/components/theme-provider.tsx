@@ -1,63 +1,22 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
-import { resolveTheme, type ThemeMode } from "../lib/appearance";
+import { useMemo, type ReactNode } from "react";
 import { ThemeContext } from "./theme-context";
 
-const STORAGE_KEY = "ayetab-theme";
-
-function readStoredTheme(): ThemeMode {
-  if (typeof window === "undefined") return "system";
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark" || stored === "system") return stored;
-  return "system";
-}
-
-function prefersDarkQuery(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
+/**
+ * Light-only product. ThemeProvider now pins the resolved theme to "light" and
+ * never writes a `dark` class. Kept as a provider so existing consumers
+ * (useTheme, AppearanceSync) keep their API while dark mode is gone.
+ */
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>("system");
-  const [prefersDark, setPrefersDark] = useState(false);
-
-  useEffect(() => {
-    setThemeState(readStoredTheme());
-    setPrefersDark(prefersDarkQuery());
-
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (e: MediaQueryListEvent) => setPrefersDark(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  const resolvedTheme = resolveTheme(theme, prefersDark);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle("dark", resolvedTheme === "dark");
-    localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme, resolvedTheme]);
-
-  const setTheme = useCallback((t: ThemeMode) => setThemeState(t), []);
-
-  const toggleTheme = useCallback(() => {
-    setThemeState((t) => {
-      const current = resolveTheme(t, prefersDarkQuery());
-      return current === "dark" ? "light" : "dark";
-    });
-  }, []);
-
   const value = useMemo(
-    () => ({ theme, resolvedTheme, setTheme, toggleTheme }),
-    [theme, resolvedTheme, setTheme, toggleTheme]
+    () => ({
+      theme: "light" as const,
+      resolvedTheme: "light" as const,
+      setTheme: () => {},
+      toggleTheme: () => {},
+    }),
+    []
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

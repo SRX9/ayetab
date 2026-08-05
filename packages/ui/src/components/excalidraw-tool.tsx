@@ -11,7 +11,6 @@ import type { OrderedExcalidrawElement } from "@excalidraw/excalidraw/element/ty
 import { ToolShell } from "./tool-shell";
 import { FavoriteButton } from "./favorite-button";
 import { useToolState } from "../hooks/use-tool-state";
-import { useTheme } from "../hooks/use-theme";
 import "@excalidraw/excalidraw/index.css";
 
 const ExcalidrawCanvas = lazy(() =>
@@ -70,7 +69,6 @@ export function ExcalidrawTool({
   onToggleFavorite,
   compact,
 }: ExcalidrawToolProps) {
-  const { theme } = useTheme();
   const { input, setInput, reset, isHydrated } = useToolState(tool.id);
   const skipChangeRef = useRef(true);
   const [canvasKey, setCanvasKey] = useState(0);
@@ -157,7 +155,7 @@ export function ExcalidrawTool({
                 key={canvasKey}
                 initialData={initialData ?? undefined}
                 onChange={handleChange}
-                theme={theme === "dark" ? "dark" : "light"}
+                theme="light"
               />
             </div>
           </Suspense>

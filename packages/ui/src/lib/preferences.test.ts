@@ -85,7 +85,7 @@ describe("normalizePreferences", () => {
     expect(prefs).toEqual({
       favorites: ["base64"],
       recents: [],
-      appearance: { theme: "system", wallpaper: { kind: "abstract", value: "default" } },
+      appearance: { theme: "light", wallpaper: { kind: "abstract", value: "default" } },
     });
   });
 
@@ -172,7 +172,7 @@ describe("subscribePreferences", () => {
     expect(received).toMatchObject({
       favorites: ["base64"],
       recents: [],
-      appearance: { theme: "system", wallpaper: { kind: "abstract", value: "default" } },
+      appearance: { theme: "light", wallpaper: { kind: "abstract", value: "default" } },
     });
   });
 });

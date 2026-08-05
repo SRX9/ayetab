@@ -1,4 +1,5 @@
-export type ThemeMode = "light" | "dark" | "system";
+/** Light-only product. ThemeMode is pinned to "light". */
+export type ThemeMode = "light";
 
 /** Built-in macOS-style abstract wallpapers (procedural gradients). */
 export type AbstractWallpaperId =
@@ -23,7 +24,7 @@ export interface AppearancePreferences {
 export const DEFAULT_WALLPAPER: Wallpaper = { kind: "abstract", value: "default" };
 
 export const DEFAULT_APPEARANCE: AppearancePreferences = {
-  theme: "system",
+  theme: "light",
   wallpaper: { ...DEFAULT_WALLPAPER },
 };
 
@@ -54,16 +55,10 @@ function normalizeWallpaper(raw: Partial<Wallpaper> | undefined | null): Wallpap
 export function normalizeAppearance(
   raw: Partial<AppearancePreferences> | undefined | null
 ): AppearancePreferences {
-  const theme =
-    raw?.theme === "light" || raw?.theme === "dark" || raw?.theme === "system"
-      ? raw.theme
-      : DEFAULT_APPEARANCE.theme;
-
-  return { theme, wallpaper: normalizeWallpaper(raw?.wallpaper) };
+  return { theme: "light", wallpaper: normalizeWallpaper(raw?.wallpaper) };
 }
 
-/** Resolve a stored theme mode to the effective light/dark class */
-export function resolveTheme(mode: ThemeMode, prefersDark: boolean): "light" | "dark" {
-  if (mode === "system") return prefersDark ? "dark" : "light";
-  return mode;
+/** Light-only: always resolves to "light". */
+export function resolveTheme(): "light" {
+  return "light";
 }
