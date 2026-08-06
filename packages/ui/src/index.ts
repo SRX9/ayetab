@@ -1,6 +1,7 @@
 export { cn } from "./lib/utils";
 export { pressable } from "./lib/pressable";
 export { AppShell, ShellContent } from "./components/app-shell";
+export { BentoCanvas } from "./components/bento-canvas";
 export { BrandMark } from "./components/brand-mark";
 export { Dock } from "./components/dock";
 export { FadeScroller } from "./components/fade-scroller";

@@ -9,6 +9,8 @@ import {
   toggleFavorite as toggleFavoriteFn,
   addRecent as addRecentFn,
   updateAppearance as updateAppearanceFn,
+  updateBento as updateBentoFn,
+  type BentoTile,
   type UserPreferences,
 } from "../lib/preferences";
 import { DEFAULT_APPEARANCE, type AppearancePreferences } from "../lib/appearance";
@@ -16,7 +18,7 @@ import { PreferencesContext } from "./preferences-context";
 
 type PrefsField = keyof UserPreferences;
 
-const PREFS_FIELDS: PrefsField[] = ["favorites", "recents", "appearance"];
+const PREFS_FIELDS: PrefsField[] = ["favorites", "recents", "appearance", "bento"];
 
 /** Every tool open calls addRecent; batching keeps many open tabs from thrashing storage. */
 const RECENTS_DEBOUNCE_MS = 500;
@@ -159,6 +161,11 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     [mutate]
   );
 
+  const updateBento = useCallback(
+    async (bento: BentoTile[] | undefined) => mutate("bento", (c) => updateBentoFn(c, bento)),
+    [mutate]
+  );
+
   const importPrefs = useCallback(
     async (imported: UserPreferences) => {
       // An import replaces everything, so it writes the whole object rather than a patch.
@@ -186,6 +193,7 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
       addRecent,
       setAppearance,
       updateAppearance,
+      updateBento,
       importPrefs,
       isFavorite,
     }),
@@ -196,6 +204,7 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
       addRecent,
       setAppearance,
       updateAppearance,
+      updateBento,
       importPrefs,
       isFavorite,
     ]
@@ -214,5 +223,6 @@ function mergeExternal(
     favorites: busy.has("favorites") ? current.favorites : external.favorites,
     recents: busy.has("recents") ? current.recents : external.recents,
     appearance: busy.has("appearance") ? current.appearance : external.appearance,
+    ...(busy.has("bento") ? (current.bento ? { bento: current.bento } : {}) : external.bento ? { bento: external.bento } : {}),
   };
 }
