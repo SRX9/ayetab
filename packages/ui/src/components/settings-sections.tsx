@@ -4,7 +4,7 @@ import { useRef, type RefObject } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Download04Icon, Image01Icon, Upload04Icon } from "@hugeicons/core-free-icons";
 import { type Wallpaper } from "../lib/appearance";
-import { ABSTRACT_WALLPAPERS } from "../lib/wallpapers";
+import { ABSTRACT_WALLPAPERS, IMAGE_WALLPAPERS, isBuiltInImageWallpaper } from "../lib/wallpapers";
 import { usePreferences } from "../hooks/use-preferences";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
@@ -26,15 +26,42 @@ export function AppearanceSection() {
     e.target.value = "";
   };
 
+  const customImage =
+    wallpaper.kind === "image" && !isBuiltInImageWallpaper(wallpaper.value);
+
   return (
     <div className="flex flex-col gap-6">
       <div>
         <h3 className="text-ui-lg font-semibold">Wallpaper</h3>
         <p className="mt-0.5 text-ui text-muted-foreground">
-          The glass reads through whatever sits behind it. Pick an abstract, or your own image.
+          The glass reads through whatever sits behind it. Start with Sequoia, or pick your own.
         </p>
       </div>
       <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
+        {IMAGE_WALLPAPERS.map((w) => {
+          const selected = wallpaper.kind === "image" && wallpaper.value === w.path;
+          return (
+            <button
+              key={w.id}
+              type="button"
+              onClick={() => setWallpaper({ kind: "image", value: w.path })}
+              aria-pressed={selected}
+              className={cn(
+                "group flex flex-col gap-1.5 rounded-lg p-1 text-left transition-transform active:scale-[0.97]",
+                selected && "ring-2 ring-[hsl(var(--ring))]"
+              )}
+            >
+              <span
+                aria-hidden
+                className="aspect-[16/10] w-full rounded-md border border-white/60 bg-cover bg-center shadow-sm"
+                style={{ backgroundImage: `url("${w.swatch}")` }}
+              />
+              <span className={cn("text-caption", selected ? "font-medium text-foreground" : "text-muted-foreground")}>
+                {w.label}
+              </span>
+            </button>
+          );
+        })}
         {ABSTRACT_WALLPAPERS.map((w) => {
           const selected = wallpaper.kind === "abstract" && wallpaper.value === w.id;
           return (
@@ -64,14 +91,14 @@ export function AppearanceSection() {
           onClick={() => imageRef.current?.click()}
           className={cn(
             "group flex flex-col gap-1.5 rounded-lg p-1 text-left transition-transform active:scale-[0.97]",
-            wallpaper.kind === "image" && "ring-2 ring-[hsl(var(--ring))]"
+            customImage && "ring-2 ring-[hsl(var(--ring))]"
           )}
         >
           <span
             aria-hidden
             className="flex aspect-[16/10] w-full items-center justify-center rounded-md border border-dashed border-border bg-[hsl(var(--muted))] text-muted-foreground transition-colors group-hover:text-foreground"
             style={
-              wallpaper.kind === "image"
+              customImage
                 ? {
                     backgroundImage: `url("${wallpaper.value.replace(/"/g, "%22")}")`,
                     backgroundSize: "cover",
@@ -80,12 +107,12 @@ export function AppearanceSection() {
                 : undefined
             }
           >
-            {wallpaper.kind !== "image" && (
+            {!customImage && (
               <HugeiconsIcon icon={Image01Icon} size={18} strokeWidth={1.75} color="currentColor" />
             )}
           </span>
-          <span className={cn("text-caption", wallpaper.kind === "image" ? "font-medium text-foreground" : "text-muted-foreground")}>
-            {wallpaper.kind === "image" ? "Custom" : "Your image"}
+          <span className={cn("text-caption", customImage ? "font-medium text-foreground" : "text-muted-foreground")}>
+            {customImage ? "Custom" : "Your image"}
           </span>
         </button>
         <input ref={imageRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />

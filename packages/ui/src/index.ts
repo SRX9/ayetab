@@ -43,7 +43,14 @@ export { SettingsMenu, SettingsPanel, SettingsButton } from "./components/settin
 export { SmartBar } from "./components/smart-bar";
 export { DEFAULT_APPEARANCE, normalizeAppearance, resolveTheme } from "./lib/appearance";
 export type { AppearancePreferences, ThemeMode, Wallpaper, AbstractWallpaperId } from "./lib/appearance";
-export { ABSTRACT_WALLPAPERS, getAbstractWallpaper, wallpaperCss } from "./lib/wallpapers";
+export {
+  ABSTRACT_WALLPAPERS,
+  IMAGE_WALLPAPERS,
+  EXAMPLE_WALLPAPER_PATH,
+  getAbstractWallpaper,
+  isBuiltInImageWallpaper,
+  wallpaperCss,
+} from "./lib/wallpapers";
 export { useClipboard } from "./hooks/use-clipboard";
 export { useToolState } from "./hooks/use-tool-state";
 export { useKeyboardShortcut } from "./hooks/use-keyboard-shortcut";

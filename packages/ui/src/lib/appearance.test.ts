@@ -17,7 +17,7 @@ describe("normalizeAppearance", () => {
   it("drops fields from older stored shapes", () => {
     expect(
       normalizeAppearance({ theme: "dark", wallpaperId: "mesa", customWallpaper: null } as never)
-    ).toEqual({ theme: "light", wallpaper: { kind: "abstract", value: "default" } });
+    ).toEqual(DEFAULT_APPEARANCE);
   });
 
   it("keeps a valid wallpaper", () => {

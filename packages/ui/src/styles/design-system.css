@@ -421,6 +421,80 @@ kbd {
   background: rgba(255, 255, 255, 0.82);
 }
 
+/*
+ * Google-style home smart bar — tall continuous-corner pill of liquid glass.
+ * Reads as a single professional control over the wallpaper.
+ */
+.smart-bar-hero {
+  height: 64px;
+  border-radius: 9999px;
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--elevation-menu),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(140, 155, 175, 0.05);
+}
+
+.smart-bar-hero:hover {
+  border-color: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.76) 45%,
+    rgba(250, 251, 253, 0.84) 100%
+  );
+}
+
+.smart-bar-hero:focus-within,
+.smart-bar-hero-open {
+  border-color: hsl(var(--ring) / 0.55);
+  box-shadow:
+    0 0 0 3.5px hsl(var(--selection-soft)),
+    var(--elevation-menu),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.home-hero-mark {
+  animation: home-mark-in 520ms var(--ease-os) both;
+}
+
+.home-hero-title {
+  animation: home-title-in 560ms var(--ease-os) 60ms both;
+}
+
+@keyframes home-mark-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes home-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-mark,
+  .home-hero-title {
+    animation: none;
+  }
+}
+
 .dark .field {
   background: linear-gradient(
     180deg,
@@ -590,7 +664,8 @@ kbd {
   .widget,
   .app-icon,
   .field,
-  .chip {
+  .chip,
+  .smart-bar-hero {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -624,7 +699,8 @@ kbd {
   }
 
   .field,
-  .chip {
+  .chip,
+  .smart-bar-hero {
     background: hsl(var(--background));
   }
 }

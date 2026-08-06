@@ -9,7 +9,7 @@ The app should feel like **your own new tab** — a calm, whitish, physical surf
 **Materials over decoration.** Depth comes from translucency, specular edges, and tint over the wallpaper — never drop shadows.
 
 ### Wallpaper
-The backdrop is a real layer (`WallpaperLayer`), like macOS. Pick an abstract preset (Mist, Sequoia, Sonoma, Tahoe, Graphite, Dune) or your own image in **Settings → Appearance → Wallpaper**. Glass sits over it and refracts the color underneath; images get a soft cool veil for legibility.
+The backdrop is a real layer (`WallpaperLayer`), like macOS. The default start is **Sequoia** — a soft photographic mist-hills wallpaper at `/wallpapers/macos-mist.jpg`. Settings also offers abstract presets (Mist, Blue Hills, Sonoma, Tahoe, Graphite, Dune) or your own image. Glass sits over it and refracts the color underneath; images get a soft cool veil for legibility.
 
 ---
 

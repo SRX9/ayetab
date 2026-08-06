@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import type { Wallpaper } from "../lib/appearance";
+import { DEFAULT_WALLPAPER } from "../lib/appearance";
 import { wallpaperCss } from "../lib/wallpapers";
 
 /**
@@ -10,9 +11,10 @@ import { wallpaperCss } from "../lib/wallpapers";
  * glass stays readable. Sits below the grain and content.
  */
 export function WallpaperLayer({ wallpaper }: { wallpaper?: Wallpaper }) {
-  const isImage = wallpaper?.kind === "image";
+  const resolved: Wallpaper = wallpaper ?? DEFAULT_WALLPAPER;
+  const isImage = resolved.kind === "image";
   const style: CSSProperties = {
-    background: wallpaperCss(wallpaper),
+    background: wallpaperCss(resolved),
     ...(isImage
       ? { backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }
       : {}),
@@ -23,7 +25,7 @@ export function WallpaperLayer({ wallpaper }: { wallpaper?: Wallpaper }) {
       {isImage && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(252,253,255,0.28),rgba(242,245,249,0.42))] dark:bg-[linear-gradient(180deg,rgba(8,10,14,0.42),rgba(10,13,18,0.55))]"
+          className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(252,253,255,0.22),rgba(242,245,249,0.36))]"
         />
       )}
     </>

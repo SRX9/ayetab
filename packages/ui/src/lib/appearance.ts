@@ -21,7 +21,11 @@ export interface AppearancePreferences {
   wallpaper: Wallpaper;
 }
 
-export const DEFAULT_WALLPAPER: Wallpaper = { kind: "abstract", value: "default" };
+/** Soft macOS Sequoia-style mist — the example starting wallpaper. */
+export const DEFAULT_WALLPAPER: Wallpaper = {
+  kind: "image",
+  value: "/wallpapers/macos-mist.jpg",
+};
 
 export const DEFAULT_APPEARANCE: AppearancePreferences = {
   theme: "light",

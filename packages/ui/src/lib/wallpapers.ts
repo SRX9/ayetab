@@ -9,6 +9,31 @@ export interface AbstractWallpaper {
   swatch: string;
 }
 
+/** Built-in photographic / rendered wallpapers shipped with the app. */
+export interface ImageWallpaper {
+  id: string;
+  label: string;
+  /** Public path served by web + extension. */
+  path: string;
+  /** Swatch path or CSS for the settings picker. */
+  swatch: string;
+}
+
+/**
+ * Default start wallpaper — soft macOS Sequoia-style mist hills.
+ * Served from `/wallpapers/macos-mist.jpg` in web + extension.
+ */
+export const EXAMPLE_WALLPAPER_PATH = "/wallpapers/macos-mist.jpg";
+
+export const IMAGE_WALLPAPERS: ImageWallpaper[] = [
+  {
+    id: "macos-mist",
+    label: "Sequoia",
+    path: EXAMPLE_WALLPAPER_PATH,
+    swatch: "/wallpapers/macos-mist-swatch.jpg",
+  },
+];
+
 /**
  * macOS-style abstract wallpapers — soft, cool, procedural gradients tuned so
  * whitish glass reads through them. `default` is the quiet near-white mist.
@@ -27,7 +52,7 @@ export const ABSTRACT_WALLPAPERS: AbstractWallpaper[] = [
   },
   {
     id: "sequoia",
-    label: "Sequoia",
+    label: "Blue Hills",
     css: [
       "radial-gradient(80% 60% at 15% 0%, rgba(255,255,255,0.95) 0%, transparent 50%)",
       "radial-gradient(70% 55% at 90% 10%, rgba(190,214,238,0.5) 0%, transparent 48%)",
@@ -86,9 +111,13 @@ export function getAbstractWallpaper(id: string): AbstractWallpaper {
   return ABSTRACT_WALLPAPERS.find((w) => w.id === id) ?? ABSTRACT_WALLPAPERS[0];
 }
 
+export function isBuiltInImageWallpaper(value: string): boolean {
+  return IMAGE_WALLPAPERS.some((w) => w.path === value);
+}
+
 /** Background CSS for any wallpaper (abstract preset or custom image). */
 export function wallpaperCss(wallpaper: Wallpaper | undefined): string {
-  if (!wallpaper) return getAbstractWallpaper("default").css;
+  if (!wallpaper) return `url("${EXAMPLE_WALLPAPER_PATH}")`;
   if (wallpaper.kind === "image") {
     return `url("${wallpaper.value.replace(/"/g, "%22")}")`;
   }

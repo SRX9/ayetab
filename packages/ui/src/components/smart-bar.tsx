@@ -23,6 +23,8 @@ interface SmartBarProps {
   tools: ToolDefinition[];
   onOpenTool: (tool: ToolDefinition) => void;
   autoFocus?: boolean;
+  /** `hero` = Google-style home bar — tall, fully rounded liquid glass. */
+  size?: "default" | "hero";
 }
 
 interface Engine {
@@ -52,7 +54,8 @@ type Item =
  * a badge; Enter then opens a new tab with the query on that engine. Escape or
  * Backspace on an empty bar backs out of engine mode.
  */
-export function SmartBar({ tools, onOpenTool, autoFocus = true }: SmartBarProps) {
+export function SmartBar({ tools, onOpenTool, autoFocus = true, size = "default" }: SmartBarProps) {
+  const hero = size === "hero";
   const { prefs } = usePreferences();
   const [query, setQuery] = useState("");
   const [engine, setEngine] = useState<Engine | null>(null);
@@ -160,17 +163,28 @@ export function SmartBar({ tools, onOpenTool, autoFocus = true }: SmartBarProps)
   }, [active]);
 
   return (
-    <div className="relative w-full">
+    <div className={cn("relative w-full", hero && "max-w-2xl")}>
       <div
         className={cn(
-          "field flex h-14 items-center gap-3 px-4 transition-shadow",
-          showList && "border-[hsl(var(--ring))] shadow-[0_0_0_3px_hsl(var(--selection-soft))]"
+          "flex items-center transition-[box-shadow,border-color,background] duration-150",
+          hero
+            ? cn(
+                "smart-bar-hero gap-3.5 px-6",
+                showList && "smart-bar-hero-open"
+              )
+            : cn(
+                "field h-14 gap-3 px-4",
+                showList && "border-[hsl(var(--ring))] shadow-[0_0_0_3px_hsl(var(--selection-soft))]"
+              )
         )}
       >
         {engine ? (
           <span
             aria-hidden
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-semibold text-white"
+            className={cn(
+              "flex shrink-0 items-center justify-center font-semibold text-white",
+              hero ? "h-9 w-9 rounded-xl text-[15px]" : "h-8 w-8 rounded-lg text-sm"
+            )}
             style={{ background: engine.color }}
           >
             {engine.glyph}
@@ -178,7 +192,7 @@ export function SmartBar({ tools, onOpenTool, autoFocus = true }: SmartBarProps)
         ) : (
           <HugeiconsIcon
             icon={Search01Icon}
-            size={18}
+            size={hero ? 20 : 18}
             strokeWidth={1.75}
             color="currentColor"
             className="shrink-0 text-muted-foreground"
@@ -199,7 +213,10 @@ export function SmartBar({ tools, onOpenTool, autoFocus = true }: SmartBarProps)
             engine ? `Search ${engine.name}…` : "Search tools, or the web…"
           }
           aria-label={engine ? `Search ${engine.name}` : "Search tools or the web"}
-          className="w-full min-w-0 bg-transparent text-ui-lg outline-none placeholder:text-muted-foreground"
+          className={cn(
+            "w-full min-w-0 bg-transparent outline-none placeholder:text-muted-foreground",
+            hero ? "text-[17px] tracking-[-0.01em]" : "text-ui-lg"
+          )}
           autoComplete="off"
           spellCheck={false}
         />
@@ -208,15 +225,25 @@ export function SmartBar({ tools, onOpenTool, autoFocus = true }: SmartBarProps)
             type="button"
             onClick={launchEngine}
             aria-label={`Search ${engine.name}`}
-            className={cn("btn-liquid-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white", FOCUS_RING)}
+            className={cn(
+              "btn-liquid-primary flex shrink-0 items-center justify-center text-white",
+              hero ? "h-9 w-9 rounded-xl" : "h-8 w-8 rounded-lg",
+              FOCUS_RING
+            )}
           >
-            <HugeiconsIcon icon={ArrowRight02Icon} size={15} strokeWidth={2} color="currentColor" />
+            <HugeiconsIcon icon={ArrowRight02Icon} size={hero ? 16 : 15} strokeWidth={2} color="currentColor" />
           </button>
         )}
       </div>
 
       {showList && (
-        <div ref={listRef} className="menu-surface absolute inset-x-0 top-full z-50 mt-2 overflow-hidden p-1">
+        <div
+          ref={listRef}
+          className={cn(
+            "menu-surface absolute inset-x-0 top-full z-50 mt-2.5 overflow-hidden p-1",
+            hero && "rounded-[22px]"
+          )}
+        >
           {!trimmed && (
             <p className="px-2.5 pb-1 pt-2 text-label font-medium uppercase text-muted-foreground">
               Recent

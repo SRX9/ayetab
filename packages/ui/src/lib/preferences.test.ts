@@ -85,7 +85,10 @@ describe("normalizePreferences", () => {
     expect(prefs).toEqual({
       favorites: ["base64"],
       recents: [],
-      appearance: { theme: "light", wallpaper: { kind: "abstract", value: "default" } },
+      appearance: {
+        theme: "light",
+        wallpaper: { kind: "image", value: "/wallpapers/macos-mist.jpg" },
+      },
     });
   });
 
@@ -98,7 +101,10 @@ describe("normalizePreferences", () => {
     const bad = normalizePreferences({
       appearance: { wallpaper: { kind: "abstract", value: "nope" } },
     });
-    expect(bad.appearance.wallpaper).toEqual({ kind: "abstract", value: "default" });
+    expect(bad.appearance.wallpaper).toEqual({
+      kind: "image",
+      value: "/wallpapers/macos-mist.jpg",
+    });
 
     const img = normalizePreferences({
       appearance: { wallpaper: { kind: "image", value: "data:image/png;base64,xx" } },
@@ -172,7 +178,10 @@ describe("subscribePreferences", () => {
     expect(received).toMatchObject({
       favorites: ["base64"],
       recents: [],
-      appearance: { theme: "light", wallpaper: { kind: "abstract", value: "default" } },
+      appearance: {
+        theme: "light",
+        wallpaper: { kind: "image", value: "/wallpapers/macos-mist.jpg" },
+      },
     });
   });
 });
