@@ -84,6 +84,8 @@ export function SmartBar({ tools, onOpenTool, autoFocus = true }: SmartBarProps)
     return [...toolItems, ...engineItems];
   }, [engine, toolMatches, trimmed]);
 
+  /* Keep the list open whenever there's something to show — typing or focus
+     opens it; selecting a tool or engine, or clearing the bar, closes it. */
   const showList = open && !engine && items.length > 0;
 
   useEffect(() => setActive(0), [trimmed]);
