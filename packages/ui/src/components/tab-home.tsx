@@ -1,33 +1,35 @@
-import { type ReactNode } from "react";
+"use client";
+
+import type { ReactNode } from "react";
 import { type ToolDefinition } from "@ayetab/utils";
-import { usePreferences } from "../hooks/use-preferences";
-import { BentoCanvas } from "./bento-canvas";
+import { BrandMark } from "./brand-mark";
+import { SmartBar } from "./smart-bar";
 
 interface TabHomeProps {
   tools: ToolDefinition[];
   onOpenTool: (tool: ToolDefinition) => void;
   title?: string;
-  /** Extra content below the canvas (e.g. first-run notices). */
+  /** Extra content (e.g. first-run notices) shown above the bar. */
   children?: ReactNode;
 }
 
 /**
- * The personal new-tab surface: a free-form bento canvas you drag, stretch,
- * and arrange — the macOS dashboard feel. No sidebar, no greeting chrome.
+ * The personal new-tab surface: one smart bar for everything. Type to launch
+ * a tool, or pick a search engine to query the web in a new tab.
  */
 export function TabHome({ tools, onOpenTool, children }: TabHomeProps) {
-  const { prefs } = usePreferences();
-  const hint = prefs.favorites.length === 0;
-
   return (
-    <div className="mx-auto w-full max-w-6xl px-5 pb-40 pt-10 md:pt-14">
+    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col items-center justify-center px-5 pb-40 pt-16">
       {children}
 
-      <BentoCanvas tools={tools} onOpenTool={onOpenTool} />
+      <div className="mb-8 flex flex-col items-center gap-3">
+        <BrandMark className="h-14 w-14" size={56} src="/logo-icon.png" />
+      </div>
 
-      <p className="mt-10 text-center text-caption text-muted-foreground">
-        Press <kbd>⌘</kbd> <kbd>K</kbd> to search every tool.
-        {hint && <> Star a tool to pin it here and in the dock.</>}
+      <SmartBar tools={tools} onOpenTool={onOpenTool} />
+
+      <p className="mt-6 text-center text-caption text-muted-foreground">
+        Type to find a tool, or search Google, Bing, or Perplexity.
       </p>
     </div>
   );
