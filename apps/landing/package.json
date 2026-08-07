@@ -7,7 +7,9 @@
     "dev": "astro dev --port 4321",
     "build": "astro build",
     "preview": "astro preview --port 4321",
-    "type-check": "astro check"
+    "type-check": "astro check",
+    "deploy": "wrangler deploy",
+    "deploy:preview": "wrangler versions upload"
   },
   "dependencies": {
     "astro": "^5.10.1"

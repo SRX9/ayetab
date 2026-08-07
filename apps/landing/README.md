@@ -41,4 +41,26 @@ Theme: macOS liquid glass — frosted refraction, system blue (`#007AFF`), soft 
 
 ## Deploy
 
-Static output in `dist/` can ship to any static host (Cloudflare Pages, Vercel, Netlify, GitHub Pages). Set the canonical `site` in `astro.config.mjs` to the production domain.
+Static output in `dist/` ships to Cloudflare Workers (assets). Config: `wrangler.jsonc`.
+
+```bash
+pnpm build --filter landing
+
+# One-time: log in (or set CLOUDFLARE_API_TOKEN)
+npx wrangler login
+
+# Deploy production Worker
+pnpm --filter landing deploy
+# → https://ayetab-landing.<account>.workers.dev
+```
+
+Then attach the custom domain `ayetab.dev` (and `www`) in the Cloudflare dashboard → Workers & Pages → ayetab-landing → Settings → Domains.
+
+For a throwaway preview without an account:
+
+```bash
+cd apps/landing && npx wrangler deploy --temporary
+# Claim the preview URL from the printed claim link within 60 minutes.
+```
+
+Canonical `site` is already `https://ayetab.dev` in `astro.config.mjs`.

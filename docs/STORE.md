@@ -74,19 +74,19 @@ rejected or pulled. Cover all of the following in the submission:
 
 **Detailed description:**
 
-AyeTab replaces your browser's new tab page with a developer toolbox: every tool in a sidebar on
-the left, the one you picked on the right. The same tools live in the side panel for use without
-leaving the page you're on. Format JSON, debug JWTs,
+AyeTab replaces your browser's new tab page with a developer toolbox: one smart search bar to
+launch any tool or search the web, plus a liquid-glass dock for favorites. The same tools live
+in the side panel for use without leaving the page you're on. Format JSON, debug JWTs,
 convert YAML, generate hashes, diff text, and more. Inspired by DevUtils, free and cross-platform.
 
-- **Replaces your new tab page** with a searchable list of every tool
+- **Replaces your new tab page** with a smart bar for tools + web search
 - Side panel for using a tool alongside any page
 - Works offline — your data stays on your device
 - 99 tools in the extension (formatters, converters, generators, debuggers, productivity)
 - Command palette (⌘K / Ctrl+K) for instant search
 - Favorites and recent tools
 - Smart paste detection suggests the right tool
-- Dark and light themes
+- Liquid-glass light UI with macOS-style wallpaper
 
 To restore your browser's default new tab page, disable or remove AyeTab from your extensions page.
 
@@ -102,14 +102,15 @@ To restore your browser's default new tab page, disable or remove AyeTab from yo
 | Store icon | 128×128 (from `public/icons/icon-128.png`) |
 
 Suggested shots, in this order: **new tab home** (lead with it — reviewers match images against
-behaviour), library, JSON formatter, side panel over a real page, command palette, dark mode.
+behaviour: logo + AyeTab + smart search bar on wallpaper), a tool open from the bar, side panel
+over a real page, command palette, Settings → Appearance.
 
 ### Permission justification
 
 | Permission  | Reason |
 |-------------|--------|
 | `sidePanel` | Display the utility sidebar (Chrome 114+) |
-| `storage`   | Save favorites, recents, home layout, and theme via `chrome.storage.local` |
+| `storage`   | Save favorites, recents, and appearance (wallpaper) via `chrome.storage.local` |
 
 No host permissions, `activeTab`, or clipboard permissions. `chrome_url_overrides.newtab` needs no
 permission of its own.
