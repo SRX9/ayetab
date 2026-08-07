@@ -466,6 +466,10 @@ kbd {
   animation: home-title-in 560ms var(--ease-os) 60ms both;
 }
 
+.smart-bar-hero {
+  animation: home-bar-in 600ms var(--ease-os) 100ms both;
+}
+
 @keyframes home-mark-in {
   from {
     opacity: 0;
@@ -488,9 +492,21 @@ kbd {
   }
 }
 
+@keyframes home-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-hero-mark,
-  .home-hero-title {
+  .home-hero-title,
+  .smart-bar-hero {
     animation: none;
   }
 }
