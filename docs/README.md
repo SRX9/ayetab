@@ -15,6 +15,7 @@ inspired by [DevUtils](https://devutils.com).
 | [Terms of Use](./TERMS.md) | Terms of use (live at ayetab.dev/terms) |
 | [Design System](./DESIGN.md) | Liquid-glass tokens + materials (matches the tab logo) |
 | [Store Listing Guide](./STORE.md) | Chrome / Firefox store listing checklist |
+| [Launch checklist](./LAUNCH.md) | Manual steps: deploy landing, pack ZIPs, store submit |
 
 ## Project Vision
 

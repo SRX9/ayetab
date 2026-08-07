@@ -31,7 +31,7 @@ pnpm --filter extension zip
 Chrome: `chrome://extensions` → Load unpacked → `apps/extension/dist/chrome`  
 Firefox: `about:debugging` → Load Temporary Add-on → `apps/extension/dist/firefox/manifest.json`
 
-Store submission steps: [docs/STORE.md](docs/STORE.md) · Privacy: [docs/PRIVACY.md](docs/PRIVACY.md) · Terms: [docs/TERMS.md](docs/TERMS.md)
+Store submission steps: [docs/STORE.md](docs/STORE.md) · Launch checklist: [docs/LAUNCH.md](docs/LAUNCH.md) · Privacy: [docs/PRIVACY.md](docs/PRIVACY.md) · Terms: [docs/TERMS.md](docs/TERMS.md)
 
 ## Tool categories (100 tools)
 
