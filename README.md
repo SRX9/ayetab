@@ -50,7 +50,7 @@ Store submission steps: [docs/STORE.md](docs/STORE.md) · Launch checklist: [doc
 - **Command palette** — `⌘K` / `Ctrl+K` fuzzy search
 - **Favorites & recents** — star tools, quick-access history
 - **Smart paste** — auto-detect JWT, JSON, Base64, URLs
-- **Dark/light theme** — persisted locally
+- **Liquid-glass light UI** — macOS-style wallpaper, favorites & appearance prefs locally
 - **Export/import** — backup favorites as JSON
 - **Onboarding** — first-visit welcome tour
 - **Keyboard shortcuts** — press `?` to view
