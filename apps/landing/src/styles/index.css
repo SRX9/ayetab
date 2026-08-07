@@ -41,9 +41,10 @@ body {
   font-optical-sizing: auto;
   color: var(--color-ink);
   background:
-    radial-gradient(1200px 600px at 12% -10%, rgba(0, 122, 255, 0.14), transparent 55%),
-    radial-gradient(900px 500px at 88% 8%, rgba(157, 208, 255, 0.35), transparent 50%),
-    linear-gradient(180deg, #f7fbff 0%, var(--color-paper) 42%, #ffffff 100%);
+    radial-gradient(1200px 640px at 12% -10%, rgba(255, 255, 255, 0.95), transparent 52%),
+    radial-gradient(900px 520px at 88% 6%, rgba(215, 230, 245, 0.4), transparent 50%),
+    radial-gradient(700px 500px at 50% 110%, rgba(225, 235, 248, 0.3), transparent 55%),
+    linear-gradient(180deg, #fcfdff 0%, #f7f9fc 48%, #f2f5f9 100%);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -96,20 +97,81 @@ button {
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.62) 45%,
+    rgba(250, 251, 253, 0.72) 100%
+  );
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.7) inset,
-    0 8px 28px rgba(26, 35, 51, 0.06);
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 12px 36px rgba(30, 42, 62, 0.08),
+    0 3px 8px rgba(30, 42, 62, 0.04);
 }
 
 .glass-nav {
-  background: rgba(247, 251, 255, 0.72);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(215, 227, 240, 0.7);
+  background: rgba(252, 253, 255, 0.78);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+/* macOS dock pill — reused for hero / install flavor */
+.dock-pill {
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 45%,
+    rgba(250, 251, 253, 0.78) 100%
+  );
+  backdrop-filter: blur(56px) saturate(180%);
+  -webkit-backdrop-filter: blur(56px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 32px;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 16px 48px rgba(30, 42, 62, 0.12),
+    0 4px 14px rgba(30, 42, 62, 0.05);
+}
+
+/* Glossy squircle app icon tile */
+.app-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22%;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.65) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    0 2px 8px rgba(30, 42, 62, 0.08);
+  color: var(--color-muted);
+  transition:
+    transform 150ms var(--ease-out-soft),
+    box-shadow 150ms var(--ease-out-soft),
+    color 150ms ease;
+}
+
+.app-icon:hover {
+  transform: scale(1.08);
+  color: var(--color-ink);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    0 6px 20px rgba(30, 42, 62, 0.14);
+}
+
+.app-icon:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {

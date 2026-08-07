@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { OnboardingModal, ToolIndex } from "@ayetab/ui";
+import { OnboardingModal, TabHome } from "@ayetab/ui";
 import { TOOL_REGISTRY, type ToolDefinition } from "@ayetab/utils";
 
 export default function HomePageClient() {
@@ -14,9 +14,9 @@ export default function HomePageClient() {
   );
 
   return (
-    <div data-testid="home-page">
+    <div data-testid="home-page" className="page-enter">
       <OnboardingModal />
-      <ToolIndex tools={TOOL_REGISTRY} onSelect={handleOpen} />
+      <TabHome tools={TOOL_REGISTRY} onOpenTool={handleOpen} />
     </div>
   );
 }

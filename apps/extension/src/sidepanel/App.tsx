@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronLeftIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import {
@@ -19,9 +19,9 @@ import {
   SettingsButton,
   ShortcutsProvider,
   ThemeProvider,
-  ThemeToggle,
   ToolCard,
   ToolHost,
+  useAutoHideScrollbar,
   usePreferences,
 } from "@ayetab/ui";
 import { EXTENSION_TOOLS, openWebOnlyTool } from "../lib/extension-tools";
@@ -60,6 +60,8 @@ function AppContent() {
   const [initialInput, setInitialInput] = useState("");
   const [sessionRestored, setSessionRestored] = useState(false);
   const { prefs, toggleFavorite, isFavorite, addRecent } = usePreferences();
+  const toolScrollRef = useRef<HTMLDivElement>(null);
+  useAutoHideScrollbar(toolScrollRef, selectedTool != null);
 
   useEffect(() => {
     const saved = readSessionTool();
@@ -135,20 +137,20 @@ function AppContent() {
     return (
       <>
         {modals}
-        <div className="flex h-screen flex-col text-foreground">
+        <div className="app-shell flex h-screen flex-col text-foreground">
           <CommandPalette
             tools={EXTENSION_TOOLS}
             onSelect={(t) => openTool(t)}
             recentIds={prefs.recents}
           />
-          <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
+          <header className="app-topbar flex shrink-0 items-center gap-1 px-2 py-1.5">
             <button
               type="button"
               onClick={() => {
                 setSelectedTool(null);
                 setInitialInput("");
               }}
-              className="inline-flex items-center gap-0.5 rounded px-1.5 py-1 text-caption text-muted-foreground transition-colors hover:bg-[hsl(var(--hover-fill))] hover:text-foreground"
+              className="inline-flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-caption text-muted-foreground transition-colors hover:bg-white/40 hover:text-foreground dark:hover:bg-white/10"
             >
               <HugeiconsIcon
                 icon={ChevronLeftIcon}
@@ -161,9 +163,12 @@ function AppContent() {
             </button>
             <span className="flex-1 truncate text-caption font-medium">{selectedTool.name}</span>
             <SettingsButton />
-            <ThemeToggle />
           </header>
-          <div className="flex-1 overflow-auto p-3">
+          <div
+            ref={toolScrollRef}
+            data-scrolling="false"
+            className="content-pane ds-scroll flex-1 overflow-auto p-3"
+          >
             <ToolHost
               key={`${selectedTool.id}-${initialInput}`}
               tool={selectedTool}
@@ -183,17 +188,16 @@ function AppContent() {
   return (
     <>
       {modals}
-      <div className="flex h-screen flex-col text-foreground">
+      <div className="app-shell flex h-screen flex-col text-foreground">
         <CommandPalette
           tools={EXTENSION_TOOLS}
           onSelect={(t) => openTool(t)}
           recentIds={prefs.recents}
         />
-        <header className="flex shrink-0 items-center gap-1.5 border-b border-border px-2 py-1.5">
+        <header className="app-topbar flex shrink-0 items-center gap-1.5 px-2 py-1.5">
           <BrandMark className="h-6 w-6" size={24} src="/logo-icon.png" />
           <h1 className="flex-1 truncate text-ui font-semibold">AyeTab</h1>
           <SettingsButton />
-          <ThemeToggle />
         </header>
 
         <div className="shrink-0 px-2 py-2">

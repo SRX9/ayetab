@@ -85,8 +85,31 @@ describe("normalizePreferences", () => {
     expect(prefs).toEqual({
       favorites: ["base64"],
       recents: [],
-      appearance: { theme: "system" },
+      appearance: {
+        theme: "light",
+        wallpaper: { kind: "image", value: "/wallpapers/macos-mist.jpg" },
+      },
     });
+  });
+
+  it("keeps a valid wallpaper and rejects a bad one", () => {
+    const ok = normalizePreferences({
+      appearance: { theme: "dark", wallpaper: { kind: "abstract", value: "tahoe" } },
+    });
+    expect(ok.appearance.wallpaper).toEqual({ kind: "abstract", value: "tahoe" });
+
+    const bad = normalizePreferences({
+      appearance: { wallpaper: { kind: "abstract", value: "nope" } },
+    });
+    expect(bad.appearance.wallpaper).toEqual({
+      kind: "image",
+      value: "/wallpapers/macos-mist.jpg",
+    });
+
+    const img = normalizePreferences({
+      appearance: { wallpaper: { kind: "image", value: "data:image/png;base64,xx" } },
+    });
+    expect(img.appearance.wallpaper.kind).toBe("image");
   });
 });
 
@@ -155,7 +178,10 @@ describe("subscribePreferences", () => {
     expect(received).toMatchObject({
       favorites: ["base64"],
       recents: [],
-      appearance: { theme: "system" },
+      appearance: {
+        theme: "light",
+        wallpaper: { kind: "image", value: "/wallpapers/macos-mist.jpg" },
+      },
     });
   });
 });

@@ -463,7 +463,7 @@ export function StyledQrTool({ tool, isFavorite, onToggleFavorite }: CustomToolP
             <Panel title="Logo">
               {logo.image ? (
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-2.5 rounded-lg bg-background p-2">
+                  <div className="input-well flex items-center gap-2.5 p-2">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={logo.image.url} alt="" className="h-10 w-10 rounded object-contain" style={CHECKER_STYLE} />
                     <span className="min-w-0 flex-1 truncate text-caption">{logo.image.name}</span>
@@ -571,8 +571,9 @@ export function CipherDecoderTool({ tool, isFavorite, onToggleFavorite }: Custom
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste ciphertext (or plaintext to encode)…"
+              aria-label="Cipher input"
               spellCheck={false}
-              className="min-h-[14rem] w-full resize-y rounded-md border border-border bg-background p-3 font-mono text-ui leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+              className="input-well min-h-[14rem] w-full resize-y p-3 font-mono text-ui leading-relaxed"
             />
           </Panel>
 
@@ -584,12 +585,12 @@ export function CipherDecoderTool({ tool, isFavorite, onToggleFavorite }: Custom
                 <p className="mb-2 text-label uppercase text-muted-foreground">
                   {candidates[0].cipher} · {candidates[0].detail}
                 </p>
-                <pre className="min-h-[10rem] whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-ui leading-relaxed">
+                <pre className="input-well min-h-[10rem] whitespace-pre-wrap break-words p-3 font-mono text-ui leading-relaxed">
                   {candidates[0].output}
                 </pre>
               </>
             ) : result?.output ? (
-              <pre className="min-h-[14rem] whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-ui leading-relaxed">
+              <pre className="input-well min-h-[14rem] whitespace-pre-wrap break-words p-3 font-mono text-ui leading-relaxed">
                 {result.output}
               </pre>
             ) : (
@@ -601,8 +602,8 @@ export function CipherDecoderTool({ tool, isFavorite, onToggleFavorite }: Custom
         {candidates.length > 1 && (
           <Panel title="Other candidates">
             <div className="flex flex-col gap-1.5">
-              {candidates.slice(1).map((c, i) => (
-                <div key={i} className="rounded-md bg-background p-2.5">
+              {candidates.slice(1).map((c) => (
+                <div key={`${c.cipher}-${c.detail}`} className="input-well p-2.5">
                   <div className="mb-1 flex items-center justify-between gap-2">
                     <span className="text-label font-medium uppercase text-muted-foreground">
                       {c.cipher} · {c.detail}
@@ -670,7 +671,7 @@ export function MetaTagGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
                   value={input.description}
                   onChange={(e) => set("description", e.target.value)}
                   rows={3}
-                  className="w-full resize-y rounded-md border border-border bg-background p-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="input-well w-full resize-y p-2.5 text-sm"
                 />
               </Field>
               <Field label="Canonical URL">
@@ -761,7 +762,7 @@ export function MetaTagGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
 
         <div className="flex flex-col gap-3">
           <Panel title="Card preview">
-            <div className="overflow-hidden rounded-md border border-border bg-background">
+            <div className="tool-surface overflow-hidden">
               {input.image.trim() ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -791,9 +792,9 @@ export function MetaTagGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
           {warnings.length > 0 && (
             <Panel title="Checks">
               <div className="flex flex-col gap-1.5">
-                {warnings.map((w, i) => (
+                {warnings.map((w) => (
                   <div
-                    key={i}
+                    key={w.field}
                     className={cn(
                       "rounded-md px-3 py-2 text-caption",
                       w.level === "error"
@@ -809,7 +810,7 @@ export function MetaTagGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
           )}
 
           <Panel title="Tags">
-            <pre className="max-h-[24rem] overflow-auto rounded-md bg-background p-3 font-mono text-caption leading-relaxed">
+            <pre className="input-well max-h-[24rem] overflow-auto p-3 font-mono text-caption leading-relaxed">
               {output}
             </pre>
           </Panel>

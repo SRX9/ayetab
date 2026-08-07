@@ -1,14 +1,12 @@
 "use client";
 
 import { createContext } from "react";
-import type { ThemeMode } from "../lib/appearance";
 
-type ResolvedTheme = "light" | "dark";
-
+/** Light-only product: theme is pinned. */
 export interface ThemeContextValue {
-  theme: ThemeMode;
-  resolvedTheme: ResolvedTheme;
-  setTheme: (theme: ThemeMode) => void;
+  theme: "light";
+  resolvedTheme: "light";
+  setTheme: (theme: "light") => void;
   toggleTheme: () => void;
 }
 

@@ -1,108 +1,198 @@
 /**
- * AyeTab — flat document design system.
- * Notion-like: a tinted sidebar, a plain content pane, hairline rules, and
- * almost no chrome. No blur, no glass, no elevation stacking.
- * Shared by web + extension. Plain CSS (no @layer / @apply).
+ * AyeTab design system — liquid glass.
+ *
+ * Materials match the brand mark and landing site: refractive fills, specular
+ * edges, cool sky atmosphere, luminous system blue (#007AFF). Shared by web +
+ * extension. Plain CSS; HSL tokens feed Tailwind.
  */
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 45 8% 20%;
-  --card: 0 0% 100%;
-  --card-foreground: 45 8% 20%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 45 8% 20%;
-  --primary: 45 8% 20%;
+  /* Soft paper — slightly cool so glass reads against it */
+  --background: 210 60% 99%;
+  --foreground: 218 38% 9%;
+  --card: 210 50% 99%;
+  --card-foreground: 218 38% 9%;
+  --popover: 210 45% 98%;
+  --popover-foreground: 218 38% 9%;
+  --primary: 218 38% 9%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 60 6% 95%;
-  --secondary-foreground: 45 8% 20%;
-  --muted: 60 8% 96%;
-  --muted-foreground: 45 3% 46%;
-  --accent: 60 6% 94%;
-  --accent-foreground: 45 8% 20%;
-  --destructive: 2 62% 52%;
+  --secondary: 210 45% 95%;
+  --secondary-foreground: 218 38% 9%;
+  --muted: 210 40% 95%;
+  --muted-foreground: 215 14% 40%;
+  --accent: 210 50% 94%;
+  --accent-foreground: 218 38% 9%;
+  --destructive: 2 78% 56%;
   --destructive-foreground: 0 0% 100%;
-  --border: 60 4% 91%;
-  --input: 60 4% 91%;
-  --ring: 210 77% 51%;
-  --radius: 0.1875rem;
+  --border: 214 24% 90%;
+  --input: 214 24% 90%;
+  --ring: 211 100% 50%;
+  --radius: 0.625rem;
 
-  /* The sidebar is the only tinted surface; content stays paper-white. */
-  --sidebar: 60 11% 96%;
-  --sidebar-border: 48 6% 89%;
+  /* Atmosphere — near-white, whisper of cool blue */
+  --shell: 210 20% 98%;
+  --sidebar: 210 16% 98%;
+  --sidebar-border: 214 16% 90%;
 
-  /* Row states are translucent ink, so they read the same on either surface. */
-  --hover-fill: 45 8% 20% / 0.055;
-  --active-fill: 45 8% 20% / 0.08;
+  --hover-fill: 215 20% 20% / 0.045;
+  --active-fill: 211 100% 50% / 0.1;
 
-  /* Notion stone (#a4a097) resting, steel (#787671) under the pointer. */
-  --scrollbar-thumb: 42 6% 61%;
-  --scrollbar-thumb-strong: 40 5% 47%;
+  --scrollbar-thumb: 215 8% 55% / 0.35;
+  --scrollbar-thumb-strong: 215 10% 45% / 0.5;
 
-  /*
-   * Switch / slider trough. The hairline token is far too faint to carry a
-   * control's off state — steel lightened to 55% clears 3:1 against the page
-   * while still reading as "not on".
-   */
-  --control-track: 40 5% 55%;
-  --control-track-strong: 40 5% 45%;
+  --control-track: 210 14% 55%;
+  --control-track-strong: 210 16% 45%;
 
-  --selection: 210 77% 51%;
+  /* System blue — logo tab plate */
+  --selection: 211 100% 50%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 210 60% 96%;
+  --selection-soft: 211 100% 50% / 0.14;
 
-  --brand: 210 77% 51%;
+  --brand: 211 100% 50%;
   --brand-foreground: 0 0% 100%;
   --favorite: 38 92% 50%;
 
-  /* Menus and dialogs lift off the page — the one place a shadow is earned. */
-  --elevation-menu: 0 0 0 1px hsl(45 8% 20% / 0.06), 0 3px 6px hsl(45 8% 20% / 0.06),
-    0 9px 24px hsl(45 8% 20% / 0.09);
+  /* Radii — continuous-corner OS feel */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+
+  /* Physical motion */
+  --ease-os: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-normal: 250ms;
+
+  /*
+   * Liquid glass recipes — clear white volume with a whisper of cool tint.
+   * Used as full backgrounds (not hsl()).
+   */
+  --glass-blur: 48px;
+  --glass-saturate: 160%;
+  --glass-fill: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(255, 255, 255, 0.42) 42%,
+    rgba(248, 250, 253, 0.48) 100%
+  );
+  --glass-fill-strong: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 45%,
+    rgba(250, 251, 253, 0.78) 100%
+  );
+  --glass-fill-soft: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(246, 249, 252, 0.35) 100%
+  );
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --glass-border-outer: rgba(180, 195, 215, 0.28);
+  --glass-specular:
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(140, 155, 175, 0.06),
+    inset 1.5px 0 0 rgba(255, 255, 255, 0.5),
+    inset -1px 0 0 rgba(160, 175, 195, 0.08);
+  /*
+   * iOS 26 liquid glass separates surfaces by tint + specular edge, not drop
+   * shadow. A faint cool outer tint is the most we allow.
+   */
+  --elevation-menu:
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 0 0 1.5px rgba(160, 175, 195, 0.16),
+    0 0 24px rgba(30, 42, 62, 0.05);
+  --elevation-glass:
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 0 0 1.5px rgba(160, 175, 195, 0.12),
+    0 0 18px rgba(30, 42, 62, 0.04);
+  --shadow-accent:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 -1px 0 rgba(0, 60, 140, 0.18) inset,
+    0 1px 3px rgba(0, 60, 140, 0.18);
 }
 
 .dark {
-  --background: 0 0% 10%;
-  --foreground: 0 0% 88%;
-  --card: 0 0% 10%;
-  --card-foreground: 0 0% 88%;
-  --popover: 0 0% 15%;
-  --popover-foreground: 0 0% 88%;
-  --primary: 0 0% 88%;
-  --primary-foreground: 0 0% 10%;
-  --secondary: 0 0% 16%;
-  --secondary-foreground: 0 0% 88%;
-  --muted: 0 0% 16%;
-  --muted-foreground: 45 3% 60%;
-  --accent: 0 0% 18%;
-  --accent-foreground: 0 0% 88%;
-  --destructive: 2 58% 54%;
+  --background: 220 30% 7%;
+  --foreground: 210 25% 94%;
+  --card: 220 26% 9%;
+  --card-foreground: 210 25% 94%;
+  --popover: 220 24% 11%;
+  --popover-foreground: 210 25% 94%;
+  --primary: 210 25% 94%;
+  --primary-foreground: 220 30% 7%;
+  --secondary: 220 22% 14%;
+  --secondary-foreground: 210 25% 94%;
+  --muted: 220 22% 13%;
+  --muted-foreground: 215 14% 62%;
+  --accent: 220 20% 15%;
+  --accent-foreground: 210 25% 94%;
+  --destructive: 2 70% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 18%;
-  --input: 0 0% 18%;
-  --ring: 210 77% 56%;
+  --border: 220 18% 18%;
+  --input: 220 18% 18%;
+  --ring: 211 100% 56%;
 
-  --sidebar: 0 0% 13%;
-  --sidebar-border: 0 0% 18%;
+  --shell: 220 32% 6%;
+  --sidebar: 220 28% 9%;
+  --sidebar-border: 220 16% 16%;
 
-  --hover-fill: 0 0% 100% / 0.055;
-  --active-fill: 0 0% 100% / 0.09;
+  --hover-fill: 0 0% 100% / 0.06;
+  --active-fill: 211 100% 56% / 0.22;
 
-  --scrollbar-thumb: 0 0% 40%;
-  --scrollbar-thumb-strong: 0 0% 55%;
+  --scrollbar-thumb: 215 8% 70% / 0.3;
+  --scrollbar-thumb-strong: 215 8% 80% / 0.45;
 
-  --control-track: 0 0% 44%;
-  --control-track-strong: 0 0% 56%;
+  --control-track: 215 12% 42%;
+  --control-track-strong: 215 12% 55%;
 
-  --selection: 210 77% 56%;
+  --selection: 211 100% 56%;
   --selection-foreground: 0 0% 100%;
-  --selection-soft: 210 40% 22%;
+  --selection-soft: 211 100% 56% / 0.22;
 
-  --brand: 210 77% 60%;
-  --brand-foreground: 0 0% 10%;
+  --brand: 211 100% 58%;
+  --brand-foreground: 220 30% 7%;
   --favorite: 38 92% 56%;
 
-  --elevation-menu: 0 0 0 1px hsl(0 0% 100% / 0.08), 0 3px 6px hsl(0 0% 0% / 0.3),
-    0 9px 24px hsl(0 0% 0% / 0.4);
+  --glass-fill: linear-gradient(
+    165deg,
+    rgba(48, 68, 92, 0.72) 0%,
+    rgba(18, 32, 48, 0.58) 45%,
+    rgba(12, 24, 40, 0.68) 100%
+  );
+  --glass-fill-strong: linear-gradient(
+    165deg,
+    rgba(55, 78, 105, 0.88) 0%,
+    rgba(28, 44, 64, 0.78) 50%,
+    rgba(18, 32, 50, 0.85) 100%
+  );
+  --glass-fill-soft: linear-gradient(
+    165deg,
+    rgba(40, 60, 85, 0.5) 0%,
+    rgba(18, 32, 48, 0.35) 50%,
+    rgba(10, 20, 35, 0.45) 100%
+  );
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-outer: rgba(255, 255, 255, 0.08);
+  --glass-specular:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  --elevation-menu:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 0 28px rgba(0, 0, 0, 0.3);
+  --elevation-glass:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06),
+    0 0 22px rgba(0, 0, 0, 0.24);
+  --shadow-accent:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 -1px 0 rgba(0, 40, 100, 0.3) inset,
+    0 1px 3px rgba(0, 20, 60, 0.3);
 }
 
 * {
@@ -119,67 +209,703 @@ html.dark {
 }
 
 ::selection {
-  background: hsl(var(--selection) / 0.25);
+  background: hsl(var(--selection) / 0.22);
 }
 
 kbd {
   display: inline-flex;
   align-items: center;
-  border-radius: 3px;
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--muted));
-  padding: 0.0625rem 0.3125rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  border-radius: 5px;
+  border: 1px solid rgba(120, 160, 200, 0.3);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.0625rem 0.375rem;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   font-size: 10px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: hsl(var(--muted-foreground));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 1px 2px rgba(40, 90, 140, 0.08);
 }
 
-/* The list rail. Tinted, separated by a hairline — never a shadow. */
+.dark kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------------------------------------------------------------------------
+ * Materials — true liquid glass (logo / landing language)
+ * ------------------------------------------------------------------------ */
+
+.app-shell {
+  position: relative;
+  isolation: isolate;
+  /* Wallpaper layer supplies the backdrop; this is just the fallback wash. */
+  background: linear-gradient(165deg, #fcfdff 0%, #f7f9fc 48%, #f2f5f9 100%);
+}
+
+.dark .app-shell {
+  background: linear-gradient(165deg, #0a0c10 0%, #0e1218 50%, #0a0d12 100%);
+}
+
+/* Fine grain — same optical “glass depth” cue as the mark */
+.app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+}
+
+.dark .app-shell::before {
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+}
+
+.app-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Thick floating liquid-glass rail — logo-like volume */
 .app-sidebar {
-  background: hsl(var(--sidebar));
-  border-inline-end: 1px solid hsl(var(--sidebar-border));
-  /* Scroll edges dissolve into the rail, not into the content pane's white. */
-  --fade-surface: var(--sidebar);
+  position: relative;
+  background: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elevation-glass);
+  /* Fade bands need an opaque HSL cousin so edges don't muddy */
+  --fade-surface: 210 16% 98%;
 }
 
-/* Menus, dialogs, command palette — the only floating surfaces. */
+.dark .app-sidebar {
+  box-shadow: var(--elevation-glass);
+  --fade-surface: 220 28% 9%;
+}
+
+.app-sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 4%,
+    rgba(255, 255, 255, 0.9) 28%,
+    rgba(255, 255, 255, 0.98) 50%,
+    rgba(255, 255, 255, 0.9) 72%,
+    transparent 96%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dark .app-sidebar::after {
+  background: linear-gradient(
+    90deg,
+    transparent 4%,
+    rgba(255, 255, 255, 0.14) 28%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.14) 72%,
+    transparent 96%
+  );
+}
+
+.app-topbar {
+  background: var(--glass-fill-soft);
+  backdrop-filter: blur(28px) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(28px) saturate(var(--glass-saturate));
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-specular), 0 4px 20px rgba(40, 90, 140, 0.06);
+}
+
+.dark .app-topbar {
+  box-shadow: var(--glass-specular), 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Crystal floating menus */
 .menu-surface {
-  background: hsl(var(--popover));
-  border-radius: 6px;
+  position: relative;
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
   box-shadow: var(--elevation-menu);
+  overflow: hidden;
 }
 
-/* A bordered block inside the content pane (code output, previews, tables). */
+.menu-surface::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dark .menu-surface::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* Floating glass content sheet — refractive but readable */
+.content-pane {
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elevation-glass);
+}
+
+.dark .content-pane {
+  background: var(--glass-fill-strong);
+  box-shadow: var(--elevation-glass);
+}
+
 .panel {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 4px;
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--elevation-glass);
 }
 
-/* Text inputs and textareas. */
+/* Inset glass wells */
 .field {
-  background: hsl(var(--background));
-  border: 1px solid hsl(var(--border));
-  border-radius: 4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.72) 100%
+  );
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(160, 175, 195, 0.22);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 1px 3px rgba(40, 55, 80, 0.05),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.45);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.field:hover {
+  border-color: rgba(0, 122, 255, 0.28);
 }
 
 .field:focus-within {
-  border-color: hsl(var(--ring) / 0.6);
+  border-color: hsl(var(--ring));
+  box-shadow:
+    0 0 0 3px hsl(var(--selection-soft)),
+    inset 0 1px 3px rgba(40, 90, 140, 0.06);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/*
+ * Google-style home smart bar — tall continuous-corner pill of liquid glass.
+ * Reads as a single professional control over the wallpaper.
+ */
+.smart-bar-hero {
+  height: 64px;
+  border-radius: 9999px;
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--elevation-menu),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(140, 155, 175, 0.05);
+}
+
+.smart-bar-hero:hover {
+  border-color: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.76) 45%,
+    rgba(250, 251, 253, 0.84) 100%
+  );
+}
+
+.smart-bar-hero:focus-within,
+.smart-bar-hero-open {
+  border-color: hsl(var(--ring) / 0.55);
+  box-shadow:
+    0 0 0 3.5px hsl(var(--selection-soft)),
+    var(--elevation-menu),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.home-hero-mark {
+  animation: home-mark-in 520ms var(--ease-os) both;
+}
+
+.home-hero-title {
+  animation: home-title-in 560ms var(--ease-os) 60ms both;
+}
+
+.smart-bar-hero {
+  animation: home-bar-in 600ms var(--ease-os) 100ms both;
+}
+
+@keyframes home-mark-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes home-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes home-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-mark,
+  .home-hero-title,
+  .smart-bar-hero {
+    animation: none;
+  }
+}
+
+.dark .field {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(20, 35, 50, 0.55) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 4px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+}
+
+.dark .field:hover {
+  border-color: rgba(10, 132, 255, 0.4);
+}
+
+.dark .field:focus-within {
+  background: rgba(20, 35, 55, 0.72);
+  box-shadow:
+    0 0 0 3px hsl(var(--selection-soft)),
+    inset 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .chip {
-  background: hsl(var(--muted));
-  border: 1px solid hsl(var(--border));
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.dark .chip {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ---------------------------------------------------------------------------
+ * OS primitives — glass sheets, dock, widgets, app icons
+ * ------------------------------------------------------------------------ */
+
+.glass {
+  background: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elevation-glass);
+}
+
+.glass-strong {
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elevation-menu);
+}
+
+/* Floating content sheet */
+.panel {
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(36px) saturate(160%);
+  -webkit-backdrop-filter: blur(36px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elevation-glass);
+}
+
+/* Bottom dock — pill launcher (tint, no shadow) */
+.dock {
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(56px) saturate(180%);
+  -webkit-backdrop-filter: blur(56px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 0 0 1.5px rgba(160, 175, 195, 0.14),
+    0 0 28px rgba(30, 42, 62, 0.06);
+  padding: 8px;
+}
+
+.dark .dock {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 32px rgba(0, 0, 0, 0.32);
+}
+
+/* Widget — personal-tab glass card */
+.widget {
+  background: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elevation-glass);
+  transition:
+    transform var(--dur-fast) var(--ease-os),
+    box-shadow var(--dur-fast) var(--ease-os);
+}
+
+.widget:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-menu);
+}
+
+/* App icon — glossy squircle tile */
+.app-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22%;
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+  color: hsl(var(--muted-foreground));
+  transition:
+    transform var(--dur-fast) var(--ease-os),
+    box-shadow var(--dur-fast) var(--ease-os),
+    color var(--dur-fast) var(--ease-os);
+}
+
+.dark .app-icon {
+  background: var(--glass-fill-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.app-icon:hover {
+  transform: scale(1.08);
+  color: hsl(var(--foreground));
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1.5px rgba(255, 255, 255, 0.6),
+    0 0 18px rgba(30, 42, 62, 0.1);
+}
+
+.app-icon:active {
+  transform: scale(0.97);
+}
+
+.app-icon-active {
+  color: hsl(var(--brand));
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 2px hsl(var(--brand) / 0.35);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .app-shell::before {
+    display: none;
+  }
+
+  .app-sidebar,
+  .app-topbar,
+  .menu-surface,
+  .content-pane,
+  .panel,
+  .glass,
+  .glass-strong,
+  .dock,
+  .widget,
+  .app-icon,
+  .field,
+  .chip,
+  .smart-bar-hero {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .app-sidebar,
+  .app-topbar {
+    background: hsl(var(--sidebar));
+    box-shadow: var(--elevation-glass);
+  }
+
+  .app-sidebar::after,
+  .menu-surface::before {
+    display: none;
+  }
+
+  .menu-surface,
+  .glass-strong,
+  .dock {
+    background: hsl(var(--popover));
+    box-shadow: var(--elevation-menu);
+  }
+
+  .content-pane,
+  .panel,
+  .glass,
+  .widget,
+  .app-icon {
+    background: hsl(var(--background));
+    box-shadow: var(--elevation-glass);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .field,
+  .chip,
+  .smart-bar-hero {
+    background: hsl(var(--background));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget,
+  .app-icon,
+  .glass {
+    transition: none !important;
+  }
+  .widget:hover,
+  .app-icon:hover,
+  .app-icon:active {
+    transform: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Tool chrome — macOS-app control kit (tint + specular, no shadows)
+ * ------------------------------------------------------------------------ */
+
+/* Tool surface — a glass sheet the tool lives on */
+.tool-surface {
+  background: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elevation-glass);
+}
+
+/* Inset well for text/number inputs and textareas */
+.input-well {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.68) 100%
+  );
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(160, 175, 195, 0.24);
+  border-radius: var(--radius-md);
+  box-shadow:
+    inset 0 1px 2px rgba(30, 42, 62, 0.05),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.input-well:hover {
+  border-color: rgba(0, 122, 255, 0.3);
+}
+
+.input-well:focus,
+.input-well:focus-within,
+.input-well:focus-visible {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow:
+    0 0 0 3px hsl(var(--selection-soft)),
+    inset 0 1px 2px rgba(30, 42, 62, 0.04);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dark .input-well {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(18, 30, 44, 0.5) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+}
+
+.dark .input-well:focus,
+.dark .input-well:focus-within,
+.dark .input-well:focus-visible {
+  background: rgba(16, 28, 42, 0.7);
+}
+
+/* macOS segmented control */
+.seg-control {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.55) 100%);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(160, 175, 195, 0.22);
+  box-shadow: inset 0 1px 2px rgba(30, 42, 62, 0.05);
+}
+
+.dark .seg-control {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(18, 30, 44, 0.5) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.seg-option {
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.seg-option:hover {
+  color: hsl(var(--foreground));
+}
+
+.seg-option-active {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(160, 175, 195, 0.28);
+  color: hsl(var(--foreground));
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 1px 3px rgba(30, 42, 62, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.dark .seg-option-active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* iOS switch — softer, glass thumb */
+.ios-switch {
+  position: relative;
+  height: 22px;
+  width: 40px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(160, 175, 195, 0.35) 0%, rgba(160, 175, 195, 0.45) 100%);
+  border: 1px solid rgba(160, 175, 195, 0.3);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.dark .ios-switch {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.ios-switch[data-on="true"] {
+  background: linear-gradient(180deg, #3d9bff 0%, #007aff 100%);
+  border-color: rgba(0, 122, 255, 0.5);
+}
+
+.ios-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fa 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 3px rgba(30, 42, 62, 0.18);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ios-switch[data-on="true"]::after {
+  transform: translateX(18px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-switch,
+  .ios-switch::after,
+  .seg-option,
+  .input-well {
+    transition: none !important;
+  }
 }
 
 /* ---------------------------------------------------------------------------
  * Range slider
- * `appearance: none` hands us the whole control, so both halves of the track
- * and the thumb are drawn here — otherwise each engine invents its own. The
- * filled half is painted with a gradient stopped at `--range-fill`, which the
- * component keeps in sync with the value, so the slider reads its own position.
  * ------------------------------------------------------------------------ */
 .range-input {
   appearance: none;
@@ -191,57 +917,68 @@ kbd {
 }
 
 .range-input::-webkit-slider-runnable-track {
-  height: 4px;
+  height: 5px;
   border-radius: 9999px;
   background: linear-gradient(
     to right,
     hsl(var(--selection)) 0 var(--range-fill, 0%),
-    hsl(var(--control-track) / 0.4) var(--range-fill, 0%) 100%
+    hsl(var(--control-track) / 0.35) var(--range-fill, 0%) 100%
   );
+  box-shadow: inset 0 1px 2px rgba(40, 90, 140, 0.12);
 }
 
 .range-input::-moz-range-track {
-  height: 4px;
+  height: 5px;
   border-radius: 9999px;
-  background: hsl(var(--control-track) / 0.4);
+  background: hsl(var(--control-track) / 0.35);
+  box-shadow: inset 0 1px 2px rgba(40, 90, 140, 0.12);
 }
 
 .range-input::-moz-range-progress {
-  height: 4px;
+  height: 5px;
   border-radius: 9999px;
   background: hsl(var(--selection));
 }
 
-/* The knob is the only round, raised thing in the system — it has to look grabbable. */
 .range-input::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  margin-top: -5px;
-  height: 14px;
-  width: 14px;
+  margin-top: -6px;
+  height: 16px;
+  width: 16px;
   border-radius: 9999px;
-  background: hsl(var(--selection));
-  border: 2px solid hsl(var(--background));
-  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.25);
-  transition: transform 100ms ease;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fa 100%);
+  border: 1px solid rgba(30, 42, 62, 0.14);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 1px 3px rgba(30, 42, 62, 0.16);
+  transition: transform 100ms ease, box-shadow 150ms ease;
 }
 
 .range-input::-moz-range-thumb {
-  height: 14px;
-  width: 14px;
+  height: 16px;
+  width: 16px;
   border-radius: 9999px;
-  background: hsl(var(--selection));
-  border: 2px solid hsl(var(--background));
-  box-shadow: 0 1px 2px hsl(0 0% 0% / 0.25);
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fa 100%);
+  border: 1px solid rgba(30, 42, 62, 0.14);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 1px 3px rgba(30, 42, 62, 0.16);
   transition: transform 100ms ease;
 }
 
+.dark .range-input::-webkit-slider-thumb,
+.dark .range-input::-moz-range-thumb {
+  background: linear-gradient(180deg, #5a7a9a 0%, #2a4058 100%);
+  border-color: rgba(10, 132, 255, 0.5);
+}
+
 .range-input:active::-webkit-slider-thumb {
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 
 .range-input:active::-moz-range-thumb {
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 
 .range-input:disabled {
@@ -256,86 +993,125 @@ kbd {
   }
 }
 
-/*
- * Row states. Selection is a neutral fill, not a blue bar: in a list this dense
- * a saturated row pulls the eye away from the content pane it controls.
- */
+/* ---------------------------------------------------------------------------
+ * Row / nav states — clean selection, no accent rails
+ * ------------------------------------------------------------------------ */
 .row-selected {
   background: hsl(var(--active-fill));
   color: hsl(var(--foreground));
   font-weight: 500;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .row-idle {
   color: hsl(var(--foreground));
+  border-radius: 8px;
+  transition: background 140ms ease, box-shadow 140ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .row-idle:hover {
-    background: hsl(var(--hover-fill));
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  .dark .row-idle:hover {
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: none;
   }
 }
 
+/* Selection is a soft elevated chip — tint + ring, never a side bar. */
 .nav-active {
-  background: hsl(var(--active-fill));
-  color: hsl(var(--foreground));
-  font-weight: 500;
+  background: hsl(var(--selection-soft));
+  color: hsl(var(--brand));
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 0 0 1px hsl(var(--brand) / 0.22);
+}
+
+.dark .nav-active {
+  background: hsl(var(--selection-soft));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px hsl(var(--brand) / 0.3);
 }
 
 /* ---------------------------------------------------------------------------
- * Scroll surfaces
- * A scrollbar is chrome, and chrome in a 240px rail is noise. The gutter is
- * always reserved — nothing reflows when the bar turns up — but stays
- * transparent until the surface actually moves, then fades back out.
+ * Primary action — landing luminous blue
+ * ------------------------------------------------------------------------ */
+.btn-liquid-primary {
+  background: linear-gradient(180deg, #3d9bff 0%, #007aff 48%, #0066d6 100%);
+  color: #fff;
+  box-shadow: var(--shadow-accent);
+}
+
+.btn-liquid-primary:hover {
+  background: linear-gradient(180deg, #5aadff 0%, #1a88ff 48%, #0070e8 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 -1px 0 rgba(0, 60, 140, 0.14) inset,
+    0 2px 6px rgba(0, 60, 140, 0.22);
+}
+
+/* ---------------------------------------------------------------------------
+ * Scroll surfaces — tiny thumb, invisible until scrolling
  * ------------------------------------------------------------------------ */
 .fade-scroller-frame {
   position: relative;
   min-height: 0;
 }
 
+.ds-scroll,
 .fade-scroller {
-  height: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
-  transition: scrollbar-color 180ms ease;
+  transition: scrollbar-color 160ms ease;
 }
 
+.ds-scroll[data-scrolling="true"],
 .fade-scroller[data-scrolling="true"] {
   scrollbar-color: hsl(var(--scrollbar-thumb)) transparent;
 }
 
-/* Safari has no scrollbar-width; Chromium ignores these once it is set. */
+.ds-scroll::-webkit-scrollbar,
 .fade-scroller::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 4px;
+  height: 4px;
 }
 
+.ds-scroll::-webkit-scrollbar-track,
 .fade-scroller::-webkit-scrollbar-track {
   background: transparent;
 }
 
+.ds-scroll::-webkit-scrollbar-thumb,
 .fade-scroller::-webkit-scrollbar-thumb {
   background-color: transparent;
-  background-clip: content-box;
-  border: 3px solid transparent;
+  background-clip: padding-box;
+  border: 0 solid transparent;
   border-radius: 9999px;
-  transition: background-color 180ms ease;
+  transition: background-color 160ms ease;
 }
 
+.ds-scroll[data-scrolling="true"]::-webkit-scrollbar-thumb,
 .fade-scroller[data-scrolling="true"]::-webkit-scrollbar-thumb {
   background-color: hsl(var(--scrollbar-thumb));
 }
 
+.ds-scroll[data-scrolling="true"]::-webkit-scrollbar-thumb:hover,
 .fade-scroller[data-scrolling="true"]::-webkit-scrollbar-thumb:hover {
   background-color: hsl(var(--scrollbar-thumb-strong));
 }
 
-/*
- * Edge bands. Shown only while there is content past that edge, so a list that
- * fits its pane carries no decoration at all.
- */
+.fade-scroller {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .fade-scroller-edge {
   position: absolute;
   inset-inline: 0;
@@ -362,7 +1138,6 @@ kbd {
   --fade-scroller-direction: to top;
 }
 
-/* The tint, painted over the blur: rows dissolve into the surface behind them. */
 .fade-scroller-edge::after {
   content: "";
   position: absolute;
@@ -375,11 +1150,6 @@ kbd {
   );
 }
 
-/*
- * Progressive blur: four stacked bands, each blurring what the ones beneath it
- * already produced. Blur ramps up toward the edge instead of switching on at a
- * seam, which is the whole difference between this and a single blurred strip.
- */
 .fade-scroller-edge > span {
   position: absolute;
   inset: 0;
@@ -441,7 +1211,6 @@ kbd {
   }
 }
 
-/* Icon state cross-fade — opacity only, no scale or blur. */
 .icon-swap {
   position: relative;
   display: grid;
@@ -464,5 +1233,48 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   .icon-swap > * {
     transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Surfaces — palette + page transitions
+ * ------------------------------------------------------------------------ */
+
+/* Raycast-style command palette: instant presence, subtle scale+fade. */
+.palette-panel {
+  animation: palette-in 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Smooth page transition between home and tools. */
+.page-enter {
+  animation: page-in 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .palette-panel,
+  .page-enter {
+    animation: none !important;
   }
 }

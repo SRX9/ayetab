@@ -14,18 +14,21 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-selection text-selection-foreground hover:bg-selection/90",
-  secondary: "bg-secondary text-secondary-foreground hover:bg-accent",
-  ghost: "text-muted-foreground hover:bg-[hsl(var(--hover-fill))] hover:text-foreground",
-  outline: "border border-border bg-background text-foreground hover:bg-[hsl(var(--hover-fill))]",
-  destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+  primary: "btn-liquid-primary border-0",
+  secondary:
+    "border border-white/70 bg-white/55 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.75)] backdrop-blur-md hover:bg-white/75 dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15",
+  ghost: "text-muted-foreground hover:bg-white/40 hover:text-foreground dark:hover:bg-white/10",
+  outline:
+    "border border-white/65 bg-white/45 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-md hover:bg-white/70 dark:border-white/15 dark:bg-white/[0.08] dark:hover:bg-white/12",
+  destructive:
+    "border-0 bg-[linear-gradient(180deg,#ff6b63_0%,#ff3b30_50%,#e0352b_100%)] text-white shadow-[0_1px_0_rgba(255,255,255,0.25)_inset,0_6px_18px_rgba(255,59,48,0.35)] hover:brightness-105",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-7 rounded px-2 text-caption gap-1.5",
-  md: "h-8 rounded px-3 text-ui gap-1.5",
-  lg: "h-9 rounded px-4 text-ui-md gap-2",
-  icon: "h-7 w-7 rounded",
+  sm: "h-7 rounded-lg px-2.5 text-caption gap-1.5",
+  md: "h-8 rounded-lg px-3 text-ui gap-1.5",
+  lg: "h-10 rounded-xl px-4 text-ui-md gap-2",
+  icon: "h-8 w-8 rounded-lg",
 };
 
 export function Button({
@@ -40,9 +43,10 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex select-none items-center justify-center font-medium transition-colors duration-100",
+        "inline-flex select-none items-center justify-center font-medium transition-[color,background-color,transform,filter,box-shadow] duration-150",
         FOCUS_RING,
         "disabled:pointer-events-none disabled:opacity-50",
+        "active:scale-[0.98]",
         variantClasses[variant],
         sizeClasses[size],
         className

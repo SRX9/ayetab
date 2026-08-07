@@ -12,7 +12,7 @@ import {
 import { cn } from "../lib/utils";
 
 /** How long the scrollbar lingers after the surface stops moving. */
-const SCROLLBAR_LINGER_MS = 700;
+const SCROLLBAR_LINGER_MS = 500;
 
 /** Fractional scroll offsets never land exactly on the bounds. */
 const EDGE_SLACK_PX = 1;

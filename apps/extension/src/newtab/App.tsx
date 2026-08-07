@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 import type { ToolDefinition } from "@ayetab/utils";
 import {
   AppShell,
@@ -7,25 +7,29 @@ import {
   OnboardingModal,
   PreferencesProvider,
   ShortcutsProvider,
+  TabHome,
   ThemeProvider,
-  ToolIndex,
   usePreferences,
 } from "@ayetab/ui";
 import { EXTENSION_TOOLS, openWebOnlyTool } from "../lib/extension-tools";
 import { FirstRunNotice } from "./first-run-notice";
 import { ToolView, WebOnlyToolsSection } from "./tool-view";
-import { navigate, parseRoute, toolHash, type Route } from "./route";
+import { navigate, parseRoute, toolHash, homeHash, type Route } from "./route";
+
+function subscribeToHash(onChange: () => void): () => void {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
+}
+
+function getHashSnapshot(): string {
+  return window.location.hash;
+}
 
 function useHashRoute(): Route {
-  const [route, setRoute] = useState<Route>(() => parseRoute(window.location.hash));
-
-  useEffect(() => {
-    const onHashChange = () => setRoute(parseRoute(window.location.hash));
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
-
-  return route;
+  // The raw hash string is the snapshot (a stable primitive); parsing is
+  // memoized so the Route object identity only changes when the hash does.
+  const hash = useSyncExternalStore(subscribeToHash, getHashSnapshot);
+  return useMemo(() => parseRoute(hash), [hash]);
 }
 
 function NewTab() {
@@ -56,18 +60,17 @@ function NewTab() {
         activeToolId={route.kind === "tool" ? route.toolId : undefined}
         onSelectTool={openTool}
         toolHref={(tool) => toolHash(tool.id)}
+        onHome={() => navigate(homeHash())}
       >
         {route.kind === "tool" ? (
           <ToolView toolId={route.toolId} initialInput={route.input} onNavigate={handleNavigate} />
         ) : (
-          <>
+          <TabHome tools={EXTENSION_TOOLS} onOpenTool={openTool}>
             <FirstRunNotice />
-            <ToolIndex
-              tools={EXTENSION_TOOLS}
-              onSelect={openTool}
-              footer={<WebOnlyToolsSection />}
-            />
-          </>
+            <div className="mt-8">
+              <WebOnlyToolsSection />
+            </div>
+          </TabHome>
         )}
       </AppShell>
     </CommandPaletteProvider>

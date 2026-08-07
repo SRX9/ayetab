@@ -139,12 +139,18 @@ export function FaviconGeneratorTool({ tool, isFavorite, onToggleFavorite }: Cus
     let cancelled = false;
 
     void (async () => {
+      // Sizes are independent renders, so encode them together.
+      const blobs = await Promise.all(
+        FAVICON_SIZES.map(async (size) => {
+          const canvas = renderSize(size);
+          if (!canvas) return null;
+          const blob = await canvasToBlob(canvas, "image/png");
+          return { size, blob };
+        })
+      );
       const out: Array<{ size: number; url: string }> = [];
-      for (const size of FAVICON_SIZES) {
-        const canvas = renderSize(size);
-        if (!canvas) continue;
-        const blob = await canvasToBlob(canvas, "image/png");
-        out.push({ size, url: URL.createObjectURL(blob) });
+      for (const entry of blobs) {
+        if (entry) out.push({ size: entry.size, url: URL.createObjectURL(entry.blob) });
       }
       if (cancelled) {
         out.forEach((o) => URL.revokeObjectURL(o.url));
@@ -464,6 +470,17 @@ export function ImageTracerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
 
 type RemoveMode = "corner" | "pick" | "chroma";
 
+/** Colour distance in a perceptually weighted RGB space. */
+function distance(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number) {
+  const rMean = (r1 + r2) / 2;
+  const dr = r1 - r2;
+  const dg = g1 - g2;
+  const db = b1 - b2;
+  return Math.sqrt(
+    (((512 + rMean) * dr * dr) >> 8) + 4 * dg * dg + (((767 - rMean) * db * db) >> 8)
+  );
+}
+
 export function BackgroundRemoverTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const { image, error, accept, clear } = useImageUpload();
   const [mode, setMode] = useState<RemoveMode>("corner");
@@ -473,17 +490,6 @@ export function BackgroundRemoverTool({ tool, isFavorite, onToggleFavorite }: Cu
   const [despill, setDespill] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sourceRef = useRef<HTMLCanvasElement>(null);
-
-  /** Colour distance in a perceptually weighted RGB space. */
-  const distance = (r1: number, g1: number, b1: number, r2: number, g2: number, b2: number) => {
-    const rMean = (r1 + r2) / 2;
-    const dr = r1 - r2;
-    const dg = g1 - g2;
-    const db = b1 - b2;
-    return Math.sqrt(
-      (((512 + rMean) * dr * dr) >> 8) + 4 * dg * dg + (((767 - rMean) * db * db) >> 8)
-    );
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -549,17 +555,31 @@ export function BackgroundRemoverTool({ tool, isFavorite, onToggleFavorite }: Cu
     ctx?.putImageData(frame, 0, 0);
   }, [image, mode, target, tolerance, feather, despill]);
 
-  const pickFromClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const pickAt = (clientX: number, clientY: number) => {
     if (mode !== "pick") return;
+    const canvas = canvasRef.current;
     const source = sourceRef.current;
-    if (!source) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.floor(((e.clientX - rect.left) / rect.width) * source.width);
-    const y = Math.floor(((e.clientY - rect.top) / rect.height) * source.height);
+    if (!canvas || !source) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.floor(((clientX - rect.left) / rect.width) * source.width);
+    const y = Math.floor(((clientY - rect.top) / rect.height) * source.height);
     const ctx = source.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
     const [r, g, b] = ctx.getImageData(x, y, 1, 1).data;
     setTarget(rgbToHex({ r, g, b }));
+  };
+
+  const pickFromClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    pickAt(e.clientX, e.clientY);
+  };
+
+  // Keyboard users get the centre pixel, which is as meaningful a key target
+  // as any single point on an arbitrary image.
+  const pickFromKeyboard = (e: React.KeyboardEvent<HTMLCanvasElement>) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    pickAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
   };
 
   return (
@@ -604,6 +624,10 @@ export function BackgroundRemoverTool({ tool, isFavorite, onToggleFavorite }: Cu
                 <canvas
                   ref={canvasRef}
                   onClick={pickFromClick}
+                  onKeyDown={pickFromKeyboard}
+                  role={mode === "pick" ? "button" : undefined}
+                  tabIndex={mode === "pick" ? 0 : undefined}
+                  aria-label="Pick the background colour from the image"
                   className={cn(
                     "mx-auto max-h-[28rem] w-full object-contain",
                     mode === "pick" && "cursor-crosshair"

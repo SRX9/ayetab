@@ -147,23 +147,28 @@ export function MarkdownEditorTool({ tool, onRecent, isFavorite, onToggleFavorit
                 value={text}
                 onChange={(e) => saveState({ text: e.target.value })}
                 placeholder={STARTER}
+                aria-label="Markdown source"
                 spellCheck
                 className={cn(
-                  "min-h-[26rem] w-full resize-y rounded-md border border-border bg-card p-5",
-                  "font-mono leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
-                  focusMode && "border-transparent bg-transparent"
+                  "input-well min-h-[26rem] w-full resize-y p-5",
+                  "font-mono leading-relaxed",
+                  focusMode && "border-transparent bg-transparent shadow-none"
                 )}
                 style={{ fontSize: `${fontSize}px` }}
               />
             )}
             {view !== "write" && (
+              // Safe: convertDocument escapes every source character and attribute
+              // (see escapeHtml in doc-convert.ts), so raw HTML/script in the
+              // markdown renders as inert text, and the input is the user's own
+              // document rendered back to the same user.
+              // eslint-disable-next-line react-doctor/dangerous-html-sink
               <div
                 className={cn(
-                  "prose-tool min-h-[26rem] overflow-auto rounded-md border border-border bg-card p-5",
-                  focusMode && "border-transparent bg-transparent"
+                  "prose-tool tool-surface min-h-[26rem] overflow-auto p-5",
+                  focusMode && "border-transparent bg-transparent shadow-none"
                 )}
                 style={{ fontSize: `${fontSize}px` }}
-                // Rendered from the user's own markdown in their own browser.
                 dangerouslySetInnerHTML={{ __html: html || "<p class='opacity-50'>Nothing yet.</p>" }}
               />
             )}
@@ -281,11 +286,10 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
   };
 
   const undo = () => {
-    setHistory((h) => {
-      if (h.length === 0) return h;
-      saveState({ text: h[h.length - 1] });
-      return h.slice(0, -1);
-    });
+    const previous = history[history.length - 1];
+    if (previous === undefined) return;
+    saveState({ text: previous });
+    setHistory((h) => h.slice(0, -1));
   };
 
   const groups = useMemo(() => {
@@ -325,8 +329,9 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
             value={text}
             onChange={(e) => saveState({ text: e.target.value })}
             placeholder="Paste or type anything. Use the buttons below to reshape it."
+            aria-label="Text to transform"
             spellCheck={false}
-            className="min-h-[20rem] w-full resize-y rounded-md border border-border bg-card p-4 font-mono text-ui leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className="input-well min-h-[20rem] w-full resize-y p-4 font-mono text-ui leading-relaxed"
           />
 
           <div className="flex flex-wrap gap-x-5 gap-y-1 px-1 text-caption tabular-nums text-muted-foreground">
@@ -358,6 +363,15 @@ export function TextScratchpadTool({ tool, onRecent, isFavorite, onToggleFavorit
 
 // ── Word Counter ────────────────────────────────────────────────────────────
 
+/** Length limits people actually write against. */
+const LIMITS: Array<[string, number]> = [
+  ["Bluesky post", 300],
+  ["X post", 280],
+  ["Meta description", 160],
+  ["Page title", 60],
+  ["SMS", 160],
+];
+
 function formatSeconds(seconds: number): string {
   if (seconds < 60) return `${Math.max(1, Math.round(seconds))} sec`;
   const mins = Math.floor(seconds / 60);
@@ -378,15 +392,6 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
     ["Paragraphs", s.paragraphs.toLocaleString()],
   ];
 
-  /** Length limits people actually write against. */
-  const LIMITS: Array<[string, number]> = [
-    ["Bluesky post", 300],
-    ["X post", 280],
-    ["Meta description", 160],
-    ["Page title", 60],
-    ["SMS", 160],
-  ];
-
   return (
     <ToolShell
       title={tool.name}
@@ -403,7 +408,8 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
             value={text}
             onChange={(e) => saveState({ text: e.target.value })}
             placeholder="Paste or type your text…"
-            className="min-h-[14rem] w-full resize-y rounded-md border border-border bg-card p-4 text-ui-md leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            aria-label="Text to count"
+            className="input-well min-h-[14rem] w-full resize-y p-4 text-ui-md leading-relaxed"
           />
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -462,7 +468,7 @@ export function WordCounterTool({ tool, onRecent, isFavorite, onToggleFavorite }
                 {s.topWords.map(({ word, count }) => (
                   <span
                     key={word}
-                    className="rounded-lg bg-background px-2.5 py-1 text-caption"
+                    className="input-well px-2.5 py-1 text-caption"
                   >
                     {word}
                     <span className="ml-1.5 tabular-nums text-muted-foreground">{count}</span>
@@ -585,8 +591,9 @@ export function DocConverterTool({ tool, isFavorite, onToggleFavorite }: CustomT
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste a document, or open a file…"
+              aria-label="Document source"
               spellCheck={false}
-              className="min-h-[22rem] w-full resize-y rounded-md border border-border bg-background p-3 font-mono text-caption leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+              className="input-well min-h-[22rem] w-full resize-y p-3 font-mono text-caption leading-relaxed"
             />
           </Panel>
 
@@ -594,7 +601,7 @@ export function DocConverterTool({ tool, isFavorite, onToggleFavorite }: CustomT
             {result.error ? (
               <ErrorNote>{result.error}</ErrorNote>
             ) : result.output ? (
-              <pre className="min-h-[22rem] max-h-[30rem] overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-caption leading-relaxed">
+              <pre className="input-well min-h-[22rem] max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-3 font-mono text-caption leading-relaxed">
                 {result.output}
               </pre>
             ) : (
@@ -644,12 +651,13 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type or paste English text…"
-              className="min-h-[14rem] w-full resize-y rounded-md border border-border bg-background p-3 text-ui-md leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+              aria-label="English text"
+              className="input-well min-h-[14rem] w-full resize-y p-3 text-ui-md leading-relaxed"
             />
           </Panel>
           <Panel title="Shavian">
             <div
-              className="min-h-[14rem] overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 leading-relaxed"
+              className="input-well min-h-[14rem] overflow-auto whitespace-pre-wrap break-words p-3 leading-relaxed"
               style={{ fontSize: `${fontSize}px` }}
             >
               {result.output || <span className="opacity-40">𐑖𐑱𐑝𐑾𐑯 𐑑𐑧𐑒𐑕𐑑 𐑩𐑐𐑽𐑟 𐑣𐑽</span>}
@@ -690,7 +698,7 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {result.meta.unknownWords.map((w) => (
-                    <span key={w} className="rounded-md bg-background px-1.5 py-0.5 text-caption">
+                    <span key={w} className="input-well px-1.5 py-0.5 text-caption">
                       {w}
                     </span>
                   ))}
@@ -712,7 +720,7 @@ export function ShavianTool({ tool, isFavorite, onToggleFavorite }: CustomToolPr
                   type="button"
                   onClick={() => void navigator.clipboard?.writeText(l.letter)}
                   title={`Copy ${l.letter}`}
-                  className="rounded-lg border border-border bg-background p-2 text-center transition-colors hover:bg-[hsl(var(--hover-fill))]"
+                  className="input-well p-2 text-center transition-colors hover:bg-[hsl(var(--hover-fill))]"
                 >
                   <p className="text-xl leading-tight">{l.letter}</p>
                   <p className="text-caption font-medium">{l.name}</p>
@@ -791,12 +799,21 @@ export function FontExplorerTool({ tool, isFavorite, onToggleFavorite }: CustomT
       };
 
       // Register the font so the preview can actually render with it.
+      // The URL is revoked if registration fails (catch below), when a new
+      // font replaces it (the `setFontUrl` updater), and on unmount.
       const family = `preview-${Date.now()}`;
       const blob = new Blob([buffer], { type: "font/opentype" });
+      // eslint-disable-next-line react-doctor/no-create-object-url-without-revoke
       const url = URL.createObjectURL(blob);
-      const face = new FontFace(family, `url(${url})`);
-      await face.load();
-      document.fonts.add(face);
+      try {
+        const face = new FontFace(family, `url(${url})`);
+        await face.load();
+        document.fonts.add(face);
+      } catch (e) {
+        // Nothing will reference this URL if registration fails.
+        URL.revokeObjectURL(url);
+        throw e;
+      }
 
       const gsub = (font.tables as Record<string, unknown>).gsub as
         | { features?: Array<{ tag: string }> }
@@ -893,13 +910,13 @@ export function FontExplorerTool({ tool, isFavorite, onToggleFavorite }: CustomT
                 <Range value={previewSize} onChange={setPreviewSize} min={12} max={140} format={(v) => `${v}px`} />
               </div>
               <p
-                className="break-words rounded-md bg-background p-4 leading-tight"
+                className="input-well break-words p-4 leading-tight"
                 style={{ fontFamily: fontFamily ?? undefined, fontSize: `${previewSize}px` }}
               >
                 {sample || "The quick brown fox"}
               </p>
               <p
-                className="mt-2 rounded-md bg-background p-4 text-ui-lg leading-relaxed"
+                className="input-well mt-2 p-4 text-ui-lg leading-relaxed"
                 style={{ fontFamily: fontFamily ?? undefined }}
               >
                 ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -943,7 +960,7 @@ export function FontExplorerTool({ tool, isFavorite, onToggleFavorite }: CustomT
                 <Panel title={`OpenType features · ${info.features.length}`}>
                   <div className="flex flex-wrap gap-1">
                     {info.features.map((f) => (
-                      <span key={f} className="rounded-md bg-background px-1.5 py-0.5 font-mono text-caption">
+                      <span key={f} className="input-well px-1.5 py-0.5 font-mono text-caption">
                         {f}
                       </span>
                     ))}

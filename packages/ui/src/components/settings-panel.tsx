@@ -8,11 +8,9 @@ import {
   PaintBoardIcon,
   Settings01Icon,
 } from "@hugeicons/core-free-icons";
-import { type ThemeMode } from "../lib/appearance";
 import type { UserPreferences } from "../lib/preferences";
 import { exportPreferences, importPreferences } from "../lib/preferences";
 import { usePreferences } from "../hooks/use-preferences";
-import { useTheme } from "../hooks/use-theme";
 import { cn } from "../lib/utils";
 import { Dialog } from "./dialog";
 import { Button } from "./button";
@@ -31,16 +29,10 @@ const SECTIONS: Array<{ id: SettingsSection; label: string; icon: typeof Setting
 ];
 
 export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
-  const { prefs, updateAppearance, importPrefs } = usePreferences();
-  const { theme, setTheme } = useTheme();
+  const { prefs, importPrefs } = usePreferences();
   const [section, setSection] = useState<SettingsSection>("appearance");
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-
-  const handleTheme = (mode: ThemeMode) => {
-    setTheme(mode);
-    void updateAppearance((a) => ({ ...a, theme: mode }));
-  };
 
   const handleExport = () => {
     setError(null);
@@ -61,7 +53,6 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
       try {
         const imported = importPreferences(String(reader.result));
         void importPrefs(imported);
-        if (imported.appearance?.theme) setTheme(imported.appearance.theme);
         setError(null);
       } catch {
         setError("Invalid preferences file");
@@ -122,9 +113,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           </nav>
 
           <div className="min-w-0 flex-1 p-5">
-            {section === "appearance" && (
-              <AppearanceSection effectiveTheme={theme} onTheme={handleTheme} />
-            )}
+            {section === "appearance" && <AppearanceSection />}
 
             {section === "data" && (
               <DataSection fileRef={fileRef} onExport={handleExport} onImport={handleImport} />

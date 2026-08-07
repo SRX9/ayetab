@@ -29,6 +29,8 @@ function AppChrome({ children }: { children: ReactNode }) {
     ? decodeURIComponent(pathname.slice(TOOL_PATH.length))
     : undefined;
 
+  const handleHome = useCallback(() => router.push("/"), [router]);
+
   return (
     <AppearanceSync>
       <ShortcutsProvider>
@@ -38,14 +40,15 @@ function AppChrome({ children }: { children: ReactNode }) {
           recentIds={prefs.recents}
         >
           {/*
-            The shell lives above the route so the sidebar keeps its scroll
-            position and search text while the content pane navigates.
+            The shell lives above the route so the dock stays put while the
+            content surface navigates between tools.
           */}
           <AppShell
             tools={TOOL_REGISTRY}
             activeToolId={activeToolId}
             onSelectTool={handleSelect}
             toolHref={(tool) => `${TOOL_PATH}${tool.id}`}
+            onHome={handleHome}
           >
             {children}
           </AppShell>

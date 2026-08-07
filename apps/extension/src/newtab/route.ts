@@ -18,8 +18,16 @@ export type Route = { kind: "home" } | { kind: "tool"; toolId: string; input: st
 const INLINE_INPUT_LIMIT = 512;
 const STASH_PREFIX = "ayetab-nav-input:";
 
+/** 8-char base36 token from a CSPRNG, matching the shape older hashes carry. */
+function stashToken(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(8));
+  let token = "";
+  for (const byte of bytes) token += (byte % 36).toString(36);
+  return token;
+}
+
 function stashInput(input: string): string | null {
-  const token = Math.random().toString(36).slice(2, 10);
+  const token = stashToken();
   try {
     sessionStorage.setItem(STASH_PREFIX + token, input);
     return token;

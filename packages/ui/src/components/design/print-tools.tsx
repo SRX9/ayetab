@@ -25,6 +25,8 @@ import {
 
 const PT_TO_MM = 25.4 / 72;
 
+const mm = (pt: number) => (pt * PT_TO_MM).toFixed(1);
+
 /** Standard sheet sizes in PostScript points. */
 const SHEETS: Record<string, [number, number]> = {
   a4: [595.28, 841.89],
@@ -228,8 +230,6 @@ export function PdfPreflightTool({ tool, isFavorite, onToggleFavorite }: CustomT
     [minDpi]
   );
 
-  const mm = (pt: number) => (pt * PT_TO_MM).toFixed(1);
-
   return (
     <ToolShell
       title={tool.name}
@@ -267,9 +267,9 @@ export function PdfPreflightTool({ tool, isFavorite, onToggleFavorite }: CustomT
           <>
             <Panel title="Checks">
               <div className="flex flex-col gap-1.5">
-                {report.issues.map((issue, i) => (
+                {report.issues.map((issue) => (
                   <div
-                    key={i}
+                    key={issue.message}
                     className={cn(
                       "flex items-start gap-2 rounded-md px-3 py-2 text-ui",
                       issue.level === "error" && "bg-destructive/10 text-destructive",
@@ -397,6 +397,12 @@ export function PrintImposerTool({ tool, isFavorite, onToggleFavorite }: CustomT
 
       const pageCount = source.getPageCount();
 
+      // Embed every source page up front — the embeds are independent, and
+      // every mode below places each page exactly once.
+      const embeddedPages = await Promise.all(
+        Array.from({ length: pageCount }, (_, i) => out.embedPage(source.getPage(i)))
+      );
+
       /** Draw one embedded page centred inside a slot on the sheet. */
       const place = (
         target: Awaited<ReturnType<typeof out.addPage>>,
@@ -452,8 +458,7 @@ export function PrintImposerTool({ tool, isFavorite, onToggleFavorite }: CustomT
           const page = out.addPage([sheetW, sheetH]);
           for (const [slot, sourceIndex] of [order[i], order[i + 1]].entries()) {
             if (sourceIndex === null || sourceIndex === undefined) continue;
-            const embedded = await out.embedPage(source.getPage(sourceIndex));
-            place(page, embedded, margin + slot * (slotW + gap), margin, slotW, slotH);
+            place(page, embeddedPages[sourceIndex], margin + slot * (slotW + gap), margin, slotW, slotH);
           }
         }
       } else if (mode === "duplicate") {
@@ -464,7 +469,7 @@ export function PrintImposerTool({ tool, isFavorite, onToggleFavorite }: CustomT
 
         for (let p = 0; p < pageCount; p++) {
           const page = out.addPage([sheetW, sheetH]);
-          const embedded = await out.embedPage(source.getPage(p));
+          const embedded = embeddedPages[p];
           for (let i = 0; i < nup; i++) {
             const col = i % cols;
             const row = Math.floor(i / cols);
@@ -489,7 +494,7 @@ export function PrintImposerTool({ tool, isFavorite, onToggleFavorite }: CustomT
           for (let i = 0; i < nup && p + i < pageCount; i++) {
             const col = i % cols;
             const row = Math.floor(i / cols);
-            const embedded = await out.embedPage(source.getPage(p + i));
+            const embedded = embeddedPages[p + i];
             place(
               page,
               embedded,
@@ -627,6 +632,15 @@ export function PrintImposerTool({ tool, isFavorite, onToggleFavorite }: CustomT
 
 type ZineKind = "mini8" | "accordion" | "quarter";
 
+const INSTRUCTIONS: Record<ZineKind, string> = {
+  mini8:
+    "Print single-sided. Fold in half the long way, then in half twice more. Unfold to the half-fold, cut the solid centre line, then push the ends together and fold into a booklet.",
+  accordion:
+    "Print single-sided. Fold along each dashed line, alternating direction, to make a concertina.",
+  quarter:
+    "Print single-sided. Fold in half top to bottom, then left to right, to make a four-page card.",
+};
+
 export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomToolProps) {
   const [file, setFile] = useState<LoadedPdf | null>(null);
   const [kind, setKind] = useState<ZineKind>("mini8");
@@ -652,7 +666,31 @@ export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
       const pageCount = source.getPageCount();
       const page = out.addPage([sheetW, sheetH]);
 
-      const draw = async (
+      // Bottom row, left→right: pages 5,4,3,2 → indices 4,3,2,1
+      const bottom = [4, 3, 2, 1];
+      // Top row, left→right (inverted): pages 6,7,8,1 → indices 5,6,7,0
+      const top = [5, 6, 7, 0];
+      const panels = Math.min(8, Math.max(2, pageCount));
+
+      // Pages each layout references, in draw order.
+      const drawOrder =
+        kind === "mini8"
+          ? [...bottom, ...top]
+          : kind === "accordion"
+            ? Array.from({ length: panels }, (_, i) => i)
+            : [3, 0, 1, 2];
+
+      const wanted = new Set<number>();
+      for (const i of drawOrder) {
+        if (i < pageCount) wanted.add(i);
+      }
+
+      // The embeds are independent of one another, so fetch them together.
+      const embeddedByIndex = new Map(
+        await Promise.all([...wanted].map(async (i) => [i, await out.embedPage(source.getPage(i))] as const))
+      );
+
+      const draw = (
         sourceIndex: number,
         x: number,
         y: number,
@@ -660,8 +698,8 @@ export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
         h: number,
         rotate180: boolean
       ) => {
-        if (sourceIndex >= pageCount) return;
-        const embedded = await out.embedPage(source.getPage(sourceIndex));
+        const embedded = embeddedByIndex.get(sourceIndex);
+        if (!embedded) return;
         const scale = Math.min(w / embedded.width, h / embedded.height);
         const dw = embedded.width * scale;
         const dh = embedded.height * scale;
@@ -687,14 +725,10 @@ export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
         // cut runs along the middle of the two centre panels.
         const cellW = sheetW / 4;
         const cellH = sheetH / 2;
-        // Bottom row, left→right: pages 5,4,3,2 → indices 4,3,2,1
-        const bottom = [4, 3, 2, 1];
-        // Top row, left→right (inverted): pages 6,7,8,1 → indices 5,6,7,0
-        const top = [5, 6, 7, 0];
 
         for (let col = 0; col < 4; col++) {
-          await draw(bottom[col], col * cellW, 0, cellW, cellH, false);
-          await draw(top[col], col * cellW, cellH, cellW, cellH, true);
+          draw(bottom[col], col * cellW, 0, cellW, cellH, false);
+          draw(top[col], col * cellW, cellH, cellW, cellH, true);
         }
 
         if (foldGuides) {
@@ -712,10 +746,9 @@ export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
           });
         }
       } else if (kind === "accordion") {
-        const panels = Math.min(8, Math.max(2, pageCount));
         const cellW = sheetW / panels;
         for (let i = 0; i < panels; i++) {
-          await draw(i, i * cellW, 0, cellW, sheetH, false);
+          draw(i, i * cellW, 0, cellW, sheetH, false);
         }
         if (foldGuides) {
           for (let i = 1; i < panels; i++) {
@@ -732,10 +765,10 @@ export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
         // Quarter fold: 4 panels, top row inverted.
         const cellW = sheetW / 2;
         const cellH = sheetH / 2;
-        await draw(3, 0, cellH, cellW, cellH, true);
-        await draw(0, cellW, cellH, cellW, cellH, true);
-        await draw(1, 0, 0, cellW, cellH, false);
-        await draw(2, cellW, 0, cellW, cellH, false);
+        draw(3, 0, cellH, cellW, cellH, true);
+        draw(0, cellW, cellH, cellW, cellH, true);
+        draw(1, 0, 0, cellW, cellH, false);
+        draw(2, cellW, 0, cellW, cellH, false);
 
         if (foldGuides) {
           const dash = { thickness: 0.5, color: rgb(0.65, 0.65, 0.65), dashArray: [4, 4] };
@@ -755,15 +788,6 @@ export function ZineImposerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
       setBusy(false);
     }
   }, [file, kind, sheet, foldGuides]);
-
-  const INSTRUCTIONS: Record<ZineKind, string> = {
-    mini8:
-      "Print single-sided. Fold in half the long way, then in half twice more. Unfold to the half-fold, cut the solid centre line, then push the ends together and fold into a booklet.",
-    accordion:
-      "Print single-sided. Fold along each dashed line, alternating direction, to make a concertina.",
-    quarter:
-      "Print single-sided. Fold in half top to bottom, then left to right, to make a four-page card.",
-  };
 
   return (
     <ToolShell

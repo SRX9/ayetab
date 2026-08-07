@@ -67,7 +67,11 @@ export default async function ToolPage({ params }: Props) {
       {jsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          // Escape `<` so tool copy containing `</script>` cannot terminate
+          // the element early; parses back to the identical JSON value.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
       )}
       <Suspense>

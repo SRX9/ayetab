@@ -247,6 +247,13 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
     [zoom]
   );
 
+  const pickAt = (clientX: number, clientY: number) => {
+    const hit = readAt(clientX, clientY);
+    if (!hit) return;
+    setPicked((prev) => (prev.includes(hit.hex) ? prev : [hit.hex, ...prev].slice(0, 24)));
+    void copy(hit.hex);
+  };
+
   const hoverRgb = hover ? parseColor(hover.hex) : null;
 
   return (
@@ -279,6 +286,9 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
                   ref={canvasRef}
                   className="w-full cursor-crosshair rounded-md"
                   style={{ imageRendering: "pixelated" }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Sample a colour from the image"
                   onMouseMove={(e) => {
                     const hit = readAt(e.clientX, e.clientY);
                     if (hit) {
@@ -287,11 +297,13 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
                     }
                   }}
                   onMouseLeave={() => setHover(null)}
-                  onClick={(e) => {
-                    const hit = readAt(e.clientX, e.clientY);
-                    if (!hit) return;
-                    setPicked((prev) => (prev.includes(hit.hex) ? prev : [hit.hex, ...prev].slice(0, 24)));
-                    void copy(hit.hex);
+                  onClick={(e) => pickAt(e.clientX, e.clientY)}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter" && e.key !== " ") return;
+                    e.preventDefault();
+                    // No pointer position on the keyboard, so sample the centre.
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    pickAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
                   }}
                 />
               </Panel>
@@ -302,7 +314,7 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
                     ref={loupeRef}
                     width={LOUPE_SIZE}
                     height={LOUPE_SIZE}
-                    className="mx-auto rounded-md border border-border bg-background"
+                    className="input-well mx-auto"
                   />
                   <div className="mt-3">
                     <Field label="Zoom">
@@ -315,7 +327,7 @@ export function PixelPickerTool({ tool, isFavorite, onToggleFavorite }: CustomTo
                   {hover && hoverRgb ? (
                     <div className="flex flex-col gap-2">
                       <div
-                        className="h-14 rounded-md border border-border"
+                        className="input-well h-14"
                         style={{ backgroundColor: hover.hex }}
                       />
                       <Select

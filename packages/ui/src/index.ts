@@ -2,8 +2,12 @@ export { cn } from "./lib/utils";
 export { pressable } from "./lib/pressable";
 export { AppShell, ShellContent } from "./components/app-shell";
 export { BrandMark } from "./components/brand-mark";
+export { Dock } from "./components/dock";
 export { FadeScroller } from "./components/fade-scroller";
+export { TabHome } from "./components/tab-home";
+export { WallpaperLayer } from "./components/wallpaper-layer";
 export { ToolIndex } from "./components/tool-index";
+export { ToolIconTile } from "./components/tool-icon-tile";
 export { Button } from "./components/button";
 export { Dialog } from "./components/dialog";
 export { InputPanel } from "./components/input-panel";
@@ -17,7 +21,6 @@ export { CommandPaletteProvider } from "./components/command-palette-provider";
 export { useCommandPalette, useCommandPaletteOptional } from "./hooks/use-command-palette";
 export { ThemeProvider } from "./components/theme-provider";
 export { useTheme } from "./hooks/use-theme";
-export { ThemeToggle } from "./components/theme-toggle";
 export { AppearanceSync } from "./components/appearance-sync";
 export { SmartPasteBanner } from "./components/smart-paste-banner";
 export { FavoriteButton } from "./components/favorite-button";
@@ -37,13 +40,23 @@ export { ShortcutsModal, ShortcutsProvider } from "./components/shortcuts-modal"
 export { useShortcutsModal, useShortcutsModalOptional } from "./hooks/use-shortcuts-modal";
 export { OnboardingModal } from "./components/onboarding-modal";
 export { SettingsMenu, SettingsPanel, SettingsButton } from "./components/settings-panel";
+export { SmartBar } from "./components/smart-bar";
 export { DEFAULT_APPEARANCE, normalizeAppearance, resolveTheme } from "./lib/appearance";
-export type { AppearancePreferences, ThemeMode } from "./lib/appearance";
+export type { AppearancePreferences, ThemeMode, Wallpaper, AbstractWallpaperId } from "./lib/appearance";
+export {
+  ABSTRACT_WALLPAPERS,
+  IMAGE_WALLPAPERS,
+  EXAMPLE_WALLPAPER_PATH,
+  getAbstractWallpaper,
+  isBuiltInImageWallpaper,
+  wallpaperCss,
+} from "./lib/wallpapers";
 export { useClipboard } from "./hooks/use-clipboard";
 export { useToolState } from "./hooks/use-tool-state";
 export { useKeyboardShortcut } from "./hooks/use-keyboard-shortcut";
 export { PreferencesProvider } from "./components/preferences-provider";
 export { usePreferences } from "./hooks/use-preferences";
+export { useAutoHideScrollbar } from "./hooks/use-auto-hide-scrollbar";
 export {
   loadPreferences,
   savePreferences,

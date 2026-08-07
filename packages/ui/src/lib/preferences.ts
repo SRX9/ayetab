@@ -3,11 +3,28 @@ import {
   normalizeAppearance,
   type AppearancePreferences,
 } from "./appearance";
+export interface BentoTile {
+  /** Tool id, or a live widget id like `live:clock`. */
+  id: string;
+  kind: "tool" | "live";
+  /** Grid column (0-based) within the 12-col canvas. */
+  x: number;
+  /** Grid row (0-based). */
+  y: number;
+  /** Span in columns (1–12). */
+  w: number;
+  /** Span in rows (1 = short, 2 = tall). */
+  h: number;
+  /** Collapsed to just a compact chip. */
+  mini?: boolean;
+}
 
 export interface UserPreferences {
   favorites: string[];
   recents: string[];
   appearance: AppearancePreferences;
+  /** Saved home bento layout; absent until the user customizes it. */
+  bento?: BentoTile[];
 }
 
 const STORAGE_KEY = "ayetab-prefs";
@@ -24,6 +41,32 @@ export function exportPreferences(prefs: UserPreferences): string {
   return JSON.stringify(prefs, null, 2);
 }
 
+function normalizeBento(raw: unknown): BentoTile[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: BentoTile[] = [];
+  for (const t of raw) {
+    if (!t || typeof t !== "object") continue;
+    const o = t as Partial<BentoTile>;
+    if (typeof o.id !== "string" || !o.id) continue;
+    const kind = o.kind === "live" ? "live" : "tool";
+    out.push({
+      id: o.id,
+      kind,
+      x: clampInt(o.x, 0, 11, 0),
+      y: clampInt(o.y, 0, 999, 0),
+      w: clampInt(o.w, 1, 12, 3),
+      h: clampInt(o.h, 1, 4, 1),
+      ...(o.mini ? { mini: true } : {}),
+    });
+  }
+  return out.length > 0 ? out : undefined;
+}
+
+function clampInt(v: unknown, min: number, max: number, fallback: number): number {
+  const n = typeof v === "number" && Number.isFinite(v) ? Math.round(v) : fallback;
+  return Math.min(max, Math.max(min, n));
+}
+
 /**
  * Coerce any stored/imported shape into a complete, valid preferences object.
  * Building a fresh object also drops fields from older versions (the home
@@ -31,10 +74,12 @@ export function exportPreferences(prefs: UserPreferences): string {
  */
 export function normalizePreferences(raw: unknown): UserPreferences {
   const parsed = (raw ?? {}) as Partial<UserPreferences>;
+  const bento = normalizeBento(parsed.bento);
   return {
     favorites: Array.isArray(parsed.favorites) ? parsed.favorites : [],
     recents: Array.isArray(parsed.recents) ? parsed.recents : [],
     appearance: normalizeAppearance(parsed.appearance),
+    ...(bento ? { bento } : {}),
   };
 }
 
@@ -185,5 +230,18 @@ export function updateAppearance(
   return { ...prefs, appearance: normalizeAppearance(appearance) };
 }
 
+/** Persist a custom home bento layout (or clear it with `undefined`). */
+export function updateBento(
+  prefs: UserPreferences,
+  bento: BentoTile[] | undefined
+): UserPreferences {
+  const next = { ...prefs };
+  if (bento && bento.length > 0) next.bento = bento;
+  else delete next.bento;
+  return next;
+}
+
 export { DEFAULT_APPEARANCE, normalizeAppearance };
 export type { AppearancePreferences };
+export type { ThemeMode, Wallpaper, AbstractWallpaperId } from "./appearance";
+export { DEFAULT_WALLPAPER } from "./appearance";

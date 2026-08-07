@@ -6,5 +6,3 @@
 import type { ComponentType } from "react";
 
 export const Excalidraw: ComponentType<Record<string, unknown>> = () => null;
-
-export default { Excalidraw };

@@ -139,12 +139,13 @@ export function HabitTrackerTool({
               name="habit-name"
               type="text"
               placeholder="Add a new habit…"
-              className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              aria-label="Add a new habit"
+              className="input-well flex-1 px-3 py-2 text-sm"
               data-testid="habit-input"
             />
             <button
               type="submit"
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="btn-liquid-primary rounded-md px-4 py-2 text-sm font-medium"
             >
               Add
             </button>
@@ -162,7 +163,7 @@ export function HabitTrackerTool({
                 return (
                   <div
                     key={habit.id}
-                    className="rounded-lg border border-border bg-card p-3 flex flex-col gap-2"
+                    className="tool-surface p-3 flex flex-col gap-2"
                   >
                     <div className="flex items-center gap-3">
                       <button
